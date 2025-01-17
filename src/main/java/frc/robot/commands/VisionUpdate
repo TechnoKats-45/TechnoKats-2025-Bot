@@ -1,0 +1,58 @@
+public class VisionUpdateCommand extends CommandBase 
+{
+    private final Vision m_vision;
+    private final Localizer m_localizer;
+
+    public VisionUpdateCommand(Vision vision, Localizer localizer) 
+    {
+        m_vision = vision;
+        m_localizer = localizer;
+        // If your vision subsystem doesn't require exclusivity, we might not need addRequirements(...)
+    }
+
+    @Override
+    public void execute() 
+    {
+        if (m_vision.hasValidTarget("front")) 
+        {
+            double[] poseArray = m_vision.getTargetPose("front");
+            Pose2d pose = m_vision.toPose2d(poseArray);
+
+            double pipelineLatency = m_vision.getPipelineLatencyMillis("front") / 1000.0;
+            double captureTime = Timer.getFPGATimestamp() - pipelineLatency;
+
+            double[] visionStdDevs = new double[] {0.5, 0.5, Math.toRadians(10)};
+
+            m_localizer.addVisionMeasurement(pose, captureTime, Constants.VISION_MEASUREMENT_STD_DEVS, "front");
+        }
+        if (m_vision.hasValidTarget("left")) 
+        {
+            double[] poseArray = m_vision.getTargetPose("left");
+            Pose2d pose = m_vision.toPose2d(poseArray);
+
+            double pipelineLatency = m_vision.getPipelineLatencyMillis("left") / 1000.0;
+            double captureTime = Timer.getFPGATimestamp() - pipelineLatency;
+
+            double[] visionStdDevs = new double[] {0.5, 0.5, Math.toRadians(10)};
+
+            m_localizer.addVisionMeasurement(pose, captureTime, Constants.VISION_MEASUREMENT_STD_DEVS, "left");
+        }
+        {
+            double[] poseArray = m_vision.getTargetPose("right");
+            Pose2d pose = m_vision.toPose2d(poseArray);
+
+            double pipelineLatency = m_vision.getPipelineLatencyMillis("right") / 1000.0;
+            double captureTime = Timer.getFPGATimestamp() - pipelineLatency;
+
+            double[] visionStdDevs = new double[] {0.5, 0.5, Math.toRadians(10)};
+
+            m_localizer.addVisionMeasurement(pose, captureTime, Constants.VISION_MEASUREMENT_STD_DEVS, "right");
+        }
+    }
+
+    @Override
+    public boolean isFinished() 
+    {
+        return false; // run forever, or until interrupted
+    }
+}
