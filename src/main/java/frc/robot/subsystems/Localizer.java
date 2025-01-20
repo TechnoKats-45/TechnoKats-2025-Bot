@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.List;
 public class Localizer extends SubsystemBase 
 {
 
-  private final CommandSwerveDrivetrain swerveDrivetrain;
+  private final Swerve swerveDrivetrain;
   private final AprilTagFieldLayout fieldLayout;
 
   // WPILib’s recommended swerve pose estimator
@@ -24,7 +24,7 @@ public class Localizer extends SubsystemBase
 
   private final Vision vision; // Our Vision subsystem to get tag-based robot poses
 
-  public Localizer(CommandSwerveDrivetrain swerveDrivetrain, Vision vision) 
+  public Localizer(Swerve swerveDrivetrain, Vision vision) 
   {
     this.swerveDrivetrain = swerveDrivetrain;
     this.vision = vision;
