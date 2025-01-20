@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Localizer;
 import frc.robot.subsystems.Vision;
 
 public class RobotContainer 
@@ -45,7 +44,6 @@ public class RobotContainer
 
     // Subsystems:
     public final Swerve drivetrain = TunerConstants.createDrivetrain();
-    private final Localizer m_localizer;
     private final Vision m_vision;
 
     private final SendableChooser<Command> autoChooser;
@@ -53,7 +51,6 @@ public class RobotContainer
     public RobotContainer() 
     {
         m_vision = new Vision();
-        m_localizer = new Localizer(drivetrain, m_vision);
 
         registerNamedCommands();
         configureBindings();
