@@ -9,19 +9,27 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
+import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -33,6 +41,18 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+
+    // Field Widget
+    private static final Field2d m_field = new Field2d();
+
+    // April tag variables
+    private static boolean useMegaTag2 = true; // set to false to use MegaTag1
+    private static boolean doRejectUpdate = false;
+    private static String limelightUsed;
+    private static LimelightHelpers.PoseEstimate LLposeEstimate;
+    //Get average tag areas (percentage of image), Choose the limelight with the highest average tag area
+    private static double limelightFrontAvgTagArea = 0;
+    private static double limelightBackAvgTagArea = 0;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -47,15 +67,18 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
-    private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
-        new SysIdRoutine.Config(
+    private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine
+    (
+        new SysIdRoutine.Config
+        (
             null,        // Use default ramp rate (1 V/s)
             Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
             null,        // Use default timeout (10 s)
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
         ),
-        new SysIdRoutine.Mechanism(
+        new SysIdRoutine.Mechanism
+        (
             output -> setControl(m_translationCharacterization.withVolts(output)),
             null,
             this
@@ -63,15 +86,18 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     );
 
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
-    private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
-        new SysIdRoutine.Config(
+    private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine
+    (
+        new SysIdRoutine.Config
+        (
             null,        // Use default ramp rate (1 V/s)
             Volts.of(7), // Use dynamic voltage of 7 V
             null,        // Use default timeout (10 s)
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
         ),
-        new SysIdRoutine.Mechanism(
+        new SysIdRoutine.Mechanism
+        (
             volts -> setControl(m_steerCharacterization.withVolts(volts)),
             null,
             this
@@ -83,8 +109,10 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
      * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
      */
-    private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
-        new SysIdRoutine.Config(
+    private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine
+    (
+        new SysIdRoutine.Config
+        (
             /* This is in radians per second², but SysId only supports "volts per second" */
             Volts.of(Math.PI / 6).per(Second),
             /* This is in radians per second, but SysId only supports "volts" */
@@ -93,8 +121,10 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
         ),
-        new SysIdRoutine.Mechanism(
-            output -> {
+        new SysIdRoutine.Mechanism
+        (
+            output -> 
+            {
                 /* output is actually radians per second, but SysId only supports "volts" */
                 setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
                 /* also log the requested output for SysId */
@@ -118,12 +148,15 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
      * @param modules               Constants for each specific module
      */
-    public Swerve(
+    public Swerve
+    (
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
-    ) {
+    ) 
+    {
         super(drivetrainConstants, modules);
-        if (Utils.isSimulation()) {
+        if (Utils.isSimulation()) 
+        {
             startSimThread();
         }
     }
@@ -141,13 +174,16 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      *                                CAN FD, and 100 Hz on CAN 2.0.
      * @param modules                 Constants for each specific module
      */
-    public Swerve(
+    public Swerve
+    (
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
         SwerveModuleConstants<?, ?, ?>... modules
-    ) {
+    ) 
+    {
         super(drivetrainConstants, odometryUpdateFrequency, modules);
-        if (Utils.isSimulation()) {
+        if (Utils.isSimulation()) 
+        {
             startSimThread();
         }
     }
@@ -171,15 +207,18 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      *                                  and radians
      * @param modules                   Constants for each specific module
      */
-    public Swerve(
+    public Swerve
+    (
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
         Matrix<N3, N1> odometryStandardDeviation,
         Matrix<N3, N1> visionStandardDeviation,
         SwerveModuleConstants<?, ?, ?>... modules
-    ) {
+    ) 
+    {
         super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
-        if (Utils.isSimulation()) {
+        if (Utils.isSimulation()) 
+        {
             startSimThread();
         }
     }
@@ -190,7 +229,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      * @param request Function returning the request to apply
      * @return Command to run
      */
-    public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+    public Command applyRequest(Supplier<SwerveRequest> requestSupplier) 
+    {
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
@@ -201,7 +241,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      * @param direction Direction of the SysId Quasistatic test
      * @return Command to run
      */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) 
+    {
         return m_sysIdRoutineToApply.quasistatic(direction);
     }
 
@@ -212,7 +253,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      * @param direction Direction of the SysId Dynamic test
      * @return Command to run
      */
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) 
+    {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
@@ -225,9 +267,12 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
          * Otherwise, only check and apply the operator perspective if the DS is disabled.
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
-        if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
-            DriverStation.getAlliance().ifPresent(allianceColor -> {
-                setOperatorPerspectiveForward(
+        if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) 
+        {
+            DriverStation.getAlliance().ifPresent(allianceColor -> 
+            {
+                setOperatorPerspectiveForward
+                (
                     allianceColor == Alliance.Red
                         ? kRedAlliancePerspectiveRotation
                         : kBlueAlliancePerspectiveRotation
@@ -237,11 +282,13 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         }
     }
 
-    private void startSimThread() {
+    private void startSimThread() 
+    {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
         /* Run simulation at a faster rate so PID gains behave more reasonably */
-        m_simNotifier = new Notifier(() -> {
+        m_simNotifier = new Notifier(() -> 
+        {
             final double currentTime = Utils.getCurrentTimeSeconds();
             double deltaTime = currentTime - m_lastSimTime;
             m_lastSimTime = currentTime;
@@ -251,4 +298,135 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
+
+    // ___________________________________________________ Vision Code ___________________________________________________
+    
+    /**
+     * Resets the robot's Odometry pose estimate to the best current mt1 pose estimate.
+     * Can also use a known reference like a wall to zero the Pigeon (most important thing for mt2)
+     */
+    public void resetToVision(){
+        choose_LL();
+        
+        LLposeEstimate = get_manual_LL_Estimate();
+        if (LLposeEstimate != null) {
+            resetPose(LLposeEstimate.pose);
+        }
+    }
+
+    /**
+     * Polls the limelights for a pose estimate and uses the pose estimator Kalman filter to fuse the best Limelight pose estimate
+     * with the odometry pose estimate
+     */
+    private void updateOdometry() {
+        choose_LL();
+
+        LLposeEstimate = get_manual_LL_Estimate();
+        if (LLposeEstimate != null) {
+            addVisionMeasurement(LLposeEstimate.pose, LLposeEstimate.timestampSeconds);
+        }
+    }
+
+    /**
+     * Uses the autobuilder and PathPlanner's navigation grid to pathfind to a pose in real time
+     * 
+     * @param pose Pose to pathfind to
+     * @param endVelocity Velocity at pose
+     */
+    public Command path_find_to(Pose2d pose, LinearVelocity endVelocity)
+    {
+        return AutoBuilder.pathfindToPose(pose, TunerConstants.oTF_Constraints, endVelocity);
+    }
+
+    /**
+     * @param useMegaTag2 Boolean to use mt2 or mt1
+     * @return Valid pose estimate or null
+     */
+    private LimelightHelpers.PoseEstimate get_LL_Estimate(boolean useMegaTag2){
+        doRejectUpdate = false;
+        LimelightHelpers.PoseEstimate poseEstimate = new LimelightHelpers.PoseEstimate();
+
+        if (useMegaTag2 == false) {
+            poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightUsed);
+
+            if (poseEstimate == null){
+                doRejectUpdate = true;
+            }
+            else{
+                if (poseEstimate.tagCount == 1 && poseEstimate.rawFiducials.length == 1) {
+                    if (poseEstimate.rawFiducials[0].ambiguity > .7) {
+                        doRejectUpdate = true;
+                    }
+                    if (poseEstimate.rawFiducials[0].distToCamera > 3) {
+                        doRejectUpdate = true;
+                    }
+                    }
+                    if (poseEstimate.tagCount == 0) {
+                    doRejectUpdate = true;
+                    }
+            }
+        } else if (useMegaTag2 == true) {
+            LimelightHelpers.SetRobotOrientation("limelight-front", getState().Pose.getRotation().getDegrees(),
+            0, 0, 0, 0, 0);
+            LimelightHelpers.SetRobotOrientation("limelight-back", getState().Pose.getRotation().getDegrees(),
+            0, 0, 0, 0, 0);
+            poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightUsed);
+
+            if (poseEstimate == null) {
+                doRejectUpdate = true;
+            } else {
+                if (Math.abs(getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second,
+                                                        // ignore vision updates. Might need to reduce to ~180
+                {
+                    doRejectUpdate = true;
+                }
+                if (poseEstimate.tagCount == 0) {
+                    doRejectUpdate = true;
+                }
+            }
+        }
+
+        if (doRejectUpdate){
+            return null;
+        }
+        else{
+            SmartDashboard.putString("LL Pose", poseEstimate.pose.toString());
+            return poseEstimate;
+        }
+    }
+
+    private static void choose_LL(){
+        limelightFrontAvgTagArea = NetworkTableInstance.getDefault().getTable("limelight-front").getEntry("botpose").getDoubleArray(new double[11])[10];
+        limelightBackAvgTagArea = NetworkTableInstance.getDefault().getTable("limelight-back").getEntry("botpose").getDoubleArray(new double[11])[10];
+        SmartDashboard.putNumber("Front Limelight Tag Area", limelightFrontAvgTagArea);
+        SmartDashboard.putNumber("Back Limelight Tag Area", limelightBackAvgTagArea);    
+
+        if(limelightFrontAvgTagArea > 
+            limelightBackAvgTagArea){
+                limelightUsed = "limelight-front";
+            }else{
+                limelightUsed = "limelight-back";
+        }
+        
+        SmartDashboard.putString("Limelight Used", limelightUsed);
+    }
+
+    private LimelightHelpers.PoseEstimate get_manual_LL_Estimate(){
+        choose_LL();
+        LimelightHelpers.PoseEstimate poseEstimate = new LimelightHelpers.PoseEstimate();
+        
+        double[] botPose = LimelightHelpers.getBotPose(limelightUsed);
+        SmartDashboard.putNumberArray("Botpose", botPose);
+        if (botPose.length != 0){
+            if (botPose[0] == 0){
+                return null;
+            }
+            poseEstimate.pose = new Pose2d(new Translation2d(botPose[0] + 8.7736 ,botPose[1] + 4.0257), new Rotation2d(Math.toRadians(botPose[5])));
+        }
+
+        Double[] pose = {poseEstimate.pose.getX(), poseEstimate.pose.getY(), poseEstimate.pose.getRotation().getRadians()};
+        SmartDashboard.putNumberArray("Manual Pose", pose);
+        return poseEstimate;
+    }
+    
 }
