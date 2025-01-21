@@ -37,6 +37,10 @@ public class RobotContainer
 
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+    private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController operator = new CommandXboxController(1);
@@ -48,11 +52,11 @@ public class RobotContainer
 
     public RobotContainer() 
     {
-        registerNamedCommands();
-        configureBindings();
-
         autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
         SmartDashboard.putData("Auto Mode", autoChooser);
+
+        registerNamedCommands();
+        configureBindings();
     }
 
     private void configureBindings() 

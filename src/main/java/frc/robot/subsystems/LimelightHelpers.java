@@ -36,8 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * LimelightHelpers provides static methods and classes for interfacing with Limelight vision cameras in FRC.
  * This library supports all Limelight features including AprilTag tracking, Neural Networks, and standard color/retroreflective tracking.
  */
-public class LimelightHelpers 
-{
+public class LimelightHelpers {
 
     private static final Map<String, DoubleArrayEntry> doubleArrayEntries = new ConcurrentHashMap<>();
 
@@ -134,7 +133,6 @@ public class LimelightHelpers
             targetPose_CameraSpace = new double[6];
             targetPose_RobotSpace = new double[6];
         }
-
     }
 
     /**
@@ -462,8 +460,6 @@ public class LimelightHelpers
             targets_Barcode = new LimelightTarget_Barcode[0];
 
         }
-
-
     }
 
     /**
@@ -1247,7 +1243,8 @@ public class LimelightHelpers
      * @param limelightName
      * @return
      */
-    public static PoseEstimate getBotPoseEstimate_wpiBlue_MegaTag2(String limelightName) {
+    public static PoseEstimate getBotPoseEstimate_wpiBlue_MegaTag2(String limelightName) 
+    {
         return getBotPoseEstimate(limelightName, "botpose_orb_wpiblue", true);
     }
 
