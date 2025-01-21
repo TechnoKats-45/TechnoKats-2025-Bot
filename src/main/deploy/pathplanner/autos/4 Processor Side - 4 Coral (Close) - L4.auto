@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.1 Processor-Reef CD"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.2 Reef CD-Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.3 Coral Station - Reef CD"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.4 Reef CD - Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.5 Coral Station - Reef AB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.6 Reef AB - Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.7 Coral Station - Reef AB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4.8 Reef AB - Coral Station"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

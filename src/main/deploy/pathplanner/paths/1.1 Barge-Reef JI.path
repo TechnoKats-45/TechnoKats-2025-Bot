@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.994358766233766,
+        "y": 6.21875
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.028148542882357,
+        "y": 5.8472205898773515
+      },
+      "isLocked": false,
+      "linkedName": "Barge Start"
+    },
+    {
+      "anchor": {
+        "x": 5.156737012987013,
+        "y": 5.143242694805195
+      },
+      "prevControl": {
+        "x": 5.383161345078483,
+        "y": 5.249223928223811
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Reef - JI"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "reversed": false,
+  "folder": "1 Barge Side - 3 Coral (Far) - L4",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

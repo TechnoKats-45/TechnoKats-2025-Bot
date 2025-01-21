@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.542796266233766,
-        "y": 6.439549512987013
+        "x": 3.8461850649350646,
+        "y": 2.878267045454545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.289224837662337,
-        "y": 6.439549512987013
+        "x": 3.293079556115015,
+        "y": 2.32359029241575
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Reef - CD"
     },
     {
       "anchor": {
-        "x": 6.303469967532467,
-        "y": 6.439549512987013
+        "x": 1.6025771103896103,
+        "y": 0.7130073051948045
       },
       "prevControl": {
-        "x": 7.037405269897241,
-        "y": 6.439549512987013
+        "x": 2.386268986836723,
+        "y": 1.4318172308851245
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Coral Station - Processor Side"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.23097531742192
+    "rotation": 54.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "4 Processor Side - 4 Coral (Close) - L4",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

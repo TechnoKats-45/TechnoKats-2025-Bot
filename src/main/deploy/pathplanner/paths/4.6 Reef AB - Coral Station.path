@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.176663961038961,
+        "y": 4.017877435064935
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.83949699643199,
+        "y": 3.297116458417534
+      },
+      "isLocked": false,
+      "linkedName": "Reef - AB"
+    },
+    {
+      "anchor": {
+        "x": 1.6025771103896103,
+        "y": 0.7130073051948045
+      },
+      "prevControl": {
+        "x": 2.070318422864832,
+        "y": 1.6955020225555701
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral Station - Processor Side"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 54.0
+  },
+  "reversed": false,
+  "folder": "4 Processor Side - 4 Coral (Close) - L4",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

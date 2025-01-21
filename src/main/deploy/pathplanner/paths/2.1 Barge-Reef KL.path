@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.994358766233766,
+        "y": 6.21875
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.950946082916683,
+        "y": 6.21875
+      },
+      "isLocked": false,
+      "linkedName": "Barge Start -90"
+    },
+    {
+      "anchor": {
+        "x": 3.817694805194805,
+        "y": 5.164610389610389
+      },
+      "prevControl": {
+        "x": 4.572686688311689,
+        "y": 5.933847402597403
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Reef - KL"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "reversed": false,
+  "folder": "2 Barge Side - 4 Coral (Close) - L4",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

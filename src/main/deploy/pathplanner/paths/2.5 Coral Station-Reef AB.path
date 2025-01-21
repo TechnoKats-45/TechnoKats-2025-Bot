@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6666801948051946,
+        "y": 7.34411525974026
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.876283375680041,
+        "y": 6.893316346926424
+      },
+      "isLocked": false,
+      "linkedName": "Coral Station - Barge Side"
+    },
+    {
+      "anchor": {
+        "x": 3.176663961038961,
+        "y": 4.017877435064935
+      },
+      "prevControl": {
+        "x": 2.6366519085375866,
+        "y": 5.2194454776321475
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Reef - AB"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "2 Barge Side - 4 Coral (Close) - L4",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -54.0
+  },
+  "useDefaultConstraints": true
+}
