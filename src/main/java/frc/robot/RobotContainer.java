@@ -23,7 +23,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
+
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Carriage;
+
 
 public class RobotContainer 
 {
@@ -32,8 +35,8 @@ public class RobotContainer
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -47,6 +50,7 @@ public class RobotContainer
 
     // Subsystems:
     public final Swerve drivetrain = TunerConstants.createDrivetrain();
+    public final Carriage intake = new Carriage();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -97,6 +101,7 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
+        
         // TODO
         
         //////////////////////////////////////////////////////////////////////////////////////////
