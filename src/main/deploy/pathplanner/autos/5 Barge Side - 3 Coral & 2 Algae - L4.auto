@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.1 Barge-Reef JI"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.2 Reef JI-Barge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.3 Barge-Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.4 Coral Station-Reef KL"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.5 Reef KL-Barge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.6 Barge-Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5.7 Coral Station-Reef AB"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

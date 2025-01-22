@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.66387987012987,
+        "y": 6.332711038961038
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.022887686932366,
+        "y": 6.443733001428629
+      },
+      "isLocked": false,
+      "linkedName": "Barge Score"
+    },
+    {
+      "anchor": {
+        "x": 1.6666801948051946,
+        "y": 7.34411525974026
+      },
+      "prevControl": {
+        "x": 2.5851778796486737,
+        "y": 7.19259372135657
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral Station - Barge Side"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -54.0
+  },
+  "reversed": false,
+  "folder": "5 Barge Side - 3 Coral (Far) & 2 Algae - L4",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
