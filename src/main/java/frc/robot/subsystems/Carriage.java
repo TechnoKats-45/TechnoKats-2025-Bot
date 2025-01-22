@@ -103,12 +103,12 @@ public class Carriage
     {
         TalonFXConfiguration algaeConfigs = new TalonFXConfiguration();
 
-        /* Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor */
-        algaeConfigs.Slot0.kS = 0; // To account for friction, add 0.1 V of static feedforward
-        algaeConfigs.Slot0.kV = 0; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
-        algaeConfigs.Slot0.kP = 0; // An error of 1 rotation per second results in 0.11 V output
-        algaeConfigs.Slot0.kI = 0; // No output for integrated error
-        algaeConfigs.Slot0.kD = 0; // No output for error derivative
+        /* Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor */                                      // TODO - Tune
+        algaeConfigs.Slot0.kS = 0; // To account for friction, add 0.1 V of static feedforward                                                      // TODO - Tune
+        algaeConfigs.Slot0.kV = 0; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second      // TODO - Tune
+        algaeConfigs.Slot0.kP = 0; // An error of 1 rotation per second results in 0.11 V output                                                    // TODO - Tune
+        algaeConfigs.Slot0.kI = 0; // No output for integrated error                                                                                // TODO - Tune
+        algaeConfigs.Slot0.kD = 0; // No output for error derivative                                                                                // TODO - Tune
         
         // Peak output of 8 volts
         algaeConfigs.Voltage.withPeakForwardVoltage(Volts.of(8))
@@ -131,12 +131,12 @@ public class Carriage
     {
         TalonFXConfiguration algaeConfigs = new TalonFXConfiguration();
 
-        /* Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor */
-        algaeConfigs.Slot0.kS = 0; // To account for friction, add 0.1 V of static feedforward
-        algaeConfigs.Slot0.kV = 0; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second
-        algaeConfigs.Slot0.kP = 0; // An error of 1 rotation per second results in 0.11 V output
-        algaeConfigs.Slot0.kI = 0; // No output for integrated error
-        algaeConfigs.Slot0.kD = 0; // No output for error derivative
+        /* Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor */                                      // TODO - Tune
+        algaeConfigs.Slot0.kS = 0; // To account for friction, add 0.1 V of static feedforward                                                      // TODO - Tune
+        algaeConfigs.Slot0.kV = 0; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second      // TODO - Tune
+        algaeConfigs.Slot0.kP = 0; // An error of 1 rotation per second results in 0.11 V output                                                    // TODO - Tune
+        algaeConfigs.Slot0.kI = 0; // No output for integrated error                                                                                // TODO - Tune
+        algaeConfigs.Slot0.kD = 0; // No output for error derivative                                                                                // TODO - Tune
         
         // Peak output of 8 volts
         algaeConfigs.Voltage.withPeakForwardVoltage(Volts.of(8))
@@ -158,9 +158,9 @@ public class Carriage
     public void configAlgaeAngleMotor()
     {
         TalonFXConfiguration algaeAngleMotorConfigs = new TalonFXConfiguration();
-        algaeAngleMotorConfigs.Slot1.kP = 0; // An error of 1 rotation results in 60 A output
-        algaeAngleMotorConfigs.Slot1.kI = 0; // No output for integrated error
-        algaeAngleMotorConfigs.Slot1.kD = 0; // A velocity of 1 rps results in 6 A output
+        algaeAngleMotorConfigs.Slot0.kP = 0; // An error of 1 rotation results in 60 A output       // TODO - Tune
+        algaeAngleMotorConfigs.Slot0.kI = 0; // No output for integrated error                      // TODO - Tune
+        algaeAngleMotorConfigs.Slot0.kD = 0; // A velocity of 1 rps results in 6 A output           // TODO - Tune
         
         // Peak output of 120 A
         algaeAngleMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(120))
