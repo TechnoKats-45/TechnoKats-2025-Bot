@@ -25,6 +25,7 @@ public class Climber
 
     // PID Declarations
     private final PositionTorqueCurrentFOC winch_angle = new PositionTorqueCurrentFOC(0);
+    // TODO - PID Stuff
 
     public Climber()
     {
@@ -47,7 +48,9 @@ public class Climber
     }
     
     
-    
+
+
+
     public void configWinchMotor()
     {
         TalonFXConfiguration winchMotorConfigs = new TalonFXConfiguration();
