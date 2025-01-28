@@ -64,8 +64,8 @@ public class Climber
         winchMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(120))
             .withPeakReverseTorqueCurrent(Amps.of(-120));
 
-        winchMotorConfigs.Feedback = new FeedbackConfigs()
-            .withFeedbackSensorSource(FeedbackSensorSourceValue.RemotePWM0) // Use PWM0 port on RoboRIO         // TODO - I don't think I can do closed loop unless I get another CANdi
+        //winchMotorConfigs.Feedback = new FeedbackConfigs()
+        //    .withFeedbackSensorSource(FeedbackSensorSourceValue.RemotePWM0) // Use PWM0 port on RoboRIO         // TODO - I don't think I can do closed loop unless I get another CANdi
 
 
         /* Retry config apply up to 5 times, report if failure */

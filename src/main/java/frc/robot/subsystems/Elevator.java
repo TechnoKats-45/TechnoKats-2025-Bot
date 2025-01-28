@@ -23,7 +23,7 @@ public class Elevator
     private CANdi elevatorCANdi;
 
     // PID Declarations
-    private final PositionTorqueCurrentFOC elevator_height = new PositionTorqueCurrentFOC(0);
+    private final PositionTorqueCurrentFOC elevator_angle = new PositionTorqueCurrentFOC(0);
 
     public Elevator()
     {
@@ -39,9 +39,9 @@ public class Elevator
         configElevator();
     }
 
-    public void setHeight()
+    public void setAngle(double angle)
     {
-
+        elevatorMotor1.setControl(elevator_angle.withPosition(angle/360));
     }
 
     public double getAngle()
@@ -49,11 +49,6 @@ public class Elevator
         elevatorAngle = elevatorCANdi.getPWM1Position().getValueAsDouble();   // Get the angle of the algae (-16384.0 to 16383.999755859375)
         elevatorAngle = ((elevatorAngle % 360) + 360) % 360;  // Normalize the angle to the range [0, 360)
         return elevatorAngle;
-    }
-
-    public double getHeight()
-    {
-        // TODO - 
     }
 
     public void configElevator()
