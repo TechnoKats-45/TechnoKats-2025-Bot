@@ -53,6 +53,7 @@ public class RobotContainer
     public final Swerve s_swerve = TunerConstants.createDrivetrain();
     public final Carriage s_carriage = new Carriage();
     public final Elevator s_elevator = new Elevator();
+    public final Climber s_climber = new Climber();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -92,6 +93,8 @@ public class RobotContainer
         driver.a().whileTrue(s_swerve.applyRequest(() -> brake));                           // A button - brake the drivetrain
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.leftTrigger().whileTrue(new autoAlign(s_swerve, s_carriage, s_elevator));    // Left trigger - Auto-align the robot w/ Operator selected location
+        driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
+        driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));   // POV Down - Set climber to down angle
 
         /*  Add back in once SysID is completed
         // Start Button - Cancel All Commands
@@ -129,6 +132,8 @@ public class RobotContainer
 
         operator.button(Constants.Button.location.Barge).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.Barge)));
         operator.button(Constants.Button.location.Processor).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
+
+        operator.button(Constants.Button.location.H).onTrue(s_climber.runOnce(() -> s_climber.openHopper()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES

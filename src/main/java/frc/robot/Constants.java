@@ -53,6 +53,12 @@ public class Constants
         public static final Pose2d Processor = new Pose2d(5.965, 0.542, Rotation2d.fromDegrees(270));
     }
     
+    public static final class Climber
+    {
+        public static final double hopperReleaseAngle = 0;  // TODO
+        public static final double climbAngle = 0;          // TODO
+        public static final double floorAngle = 0;           // TODO
+    }
     
     // Operator Button Board Mapping
     public static final class Button
