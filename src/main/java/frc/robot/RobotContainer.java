@@ -11,14 +11,10 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -86,16 +82,22 @@ public class RobotContainer
             )
         );
 
+        s_carriage.setDefaultCommand
+        (
+            // Carriage will execute this command periodically
+            new CarriageDefault(s_carriage, s_elevator)
+        );
+
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
 
         driver.a().whileTrue(s_swerve.applyRequest(() -> brake));                           // A button - brake the drivetrain
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
-        driver.leftTrigger().whileTrue(new autoAlign(s_swerve, s_carriage, s_elevator));    // Left trigger - Auto-align the robot w/ Operator selected location
+        driver.leftTrigger().whileTrue(new PositionAlign(s_swerve, s_carriage, s_elevator));    // Left trigger - Auto-align the robot w/ Operator selected location
         driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
-        driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));   // POV Down - Set climber to down angle
-        //driver.rightBumper().onTrue(autoIntake(s_carriage));                                // Right bumper - Auto-intake
+        driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));     // POV Down - Set climber to down angle
+        driver.rightBumper().onTrue(new FloorCoralIntake(s_carriage, s_elevator));                              // Right bumper - Coral Floor Intake
 
         /*  Add back in once SysID is completed
         // Start Button - Cancel All Commands
@@ -106,14 +108,14 @@ public class RobotContainer
         /// OPERATOR CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         
-        operator.button(Constants.Button.height.L1).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.L1)));
-        operator.button(Constants.Button.height.L2).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.L2)));
-        operator.button(Constants.Button.height.L3).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.L3)));
-        operator.button(Constants.Button.height.L4).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.L4)));
-        operator.button(Constants.Button.height.Barge).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.Barge)));
+        operator.button(Constants.Button.height.L1).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1)));
+        operator.button(Constants.Button.height.L2).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L2)));
+        operator.button(Constants.Button.height.L3).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L3)));
+        operator.button(Constants.Button.height.L4).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4)));
+        operator.button(Constants.Button.height.Barge).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Barge)));
 
-        operator.button(Constants.Button.height.A1).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.A1)));
-        operator.button(Constants.Button.height.A2).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.A2)));
+        operator.button(Constants.Button.height.A1).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.A1)));
+        operator.button(Constants.Button.height.A2).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.A2)));
 
         operator.button(Constants.Button.location.A).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.A)));
         operator.button(Constants.Button.location.B).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.B)));

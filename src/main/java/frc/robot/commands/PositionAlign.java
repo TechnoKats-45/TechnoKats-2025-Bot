@@ -13,37 +13,32 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.math.util.Units;
 
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Elevator;
 
-import frc.robot.Constants;
-
-public class autoAlign extends Command
+public class PositionAlign extends Command
 {
     private Swerve s_swerve;
-    private Carriage s_carriage;
-    private Elevator s_elevator;
+    private Pose2d targetPose;
 
-    public autoAlign(Swerve s_swerve, Carriage s_carriage, Elevator s_elevator)
+    public PositionAlign(Swerve s_swerve, Carriage s_carriage, Elevator s_elevator)
     {
         this.s_swerve = s_swerve;
-        this.s_carriage = s_carriage;
-        this.s_elevator = s_elevator;
-
+        
         addRequirements(s_swerve, s_carriage, s_elevator);
     }
 
     public void execute()
     {
+        targetPose = s_swerve.getDestination();
         Pose2d currentPose = s_swerve.getState().Pose;
 
         // The rotation component in these poses represents the direction of travel
-        Pose2d startPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
-        Pose2d endPos = new Pose2d(currentPose.getTranslation().plus(new Translation2d(2.0, 0.0)), new Rotation2d());
+        Pose2d startPos = new Pose2d(currentPose.getTranslation(), currentPose.getRotation());
+        Pose2d endPos = new Pose2d(currentPose.getTranslation().plus(new Translation2d(targetPose.getX(), targetPose.getY())), targetPose.getRotation());
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPos, endPos);
         PathPlannerPath path = new PathPlannerPath
@@ -51,11 +46,11 @@ public class autoAlign extends Command
             waypoints, 
             new PathConstraints
             (
-                4.0, 4.0, 
+                4.0, 4.0, // TODO - check these numbers
                 Units.degreesToRadians(360), Units.degreesToRadians(540)
             ),
             null, // Ideal starting state can be null for on-the-fly paths
-            new GoalEndState(0.0, currentPose.getRotation())
+            new GoalEndState(0.0, targetPose.getRotation())
         );
 
         // Flips the path for the RED alliance.

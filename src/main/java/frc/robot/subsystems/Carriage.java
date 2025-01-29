@@ -50,51 +50,44 @@ public class Carriage extends SubsystemBase
         configAlgaeAngleMotor();
     }
 
-
     ///////////////////////////////////////////////////////////////////////////
     /// ALGAE Helpers
     /////////////////////////////////////////////////////////////////////////// 
 
-    public class Algae
+    public double getAlgaeAngle()
     {
-        public double getAngle()
-        {
-            algaeAngle = algaeCANdi.getPWM1Position().getValueAsDouble();   // Get the angle of the algae (-16384.0 to 16383.999755859375)
-            algaeAngle = ((algaeAngle % 360) + 360) % 360;  // Normalize the angle to the range [0, 360)
-            return algaeAngle;
-        }
+        algaeAngle = algaeCANdi.getPWM1Position().getValueAsDouble();   // Get the angle of the algae (-16384.0 to 16383.999755859375)
+        algaeAngle = ((algaeAngle % 360) + 360) % 360;  // Normalize the angle to the range [0, 360)
+        return algaeAngle;
+    }
 
-        public void setAngle(double angle)
-        {
-            algaeAngleMotor.setControl(algae_angle.withPosition(angle/360));
-        }
+    public void setAlgaeAngle(double angle)
+    {
+        algaeAngleMotor.setControl(algae_angle.withPosition(angle/360));
+    }
 
-        public boolean isAlgaeDetected()
-        {
-            return algaeCANdi.getS2State().getValueAsDouble() > 0;
-        }
+    public boolean isAlgaeDetected()
+    {
+        return algaeCANdi.getS2State().getValueAsDouble() > 0;
+    }
 
-        public void setSpeed(double speed)
-        {
-            algaeMotor.setControl(algae_velocity.withVelocity(speed));
-        }
+    public void setAlgaeSpeed(double speed)
+    {
+        algaeMotor.setControl(algae_velocity.withVelocity(speed));
     }
 
     ///////////////////////////////////////////////////////////////////////////
     /// CORAL Helpers
     /////////////////////////////////////////////////////////////////////////// 
 
-    public class Coral
+    public boolean isCoralDetected()
     {
-        public boolean isCoralDetected()
-        {
-            return coralCANdi.getS2State().getValueAsDouble() > 0;
-        }
+        return coralCANdi.getS2State().getValueAsDouble() > 0;
+    }
 
-        public void setSpeed(double speed)
-        {
-            coralMotor.setControl(coral_velocity.withVelocity(speed));
-        }
+    public void setCoralSpeed(double speed)
+    {
+        coralMotor.setControl(coral_velocity.withVelocity(speed));
     }
     
     ///////////////////////////////////////////////////////////////////////////
