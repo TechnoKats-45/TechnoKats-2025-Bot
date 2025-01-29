@@ -95,6 +95,7 @@ public class RobotContainer
         driver.leftTrigger().whileTrue(new autoAlign(s_swerve, s_carriage, s_elevator));    // Left trigger - Auto-align the robot w/ Operator selected location
         driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
         driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));   // POV Down - Set climber to down angle
+        //driver.rightBumper().onTrue(autoIntake(s_carriage));                                // Right bumper - Auto-intake
 
         /*  Add back in once SysID is completed
         // Start Button - Cancel All Commands
