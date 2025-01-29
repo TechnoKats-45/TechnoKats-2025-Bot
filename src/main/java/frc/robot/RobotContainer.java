@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 import frc.robot.generated.TunerConstants;
 
-import frc.robot.Commands.*;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 public class RobotContainer 
@@ -89,9 +89,9 @@ public class RobotContainer
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
 
-        driver.a().whileTrue(s_swerve.applyRequest(() -> brake));                   // A button - brake the drivetrain
-        driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));     // B button - Reset the field-centric heading on B button press
-        driver.leftTrigger().whileTrue(new autoAlign(s_swerve, s_carriage, s_elevator));                                    // Left trigger - Auto-align the robot w/ Operator selected location
+        driver.a().whileTrue(s_swerve.applyRequest(() -> brake));                           // A button - brake the drivetrain
+        driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
+        driver.leftTrigger().whileTrue(new autoAlign(s_swerve, s_carriage, s_elevator));    // Left trigger - Auto-align the robot w/ Operator selected location
 
         /*  Add back in once SysID is completed
         // Start Button - Cancel All Commands

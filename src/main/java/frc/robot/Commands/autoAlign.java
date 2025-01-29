@@ -1,4 +1,4 @@
-package frc.robot.Commands;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -58,19 +58,29 @@ public class autoAlign extends Command
             new GoalEndState(0.0, currentPose.getRotation())
         );
 
-      // Flips the path for the RED alliance.
-      path.preventFlipping = false;
+        // Flips the path for the RED alliance.
+        path.preventFlipping = false;
 
-      AutoBuilder.followPath(path).schedule();
+        AutoBuilder.followPath(path).schedule();
     }
 
     public boolean isFinished()
     {
-        return false;
+        Pose2d currentPose = s_swerve.getState().Pose;
+        Pose2d targetPose = new Pose2d(currentPose.getTranslation().plus(new Translation2d(2.0, 0.0)), new Rotation2d());
+    
+        double positionTolerance = Units.inchesToMeters(1.5); // meters
+        double rotationTolerance = Units.degreesToRadians(1.0); // radians
+    
+        boolean positionAligned = currentPose.getTranslation().getDistance(targetPose.getTranslation()) < positionTolerance;
+        boolean rotationAligned = Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()) < rotationTolerance;
+    
+        return positionAligned && rotationAligned;
     }
+    
 
     public void end(boolean interrupted)
     {
-
+        
     }
 }
