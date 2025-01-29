@@ -44,6 +44,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    private Pose2d onTheFlyDestination;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -132,7 +133,12 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
-    
+    public void setDestination(Pose2d destination)
+    {
+        onTheFlyDestination = destination;
+    }
+
+
     
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -251,7 +257,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
     }
-
 
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.

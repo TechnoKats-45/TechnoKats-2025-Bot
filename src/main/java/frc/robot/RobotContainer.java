@@ -21,12 +21,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 import frc.robot.generated.TunerConstants;
 
-import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Carriage;
-
+import frc.robot.Commands.*;
+import frc.robot.subsystems.*;
 
 public class RobotContainer 
 {
@@ -46,11 +46,13 @@ public class RobotContainer
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController driver = new CommandXboxController(0);
-    private final CommandXboxController operator = new CommandXboxController(1);
+    //private final CommandXboxController operator = new CommandXboxController(1);
+    private final CommandJoystick operator = new CommandJoystick(1);
 
     // Subsystems:
-    public final Swerve drivetrain = TunerConstants.createDrivetrain();
-    public final Carriage intake = new Carriage();
+    public final Swerve s_swerve = TunerConstants.createDrivetrain();
+    public final Carriage s_carriage = new Carriage();
+    public final Elevator s_elevator = new Elevator();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -67,15 +69,15 @@ public class RobotContainer
     {
 
         //////////////////////////////////////////////////////////////////////////////////////////
-        /// DRIVER CONTROLS
+        /// DEFAULT COMMANDS
         //////////////////////////////////////////////////////////////////////////////////////////
-
+        
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand
+        s_swerve.setDefaultCommand
         (
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest
+            s_swerve.applyRequest
             (() ->
                 drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
@@ -83,18 +85,16 @@ public class RobotContainer
             )
         );
 
-        driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        /*
-        driver.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))
-        ));
-        */
+        //////////////////////////////////////////////////////////////////////////////////////////
+        /// DRIVER CONTROLS
+        //////////////////////////////////////////////////////////////////////////////////////////
 
-        // reset the field-centric heading on B button press
-        driver.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driver.a().whileTrue(s_swerve.applyRequest(() -> brake));                   // A button - brake the drivetrain
+        driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));     // B button - Reset the field-centric heading on B button press
+        driver.leftTrigger().whileTrue(new autoAlign(s_swerve, s_carriage, s_elevator));                                    // Left trigger - Auto-align the robot w/ Operator selected location
 
         /*  Add back in once SysID is completed
-        // Start Button - Cancel All Commands // THIS WORKS
+        // Start Button - Cancel All Commands
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
         */        
 
@@ -102,18 +102,44 @@ public class RobotContainer
         /// OPERATOR CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         
-        // TODO
-        
+        operator.button(Constants.Button.height.L1).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.L1)));
+        operator.button(Constants.Button.height.L2).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.L2)));
+        operator.button(Constants.Button.height.L3).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.L3)));
+        operator.button(Constants.Button.height.L4).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.L4)));
+        operator.button(Constants.Button.height.Barge).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.Barge)));
+
+        operator.button(Constants.Button.height.A1).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.A1)));
+        operator.button(Constants.Button.height.A2).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.HeightPresets.A2)));
+
+        operator.button(Constants.Button.location.A).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.A)));
+        operator.button(Constants.Button.location.B).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.B)));
+        operator.button(Constants.Button.location.C).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.C)));
+        operator.button(Constants.Button.location.D).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.D)));
+        operator.button(Constants.Button.location.E).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.E)));
+        operator.button(Constants.Button.location.F).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.F)));
+        operator.button(Constants.Button.location.G).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.G)));
+        operator.button(Constants.Button.location.H).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.H)));
+        operator.button(Constants.Button.location.I).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.I)));
+        operator.button(Constants.Button.location.J).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.J)));
+        operator.button(Constants.Button.location.K).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.K)));
+        operator.button(Constants.Button.location.L).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.L)));
+
+        operator.button(Constants.Button.location.LeftCoral).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.LeftCoral)));
+        operator.button(Constants.Button.location.RightCoral).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.RightCoral)));
+
+        operator.button(Constants.Button.location.Barge).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.Barge)));
+        operator.button(Constants.Button.location.Processor).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
+
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES
         //////////////////////////////////////////////////////////////////////////////////////////
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        driver.back().and(driver.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        driver.back().and(driver.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        driver.start().and(driver.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        driver.start().and(driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
+        driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
+        driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
+        driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
     }
 
     public Command getAutonomousCommand() 

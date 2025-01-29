@@ -12,7 +12,9 @@ import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
-public class Carriage
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class Carriage extends SubsystemBase
 {
     // CAN IDs:
     int coralMotorID = 1;           // TODO - Replace with actual CAN ID

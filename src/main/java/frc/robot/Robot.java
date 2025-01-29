@@ -33,7 +33,7 @@ public class Robot extends TimedRobot
 
     if (kUseLimelight) 
     {
-      var driveState = m_robotContainer.drivetrain.getState();
+      var driveState = m_robotContainer.s_swerve.getState();
       double headingDeg = driveState.Pose.getRotation().getDegrees();
       double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
@@ -73,7 +73,7 @@ public class Robot extends TimedRobot
           if (limelightAvgStdDev[i] < dynamicThreshold && Math.abs(omegaRps) < 2.0) 
           {
             LimelightHelpers.SetRobotOrientation(limelightName, headingDeg, 0, 0, 0, 0, 0);
-            m_robotContainer.drivetrain.addVisionMeasurement
+            m_robotContainer.s_swerve.addVisionMeasurement
             (
               llMeasurement.pose, 
               Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds)
