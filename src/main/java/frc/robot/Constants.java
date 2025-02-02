@@ -1,23 +1,13 @@
 package frc.robot;
 
-import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-
-//import com.pathplanner.lib.config.RobotConfig;
-//import com.pathplanner.lib.path.PathConstraints;
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
 
-import java.util.function.BiFunction;
+
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class Constants 
 {
@@ -53,6 +43,12 @@ public class Constants
         public static final Pose2d Processor = new Pose2d(5.965, 0.542, Rotation2d.fromDegrees(270));
     }
     
+    public static final class Climber
+    {
+        public static final double hopperReleaseAngle = 0;  // TODO
+        public static final double climbAngle = 0;          // TODO
+        public static final double floorAngle = 0;           // TODO
+    }
     
     // Operator Button Board Mapping
     public static final class Button
@@ -93,14 +89,32 @@ public class Constants
         public static final int H = -1;
     }
 
-    public static final class HeightPresets // TODO
+    public static final class Elevator
     {
-        public static final double L1 = 0;
-        public static final double L2 = 0;
-        public static final double L3 = 0;
-        public static final double L4 = 0;
-        public static final double Barge = 0;
-        public static final double A1 = 0;
-        public static final double A2 = 0;
+        public static final double elevatorHeightTolerance = 0; // TODO
+        public static final double GearRatio = 0; // TODO
+
+        public static final class HeightPresets // TODO
+        {
+            public static final double L1 = 0;
+            public static final double L2 = 0;
+            public static final double L3 = 0;
+            public static final double L4 = 0;
+            public static final double Barge = 0;
+            public static final double A1 = 0;
+            public static final double A2 = 0;
+
+            public static final double handoffHeight = 0;
+        }
+    }
+
+    public static final class Carriage
+    {
+        public static final double algaeIntakeSpeed = 0; // TODO
+
+        public static final double coralIntakeSpeed = 0; // TODO
+        public static final double coralPassiveIntakeSpeed = 0.10; // TODO
+        public static final double coralReverseSpeed = 0.10; // TODO;
+        public static final double coralSlowIntakeSpeed = 0.10; // TODO
     }
 }

@@ -1,17 +1,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Servo;
 
 import frc.robot.Constants;
 
@@ -23,6 +20,7 @@ public class Climber extends SubsystemBase
 
     private TalonFX winchMotor;
     private DutyCycleEncoder m_absoluteEncoder;
+    private Servo m_hatchServo;
 
     // PID Declarations
     private final PositionTorqueCurrentFOC winch_angle = new PositionTorqueCurrentFOC(0);
@@ -48,9 +46,10 @@ public class Climber extends SubsystemBase
         return m_absoluteEncoder.get() * 360;
     }
     
-    
-
-
+    public void openHopper()
+    {
+        m_hatchServo.setAngle(Constants.Climber.hopperReleaseAngle);
+    }
 
     public void configWinchMotor()
     {
