@@ -8,10 +8,11 @@
     "2 Barge Side - 4 Coral (Close) - L4",
     "3 Processor Side - 3 Coral (Far) - L4",
     "4 Processor Side - 4 Coral (Close) - L4",
-    "5 Barge Side - 3 Coral (Far) & 2 Algae - L4"
+    "5 Barge Side - 3 Coral (Far) & 2 Algae - L4",
+    "6 Processor Side - 3 Coral (Far) & 2 Algae - L4"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 3.0,
+  "defaultMaxVel": 3.78,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

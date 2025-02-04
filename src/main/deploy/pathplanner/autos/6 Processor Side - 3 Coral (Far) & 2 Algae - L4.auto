@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.1 Barge-Reef EF"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.2 Reef EF-Processor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.3 Processor-Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.4 Coral Station-Reef CD"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.5 Reef CD-Processor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.6 Processor-Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.7 Coral Station-Reef CD"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase
 
     public double getAngle()
     {
-        elevatorAngle = elevatorCANdi.getPWM1Position().getValueAsDouble();   // Get the angle of the algae (-16384.0 to 16383.999755859375)
+        elevatorAngle = elevatorCANdi.getPWM1Position().getValueAsDouble();   // Get the angle of the elevator (-16384.0 to 16383.999755859375)
         elevatorAngle = ((elevatorAngle % 360) + 360) % 360;  // Normalize the angle to the range [0, 360)
         return elevatorAngle;
     }
