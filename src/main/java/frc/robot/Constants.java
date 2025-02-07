@@ -11,6 +11,8 @@ import java.util.function.Function;
 
 public class Constants 
 {
+    public static final double STICK_DEADBAND = 0.1;
+
     public static final class Vision
     {
         public static final String LIMELIGHT_FRONT_TABLE = "limelight-front";   // TODO
@@ -91,6 +93,10 @@ public class Constants
 
     public static final class Elevator
     {
+        public static final int elevatorMotor1ID = 7;
+        public static final int elevatorMotor2ID = 8;
+        public static final int elevatorCANdiID = 9;
+
         public static final double elevatorHeightTolerance = 0; // TODO
         public static final double GearRatio = 0; // TODO
 

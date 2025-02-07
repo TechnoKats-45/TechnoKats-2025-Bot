@@ -14,18 +14,15 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import static edu.wpi.first.units.Units.*;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
 
 public class Elevator extends SubsystemBase
 {
-    // CAN IDs:
-    int elevatorMotor1ID = 7;
-    int elevatorMotor2ID = 8;
-    int elevatorCANdiID = 9;
-
     private TalonFX elevatorMotor1;
     private TalonFX elevatorMotor2;
     private Follower follower;
@@ -42,9 +39,10 @@ public class Elevator extends SubsystemBase
     public Elevator()
     {
         // Initialize motors and sensors
-        elevatorMotor1 = new TalonFX(elevatorMotor1ID);
-        elevatorMotor2 = new TalonFX(elevatorMotor2ID);
-        follower = new Follower(elevatorMotor1ID, false);
+        elevatorMotor1 = new TalonFX(Constants.Elevator.elevatorMotor1ID);
+        elevatorMotor2 = new TalonFX(Constants.Elevator.elevatorMotor2ID);
+        follower = new Follower(Constants.Elevator.elevatorMotor1ID, false);
+        elevatorCANdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
         // How to control it:
             //elevatorMotor1.set(x);
@@ -60,7 +58,7 @@ public class Elevator extends SubsystemBase
 
     public void setHeightPreset(double angle)
     {
-        currentHeightPreset = angle;
+        currentHeightPreset = angle;    // TODO - Change to height, rn it's angle
     }
 
     public void setAngle(double angle)
@@ -87,6 +85,23 @@ public class Elevator extends SubsystemBase
         return 0;
     }
 
+    public void ManualElevator(CommandXboxController controller)
+    {
+        if(controller.getRightY() < -Constants.STICK_DEADBAND)  // Up
+        {
+            elevatorMotor1.set(.1);  // Go up
+        }
+        else if(controller.getRightY() > Constants.STICK_DEADBAND) // Up
+        {
+            elevatorMotor1.set(-.1); // Go down
+        }
+        else
+        {
+            // Hold Position
+            elevatorMotor1.set(0);
+        }
+    }
+
     public void configElevator()
     {
         TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
@@ -102,6 +117,7 @@ public class Elevator extends SubsystemBase
             .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));  // Take approximately 0.1 seconds to reach max accel 
         
         elevatorConfig.Slot0.kS = 0; // Add 0.25 V output to overcome static friction       // TODO - Tune
+        elevatorConfig.Slot0.kG = 0;                                                        // TODO - Tune
         elevatorConfig.Slot0.kV = 0; // A velocity target of 1 rps results in 0.12 V output // TODO - Tune
         elevatorConfig.Slot0.kA = 0; // An acceleration of 1 rps/s requires 0.01 V output   // TODO - Tune
         elevatorConfig.Slot0.kP = 0; // An error of 1 rotation results in 60 A output       // TODO - Tune
@@ -118,5 +134,13 @@ public class Elevator extends SubsystemBase
         {
             System.out.println("Could not configure device. Error: " + status.toString());
         }
+    }
+
+    public void printDiagnostics()
+    {
+        SmartDashboard.putNumber("Elevator Height", getHeight());
+        SmartDashboard.putNumber("Elevator Angle", getAngle());
+        SmartDashboard.putNumber("currentHeightPreset", currentHeightPreset);
+        SmartDashboard.putBoolean("Elevator Aligned", isAligned());
     }
 }

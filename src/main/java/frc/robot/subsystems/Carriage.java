@@ -12,7 +12,9 @@ import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Carriage extends SubsystemBase
 {
@@ -23,6 +25,7 @@ public class Carriage extends SubsystemBase
     int algaeAngleMotorID = 4;      // TODO - Replace with actual CAN ID
     int algaeCANdiID = 5;           // TODO - Replace with actual CAN ID
     double algaeAngle;
+    double algaeAnglePreset;
 
     private TalonFX coralMotor;
     private TalonFX algaeMotor;
@@ -179,5 +182,12 @@ public class Carriage extends SubsystemBase
     
         /* Make sure we start at 0 */
         algaeAngleMotor.setPosition(0);
+    }
+
+    public void printDiagnostics()
+    {
+        SmartDashboard.putBoolean("Algae Detecected", isAlgaeDetected());
+        SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
+        SmartDashboard.putNumber("Algae Intake Angle", getAlgaeAngle());
     }
 }

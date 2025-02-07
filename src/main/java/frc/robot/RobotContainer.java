@@ -35,15 +35,12 @@ public class RobotContainer
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-    private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController driver = new CommandXboxController(0);
-    //private final CommandXboxController operator = new CommandXboxController(1);
-    private final CommandJoystick operator = new CommandJoystick(1);
+    private final CommandXboxController driver = new CommandXboxController(0);              // Driver Controller
+    private final CommandJoystick operator = new CommandJoystick(1);                        // Operator Button Board
+    private final CommandXboxController testController = new CommandXboxController(2);      // Test Controller
 
     // Subsystems:
     public final Swerve s_swerve = TunerConstants.createDrivetrain();
@@ -86,6 +83,12 @@ public class RobotContainer
         (
             // Carriage will execute this command periodically
             new CarriageDefault(s_carriage, s_elevator)
+        );
+
+        s_elevator.setDefaultCommand
+        (
+            // Elevator will execute this command periodically
+            new ManualElevator(s_elevator, testController)
         );
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -166,5 +169,10 @@ public class RobotContainer
         //Example:
             // Use event markers as triggers
             new EventTrigger("Example Marker").onTrue(Commands.print("Passed an event marker"));
+    }
+
+    public void printDiagnostics()
+    {
+        s_elevator.printDiagnostics();
     }
 }

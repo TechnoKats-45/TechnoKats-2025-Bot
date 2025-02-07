@@ -22,7 +22,8 @@ public class Robot extends TimedRobot
 
   private final boolean kUseLimelight = true;
 
-  public Robot() {
+  public Robot() 
+  {
     m_robotContainer = new RobotContainer();
   }
 
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot
   public void robotPeriodic() 
   {
     CommandScheduler.getInstance().run();
+    m_robotContainer.printDiagnostics();
 
     if (kUseLimelight) 
     {

@@ -1,26 +1,32 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import static edu.wpi.first.units.Units.Amps;
+
+import edu.wpi.first.hal.ConstantsJNI;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Servo;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase
 {
     // CAN IDs:
     int winchMotorID = 6;           // TODO - Replace with actual CAN ID
-    int EncoderPort = 0;            // TODO - Replace with actual DIO port number on RIO
+    double climberAngle;
 
     private TalonFX winchMotor;
     private DutyCycleEncoder m_absoluteEncoder;
     private Servo m_hatchServo;
+    private CANdi climberCaNdi;
 
     // PID Declarations
     private final PositionTorqueCurrentFOC winch_angle = new PositionTorqueCurrentFOC(0);
@@ -30,8 +36,7 @@ public class Climber extends SubsystemBase
     {
         // Initialize motors and sensors
         winchMotor = new TalonFX(winchMotorID);
-        m_absoluteEncoder = new DutyCycleEncoder(EncoderPort);
-
+        climberCaNdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
         configWinchMotor();
     }
@@ -43,7 +48,9 @@ public class Climber extends SubsystemBase
     
     public double getAngle()
     {
-        return m_absoluteEncoder.get() * 360;
+        climberAngle = climberCaNdi.getPWM2Position().getValueAsDouble();   // Get the angle of the algae (-16384.0 to 16383.999755859375)
+        climberAngle = ((climberAngle % 360) + 360) % 360;  // Normalize the angle to the range [0, 360)
+        return climberAngle;
     }
     
     public void openHopper()
@@ -64,8 +71,9 @@ public class Climber extends SubsystemBase
         winchMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(120))
             .withPeakReverseTorqueCurrent(Amps.of(-120));
 
-        //winchMotorConfigs.Feedback = new FeedbackConfigs()
-        //    .withFeedbackSensorSource(FeedbackSensorSourceValue.RemotePWM0) // Use PWM0 port on RoboRIO         // TODO - I don't think I can do closed loop unless I get another CANdi
+        winchMotorConfigs.Feedback = new FeedbackConfigs()
+            .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANdiPWM2)
+            .withFeedbackRemoteSensorID(Constants.Elevator.elevatorCANdiID);
 
 
         /* Retry config apply up to 5 times, report if failure */
@@ -82,5 +90,10 @@ public class Climber extends SubsystemBase
             
         /* Make sure we start at 0 */
         winchMotor.setPosition(0);
+    }
+
+        public void printDiagnostics()
+    {
+        SmartDashboard.putNumber("Climber Winch Angle", getAngle());
     }
 }
