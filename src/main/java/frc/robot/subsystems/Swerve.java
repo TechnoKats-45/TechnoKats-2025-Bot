@@ -26,7 +26,8 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -46,6 +47,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
+
+    private boolean isAlgae;
 
     /** Swerve request to apply during robot-centric path following */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
@@ -134,8 +137,37 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         onTheFlyDestination = destination;
     }
 
-    public Pose2d getDestination()
-    {
+    public Pose2d getDestination(CommandXboxController controller)
+    {        
+        isAlgae = (controller.button(Constants.Button.height.A1).getAsBoolean() || controller.button(Constants.Button.height.A2).getAsBoolean());
+
+        if(isAlgae) // Change requested Posed2d to the Algae Cleaning Pose2d if Height is set to Algae
+        {
+            if(onTheFlyDestination == Constants.Destinations.A || onTheFlyDestination == Constants.Destinations.B)
+            {
+                return Constants.Destinations.AB;
+            }
+            else if(onTheFlyDestination == Constants.Destinations.C || onTheFlyDestination == Constants.Destinations.D)
+            {
+                return Constants.Destinations.CD;
+            }
+            else if(onTheFlyDestination == Constants.Destinations.E || onTheFlyDestination == Constants.Destinations.F)
+            {
+                return Constants.Destinations.EF;
+            }
+            else if(onTheFlyDestination == Constants.Destinations.G || onTheFlyDestination == Constants.Destinations.H)
+            {
+                return Constants.Destinations.GH;
+            }
+            else if(onTheFlyDestination == Constants.Destinations.I || onTheFlyDestination == Constants.Destinations.J)
+            {
+                return Constants.Destinations.IJ;
+            }
+            else if(onTheFlyDestination == Constants.Destinations.K || onTheFlyDestination == Constants.Destinations.L)
+            {
+                return Constants.Destinations.KL;
+            }
+        }
         return onTheFlyDestination;
     }
     

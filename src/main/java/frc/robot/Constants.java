@@ -25,6 +25,7 @@ public class Constants
 
     public static final class Destinations
     {
+        // For Coral Scoring - Numbers taken from PathPlanner manually
         public static final Pose2d A = new Pose2d(3.146, 4.179, Rotation2d.fromDegrees(0));
         public static final Pose2d B = new Pose2d(3.146, 3.861, Rotation2d.fromDegrees(0));
         public static final Pose2d C = new Pose2d(3.695, 2.976, Rotation2d.fromDegrees(60));
@@ -38,9 +39,19 @@ public class Constants
         public static final Pose2d K = new Pose2d(3.964, 5.257, Rotation2d.fromDegrees(300));
         public static final Pose2d L = new Pose2d(3.964, 5.103, Rotation2d.fromDegrees(300));
 
-        public static final Pose2d LeftCoral = new Pose2d(1.693, 7.354, Rotation2d.fromDegrees(130+180));   // TODO - get more accurate value
-        public static final Pose2d RightCoral = new Pose2d(1.665, 0.696, Rotation2d.fromDegrees(220+180));  // TODO - get more accurate value
+        // For Algae Cleaning - Numbers taken from PathPlanner manually
+        public static final Pose2d AB = new Pose2d(3.146, 3.146, Rotation2d.fromDegrees(0));
+        public static final Pose2d CD = new Pose2d(3.832, 3.832, Rotation2d.fromDegrees(60));
+        public static final Pose2d EF = new Pose2d(5.134, 5.134, Rotation2d.fromDegrees(120));
+        public static final Pose2d GH = new Pose2d(5.803, 4.017, Rotation2d.fromDegrees(180));
+        public static final Pose2d IJ = new Pose2d(5.148, 5.171, Rotation2d.fromDegrees(240));
+        public static final Pose2d KL = new Pose2d(3.823, 5.166, Rotation2d.fromDegrees(300));
 
+        // For Coral Aquisition - Numbers taken from PathPlanner manually
+        public static final Pose2d LeftCoral = new Pose2d(1.693, 7.354, Rotation2d.fromDegrees(130+180));   // TODO - get more accurate values from actual field
+        public static final Pose2d RightCoral = new Pose2d(1.665, 0.696, Rotation2d.fromDegrees(220+180));  // TODO - get more accurate value from actual field
+
+        // For Algae Scoring - Numbers taken from PathPlanner manually
         public static final Pose2d Barge = new Pose2d(7.755, 6.498, Rotation2d.fromDegrees(0.180));
         public static final Pose2d Processor = new Pose2d(5.965, 0.542, Rotation2d.fromDegrees(270));
     }
@@ -116,11 +127,21 @@ public class Constants
 
     public static final class Carriage
     {
-        public static final double algaeIntakeSpeed = 0; // TODO
+        public static final double algaeCleanSpeed = .10; // TODO
+        public static final double algaeCleanAngle = 45; // TODO
+        
+        public static final double algaeScoreSpeed = 1; // TODO
+        public static final double algaeScoreAngle = 90; // TODO
+
+        public static final double algaeAngleTolerance = 5; // TODO
+
+        public static final double algaeStowAngle = -90; // TODO
+
 
         public static final double coralIntakeSpeed = 0; // TODO
         public static final double coralPassiveIntakeSpeed = 0.10; // TODO
         public static final double coralReverseSpeed = 0.10; // TODO;
         public static final double coralSlowIntakeSpeed = 0.10; // TODO
+        public static final double coralScoreSpeed = .10; // TODO
     }
 }

@@ -61,9 +61,20 @@ public class Elevator extends SubsystemBase
         currentHeightPreset = angle;    // TODO - Change to height, rn it's angle
     }
 
-    public void setAngle(double angle)
+    public double getHeightPreset()
+    {
+        return currentHeightPreset;
+    }
+
+    public void setAngle(double angle) // Set to angle
     {
         elevatorMotor1.setControl(elevator_angle.withPosition(angle/360));
+        elevatorMotor2.setControl(follower);
+    }
+
+    public void setAngle()  // Set to currentHeightPreset   // TODO - Change to height, rn it's angle
+    {
+        elevatorMotor1.setControl(elevator_angle.withPosition(currentHeightPreset/360));
         elevatorMotor2.setControl(follower);
     }
 

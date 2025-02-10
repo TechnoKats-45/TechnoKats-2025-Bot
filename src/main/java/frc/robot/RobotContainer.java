@@ -15,9 +15,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+
 
 import frc.robot.generated.TunerConstants;
 
@@ -87,7 +94,7 @@ public class RobotContainer
 
         s_elevator.setDefaultCommand
         (
-            // Elevator will execute this command periodically
+            // Elevator will execute this command periodically  // TODO - Comment out when tuned / tested
             new ManualElevator(s_elevator, testController)
         );
 
@@ -97,11 +104,27 @@ public class RobotContainer
 
         driver.a().whileTrue(s_swerve.applyRequest(() -> brake));                           // A button - brake the drivetrain
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
-        driver.leftTrigger().whileTrue(new PositionAlign(s_swerve, s_carriage, s_elevator));    // Left trigger - Auto-align the robot w/ Operator selected location
         driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
         driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));     // POV Down - Set climber to down angle
         driver.rightBumper().onTrue(new FloorCoralIntake(s_carriage, s_elevator));                              // Right bumper - Coral Floor Intake
-
+        
+        driver.leftTrigger().whileTrue
+        (
+            new SequentialCommandGroup
+            (
+                new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
+                new GoToHeightPreset(s_carriage, s_elevator, s_swerve), // 2. Go to height
+                new ConditionalCommand  // 3. Score / Clean
+                (
+                    // If the condition is TRUE, run AutoClean
+                    new AutoClean(s_carriage, s_elevator),  
+                    // Otherwise, run AutoScore - passes if is set to Barge Height
+                    new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),
+                    // The condition (must be a BooleanSupplier)
+                    () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
+                )
+            )
+        );
         /*  Add back in once SysID is completed
         // Start Button - Cancel All Commands
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));

@@ -69,6 +69,11 @@ public class Carriage extends SubsystemBase
         algaeAngleMotor.setControl(algae_angle.withPosition(angle/360));
     }
 
+    public boolean isAlgaeAngleAligned()
+    {
+        return (Math.abs(getAlgaeAngle() - algaeAnglePreset)) <= (Constants.Carriage.algaeAngleTolerance);
+    }
+
     public boolean isAlgaeDetected()
     {
         return algaeCANdi.getS2State().getValueAsDouble() > 0;

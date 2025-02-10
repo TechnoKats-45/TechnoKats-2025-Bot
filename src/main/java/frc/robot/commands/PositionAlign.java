@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import java.util.List;
 
@@ -18,22 +19,27 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Elevator;
+import frc.robot.Constants;
 
 public class PositionAlign extends Command
 {
     private Swerve s_swerve;
     private Pose2d targetPose;
+    private boolean isAlgae;
+    private CommandXboxController controller;
 
-    public PositionAlign(Swerve s_swerve, Carriage s_carriage, Elevator s_elevator)
+    public PositionAlign(Swerve s_swerve, Carriage s_carriage, Elevator s_elevator, CommandXboxController controller)
     {
         this.s_swerve = s_swerve;
+        this.isAlgae = isAlgae;
+        this.controller = controller;
         
         addRequirements(s_swerve, s_carriage, s_elevator);
     }
 
     public void execute()
     {
-        targetPose = s_swerve.getDestination();
+        targetPose = s_swerve.getDestination(controller);
         Pose2d currentPose = s_swerve.getState().Pose;
 
         // The rotation component in these poses represents the direction of travel
