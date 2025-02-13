@@ -68,38 +68,38 @@ public class Constants
     {
         public static final class height    // TODO
         {
-            public static final int L1 = -1;
-            public static final int L2 = -1;
-            public static final int L3 = -1;
-            public static final int L4 = -1;
-            public static final int Barge = -1;
-            public static final int A1 = -1;
-            public static final int A2 = -1;
+            public static final int L1 = 5;
+            public static final int L2 = 4;
+            public static final int L3 = 3;
+            public static final int L4 = 2;
+            public static final int Barge = 1;
+            public static final int A1 = 16;
+            public static final int A2 = 15;
         }
 
         public static final class location  // TODO
         {
-            public static final int A = -1;
-            public static final int B = -1;
-            public static final int C = -1;
-            public static final int D = -1;
-            public static final int E = -1;
-            public static final int F = -1;
-            public static final int G = -1;
-            public static final int H = -1;
-            public static final int I = -1;
-            public static final int J = -1;
-            public static final int K = -1;
-            public static final int L = -1;
+            public static final int A = 24;
+            public static final int B = 13;
+            public static final int C = 12;
+            public static final int D = 11;
+            public static final int E = 10;
+            public static final int F = 9;
+            public static final int G = 8;
+            public static final int H = 19;
+            public static final int I = 20;
+            public static final int J = 21;
+            public static final int K = 22;
+            public static final int L = 23;
             
-            public static final int LeftCoral = -1; 
-            public static final int RightCoral = -1;
+            public static final int LeftCoral = 17;
+            public static final int RightCoral = 7;
 
-            public static final int Barge = -1;
-            public static final int Processor = -1;
+            public static final int Barge = 18;
+            public static final int Processor = 6;
         }
 
-        public static final int H = -1;
+        public static final int H = 14;
     }
 
     public static final class Elevator

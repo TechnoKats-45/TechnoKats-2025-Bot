@@ -25,13 +25,11 @@ public class PositionAlign extends Command
 {
     private Swerve s_swerve;
     private Pose2d targetPose;
-    private boolean isAlgae;
     private CommandXboxController controller;
 
     public PositionAlign(Swerve s_swerve, Carriage s_carriage, Elevator s_elevator, CommandXboxController controller)
     {
         this.s_swerve = s_swerve;
-        this.isAlgae = isAlgae;
         this.controller = controller;
         
         addRequirements(s_swerve, s_carriage, s_elevator);
