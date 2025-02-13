@@ -66,7 +66,7 @@ public class Constants
     // Operator Button Board Mapping
     public static final class Button
     {
-        public static final class height    // TODO
+        public static final class height
         {
             public static final int L1 = 5;
             public static final int L2 = 4;
@@ -77,7 +77,7 @@ public class Constants
             public static final int A2 = 15;
         }
 
-        public static final class location  // TODO
+        public static final class location
         {
             public static final int A = 24;
             public static final int B = 13;
