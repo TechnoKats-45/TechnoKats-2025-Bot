@@ -123,6 +123,19 @@ public class Constants
 
             public static final double handoffHeight = 0;
         }
+
+        public static final class AnglePresets  // TODO
+        {
+            public static final double L1 = 0;
+            public static final double L2 = 0;
+            public static final double L3 = 0;
+            public static final double L4 = 0;
+            public static final double Barge = 0;
+            public static final double A1 = 0;
+            public static final double A2 = 0;
+
+            public static final double handoffAngle = 0;
+        }
     }
 
     public static final class Carriage
