@@ -24,10 +24,14 @@ public class CarriageDefault extends Command
 
     public void execute()
     {
-        if(s_elevator.isAligned())
+        if(!s_carriage.isAlgaeDetected())   // If algae is not detected, run the intake at passive intake speed
         {
             s_carriage.setCoralSpeed(Constants.Carriage.coralPassiveIntakeSpeed);
         }    
+        else    // If algae is detected, run the intake at active intake speed
+        {
+            s_carriage.setCoralSpeed(0);
+        }
     }
 
     public boolean isFinished()
