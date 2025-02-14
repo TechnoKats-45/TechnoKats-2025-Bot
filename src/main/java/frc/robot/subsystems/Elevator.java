@@ -13,11 +13,13 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
+
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import frc.robot.Constants;
 
 
@@ -127,13 +129,13 @@ public class Elevator extends SubsystemBase
             .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10)) // Take approximately 0.5 seconds to reach max vel
             .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));  // Take approximately 0.1 seconds to reach max accel 
         
-        elevatorConfig.Slot0.kS = 0; // Add 0.25 V output to overcome static friction       // TODO - Tune
-        elevatorConfig.Slot0.kG = 0;                                                        // TODO - Tune
-        elevatorConfig.Slot0.kV = 0; // A velocity target of 1 rps results in 0.12 V output // TODO - Tune
-        elevatorConfig.Slot0.kA = 0; // An acceleration of 1 rps/s requires 0.01 V output   // TODO - Tune
-        elevatorConfig.Slot0.kP = 0; // An error of 1 rotation results in 60 A output       // TODO - Tune
-        elevatorConfig.Slot0.kI = 0; // No output for integrated error                      // TODO - Tune
-        elevatorConfig.Slot0.kD = 0; // A velocity of 1 rps results in 6 A output           // TODO - Tune
+        elevatorConfig.Slot0.kS = 0;        // TODO - Tune
+        elevatorConfig.Slot0.kG = 0.09;     // Estimated from ReCalc    // TODO - Tune
+        elevatorConfig.Slot0.kV = 3.11;        // Estimated from ReCalc    // TODO - Tune
+        elevatorConfig.Slot0.kA = 0.01;        // Estimated from ReCalc    // TODO - Tune
+        elevatorConfig.Slot0.kP = 0;        // TODO - Tune
+        elevatorConfig.Slot0.kI = 0;        // TODO - Tune
+        elevatorConfig.Slot0.kD = 0;        // TODO - Tune
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) 
