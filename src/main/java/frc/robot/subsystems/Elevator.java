@@ -130,9 +130,9 @@ public class Elevator extends SubsystemBase
             .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));  // Take approximately 0.1 seconds to reach max accel 
         
         elevatorConfig.Slot0.kS = 0;        // TODO - Tune
-        elevatorConfig.Slot0.kG = 0.09;     // Estimated from ReCalc    // TODO - Tune
-        elevatorConfig.Slot0.kV = 3.11;        // Estimated from ReCalc    // TODO - Tune
-        elevatorConfig.Slot0.kA = 0.01;        // Estimated from ReCalc    // TODO - Tune
+        elevatorConfig.Slot0.kG = 0.09;     // Estimated from ReCalc        // TODO - Tune
+        elevatorConfig.Slot0.kV = 3.11;     // Estimated from ReCalc        // TODO - Tune
+        elevatorConfig.Slot0.kA = 0.01;     // Estimated from ReCalc        // TODO - Tune
         elevatorConfig.Slot0.kP = 0;        // TODO - Tune
         elevatorConfig.Slot0.kI = 0;        // TODO - Tune
         elevatorConfig.Slot0.kD = 0;        // TODO - Tune
