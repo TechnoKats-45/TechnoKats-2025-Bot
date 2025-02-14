@@ -158,21 +158,21 @@ public class Elevator extends SubsystemBase
     }
 
     // SYS ID Stuff (Manual)
-    public void determineKs() 
+    public void determineKs()   // TODO - Assign to button
     {
         double voltage = 0.0;
         double velocity = 0.0;
         
-        while (voltage <= 12.0) 
-        { // Prevent over-volting
+        while (voltage <= 12.0)     // Prevent over-volting
+        {
             elevatorMotor1.setVoltage(voltage);
             velocity = elevatorMotor1.getVelocity().getValueAsDouble(); // Assuming this method gets velocity
     
             SmartDashboard.putNumber("Testing Voltage", voltage);
             SmartDashboard.putNumber("Elevator Velocity", velocity);
     
-            if (Math.abs(velocity) > 0.01) 
-            { // Detect motion (adjust threshold if needed)
+            if (Math.abs(velocity) > 0.01)  // Detect motion (adjust threshold if needed)
+            { 
                 System.out.println("Motion detected at " + voltage + "V");
                 break;
             }

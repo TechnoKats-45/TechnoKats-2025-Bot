@@ -195,4 +195,47 @@ public class Carriage extends SubsystemBase
         SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
         SmartDashboard.putNumber("Algae Intake Angle", getAlgaeAngle());
     }
+
+    // Custom SYS ID:
+    public void determineKs()   // TODO - Assign to button
+    {
+        determineKsForMotor(coralMotor, "Coral Motor");
+        determineKsForMotor(algaeMotor, "Algae Motor");
+        determineKsForMotor(algaeAngleMotor, "Algae Angle Motor");
+    }
+    
+    private void determineKsForMotor(TalonFX motor, String motorName)   // TODO - Assign to button
+    {
+        double voltage = 0.0;
+        double velocity = 0.0;
+    
+        while (voltage <= 12.0) // Prevent over-volting
+        { 
+            motor.setVoltage(voltage);
+            velocity = motor.getVelocity().getValueAsDouble(); // Assuming this method gets velocity
+    
+            SmartDashboard.putNumber(motorName + " Testing Voltage", voltage);
+            SmartDashboard.putNumber(motorName + " Velocity", velocity);
+    
+            if (Math.abs(velocity) > 0.01)  // Detect motion (adjust threshold if needed)
+            { 
+                System.out.println(motorName + " motion detected at " + voltage + "V");
+                break;
+            }
+    
+            voltage += 0.1;
+            try 
+            {
+                Thread.sleep(500); // Small delay to allow motor to react
+            } 
+            catch (InterruptedException e) 
+            {
+                Thread.currentThread().interrupt();
+            }
+        }
+    
+        motor.setVoltage(0); // Stop the motor
+        System.out.println("Final kS estimate for " + motorName + ": " + voltage);
+    }
+    
 }
