@@ -1,26 +1,24 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.CANdi;
-import com.ctre.phoenix6.hardware.TalonFX;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Second;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+import com.ctre.phoenix6.hardware.CANdi;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import static edu.wpi.first.units.Units.*;
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
 import frc.robot.Constants;
 
 
@@ -71,35 +69,52 @@ public class Elevator extends SubsystemBase
         return currentHeightPreset;
     }
 
-    public void setAngle(double angle) // Set to angle
+    public void setAngle(double angle) 
     {
-        elevatorMotor1.setControl(elevator_angle.withPosition(angle/360));
-        //elevatorMotor2.setControl(follower);
+        // Convert desired elevator angle (in degrees) to sensor rotations
+        double desiredSensorRotations = (angle / 360) * Constants.Elevator.TOTAL_GEAR_REDUCTION;
+        elevatorMotor1.setControl(elevator_angle.withPosition(desiredSensorRotations));
+    }
+    
+    public void setAngle() 
+    {  
+        // Use currentHeightPreset (assumed to be in degrees) and apply same conversion
+        double desiredSensorRotations = (currentHeightPreset / 360) * Constants.Elevator.TOTAL_GEAR_REDUCTION;
+        elevatorMotor1.setControl(elevator_angle.withPosition(desiredSensorRotations));
     }
 
-    public void setAngle()  // Set to currentHeightPreset   // TODO - Change to height, rn it's angle
-    {
-        elevatorMotor1.setControl(elevator_angle.withPosition(currentHeightPreset/360));
-        //elevatorMotor2.setControl(follower);
+    public double getAngle() {
+        // Read the sensor value (already in mechanism rotations due to SensorToMechanismRatio)
+        double raw = elevatorCANdi.getPWM1Position().getValueAsDouble();
+        SmartDashboard.putNumber("Elevator Angle B4 Math", raw);
+        
+        // Convert mechanism rotations directly to degrees.
+        double elevatorAngleDegrees = raw * 360;
+        
+        // Shift the angle so that -78° becomes 0° (i.e., add 78° to the result)
+        double adjustedAngle = elevatorAngleDegrees + 78;
+        
+        // Optionally, wrap the angle into the [0, 360) range:
+        adjustedAngle = (adjustedAngle % 360 + 360) % 360;
+        
+        return adjustedAngle;
     }
-
-    public double getAngle()
-    {
-        elevatorAngle = elevatorCANdi.getPWM1Position().getValueAsDouble();   // Get the angle of the elevator (-16384.0 to 16383.999755859375)
-        elevatorAngle = ((elevatorAngle % 360) + 360) % 360;  // Normalize the angle to the range [0, 360)
-        return elevatorAngle;
-    }
+    
+    
+    
 
     public void setHeight(double setPoint)
     {
         // TODO - Implement
     }
 
-    public double getHeight()
+    public double getHeight() 
     {
-        elevatorHeight = getAngle() * Constants.Elevator.GearRatio; // TODO - Implement
-        return 0;
+        // Assuming getAngle() returns the elevator angle in degrees, and GearRatio converts to height.
+        elevatorHeight = getAngle() * Constants.Elevator.GearRatio; 
+        return elevatorHeight;
     }
+    
 
     public void ManualElevator(CommandXboxController controller)
     {
@@ -129,7 +144,7 @@ public class Elevator extends SubsystemBase
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = elevatorConfig.Feedback;
-        fdb.SensorToMechanismRatio = 10; // 10 rotor rotations per mechanism rotation       // TODO - Tune
+        fdb.SensorToMechanismRatio = Constants.Elevator.TOTAL_GEAR_REDUCTION;
 
         /* Configure Motion Magic */
         MotionMagicConfigs mm = elevatorConfig.MotionMagic; // TODO - TUNE

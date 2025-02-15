@@ -104,6 +104,8 @@ public class Constants
 
     public static final class Elevator
     {
+        public static final double TOTAL_GEAR_REDUCTION = 12.0 * 11.9;  // 142.8
+
         public static final int elevatorMotor1ID = 7;
         public static final int elevatorMotor2ID = 8;
         public static final int elevatorCANdiID = 9;
