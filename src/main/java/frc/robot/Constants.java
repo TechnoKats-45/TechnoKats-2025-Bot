@@ -153,7 +153,7 @@ public class Constants
         ////////////////////////////////////////////////////////////////
 
         public static final double coralIntakeSpeed = 0; // TODO
-        public static final double coralPassiveIntakeSpeed = 0.10; // TODO
+        public static final double coralPassiveIntakeSpeed = -45; // TODO
         public static final double coralReverseSpeed = 0.10; // TODO;
         public static final double coralSlowIntakeSpeed = 0.10; // TODO
         public static final double coralScoreSpeed = .10; // TODO

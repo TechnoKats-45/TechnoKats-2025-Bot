@@ -38,7 +38,7 @@ public class Climber extends SubsystemBase
         winchMotor = new TalonFX(winchMotorID);
         climberCaNdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
-        configWinchMotor();
+        //configWinchMotor();
     }
 
     public void setAngle(double angle)

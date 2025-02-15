@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Carriage;
@@ -19,14 +20,15 @@ public class CarriageDefault extends Command
 
         addRequirements(s_carriage);
 
-        s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight);
+        //s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight); // TODO
     }
 
     public void execute()
     {
-        if(!s_carriage.isAlgaeDetected())   // If algae is not detected, run the intake at passive intake speed
+        if(true)   // If algae is not detected, run the intake at passive intake speed // !s_carriage.isAlgaeDetected()
         {
             s_carriage.setCoralSpeed(Constants.Carriage.coralPassiveIntakeSpeed);
+            //s_carriage.setCoralSpeedDumb(.10);    // TODO - Change to passive intake speed
         }    
         else    // If algae is detected, run the intake at active intake speed
         {
@@ -36,7 +38,8 @@ public class CarriageDefault extends Command
 
     public boolean isFinished()
     {
-        return s_carriage.isAlgaeDetected();
+        //return s_carriage.isAlgaeDetected();
+        return false;
     }
     
 

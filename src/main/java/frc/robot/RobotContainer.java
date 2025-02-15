@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 
-
 import frc.robot.generated.TunerConstants;
 
 import frc.robot.commands.*;
@@ -68,7 +67,6 @@ public class RobotContainer
 
     private void configureBindings() 
     {
-
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DEFAULT COMMANDS
         //////////////////////////////////////////////////////////////////////////////////////////

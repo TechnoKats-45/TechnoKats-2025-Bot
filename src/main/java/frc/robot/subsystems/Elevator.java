@@ -4,6 +4,7 @@ import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -12,7 +13,7 @@ import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -42,7 +43,9 @@ public class Elevator extends SubsystemBase
     {
         // Initialize motors and sensors
         elevatorMotor1 = new TalonFX(Constants.Elevator.elevatorMotor1ID);
-        elevatorMotor2 = new TalonFX(Constants.Elevator.elevatorMotor2ID);
+        elevatorMotor1.setNeutralMode(NeutralModeValue.Brake);
+        //elevatorMotor2 = new TalonFX(Constants.Elevator.elevatorMotor2ID);
+        //elevatorMotor2.setNeutralMode(NeutralModeValue.Brake);
         follower = new Follower(Constants.Elevator.elevatorMotor1ID, false);
         elevatorCANdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
@@ -71,13 +74,13 @@ public class Elevator extends SubsystemBase
     public void setAngle(double angle) // Set to angle
     {
         elevatorMotor1.setControl(elevator_angle.withPosition(angle/360));
-        elevatorMotor2.setControl(follower);
+        //elevatorMotor2.setControl(follower);
     }
 
     public void setAngle()  // Set to currentHeightPreset   // TODO - Change to height, rn it's angle
     {
         elevatorMotor1.setControl(elevator_angle.withPosition(currentHeightPreset/360));
-        elevatorMotor2.setControl(follower);
+        //elevatorMotor2.setControl(follower);
     }
 
     public double getAngle()
@@ -100,13 +103,13 @@ public class Elevator extends SubsystemBase
 
     public void ManualElevator(CommandXboxController controller)
     {
-        if(controller.getRightY() < -Constants.STICK_DEADBAND)  // Up
+        if(controller.getRightY() < -Constants.STICK_DEADBAND)  // Down
         {
-            elevatorMotor1.set(.1);  // Go up
+            elevatorMotor1.set(.2);  // Go up
         }
         else if(controller.getRightY() > Constants.STICK_DEADBAND) // Up
         {
-            elevatorMotor1.set(-.1); // Go down
+            elevatorMotor1.set(-.2); // Go down
         }
         else
         {
@@ -118,6 +121,11 @@ public class Elevator extends SubsystemBase
     public void configElevator()
     {
         TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
+        var limitConfigs = new CurrentLimitsConfigs();
+
+        // enable stator current limit
+        limitConfigs.StatorCurrentLimit = 40;
+        limitConfigs.StatorCurrentLimitEnable = true;
 
         /* Configure gear ratio */
         FeedbackConfigs fdb = elevatorConfig.Feedback;

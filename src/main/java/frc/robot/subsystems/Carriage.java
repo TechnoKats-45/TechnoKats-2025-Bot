@@ -49,8 +49,8 @@ public class Carriage extends SubsystemBase
         algaeCANdi = new CANdi(algaeCANdiID);
 
         configCoralMotor();
-        configAlgaeMotor();
-        configAlgaeAngleMotor();
+        //configAlgaeMotor();
+        //configAlgaeAngleMotor();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -96,6 +96,12 @@ public class Carriage extends SubsystemBase
     public void setCoralSpeed(double speed)
     {
         coralMotor.setControl(coral_velocity.withVelocity(speed));
+        SmartDashboard.putNumber("Coral Speed", speed);
+    }
+
+    public void setCoralSpeedDumb(double dumbSpeed)
+    {
+        coralMotor.set(dumbSpeed);
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -104,24 +110,24 @@ public class Carriage extends SubsystemBase
     
     public void configCoralMotor()
     {
-        TalonFXConfiguration algaeConfigs = new TalonFXConfiguration();
+        TalonFXConfiguration coralConfigs = new TalonFXConfiguration();
 
         /* Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor */
-        algaeConfigs.Slot0.kS = 0;// TODO - Tune
-        algaeConfigs.Slot0.kV = 0;// TODO - Tune
-        algaeConfigs.Slot0.kP = 0;// TODO - Tune
-        algaeConfigs.Slot0.kI = 0;// TODO - Tune
-        algaeConfigs.Slot0.kD = 0;// TODO - Tune
+        coralConfigs.Slot0.kS = 0;// TODO - Tune
+        coralConfigs.Slot0.kV = 0;// TODO - Tune
+        coralConfigs.Slot0.kP = .1;// TODO - Tune
+        coralConfigs.Slot0.kI = 0;// TODO - Tune
+        coralConfigs.Slot0.kD = 0;// TODO - Tune
         
         // Peak output of 8 volts
-        algaeConfigs.Voltage.withPeakForwardVoltage(Volts.of(8))
-            .withPeakReverseVoltage(Volts.of(-8));
+        coralConfigs.Voltage.withPeakForwardVoltage(Volts.of(16))
+            .withPeakReverseVoltage(Volts.of(-16));
 
         /* Retry config apply up to 5 times, report if failure */
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) 
         {
-            status = algaeMotor.getConfigurator().apply(algaeConfigs);
+            status = coralMotor.getConfigurator().apply(coralConfigs);
             if (status.isOK()) break;
         }
         if (!status.isOK()) 
@@ -135,9 +141,9 @@ public class Carriage extends SubsystemBase
         TalonFXConfiguration algaeConfigs = new TalonFXConfiguration();
 
         /* Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor */
-        algaeConfigs.Slot0.kS = 0;// TODO - Tune
-        algaeConfigs.Slot0.kV = 0;// TODO - Tune
-        algaeConfigs.Slot0.kP = 0;// TODO - Tune
+        algaeConfigs.Slot0.kS = 0.1;// TODO - Tune
+        algaeConfigs.Slot0.kV = 0.1;// TODO - Tune
+        algaeConfigs.Slot0.kP = 0.1;// TODO - Tune
         algaeConfigs.Slot0.kI = 0;// TODO - Tune
         algaeConfigs.Slot0.kD = 0;// TODO - Tune
         
