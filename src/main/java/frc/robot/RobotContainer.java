@@ -90,11 +90,23 @@ public class RobotContainer
             new CarriageDefault(s_carriage, s_elevator)
         );
 
+        /*
         s_elevator.setDefaultCommand
         (
             // Elevator will execute this command periodically  // TODO - Comment out when tuned / tested
             new ManualElevator(s_elevator, testController)
         );
+        */
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+        /// TEST CONTROLS
+        //////////////////////////////////////////////////////////////////////////////////////////
+        
+        testController.leftTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(8.02)));
+        testController.leftBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(12)));
+        testController.rightBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(16)));
+        testController.rightTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(19)));
+        testController.a().onTrue(s_elevator.runOnce(() -> s_elevator.determineKs()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS

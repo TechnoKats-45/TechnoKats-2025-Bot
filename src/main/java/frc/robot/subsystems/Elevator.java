@@ -12,8 +12,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANdi;
+import com.ctre.phoenix6.hardware.core.CoreCANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,197 +25,164 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
-
-public class Elevator extends SubsystemBase
+public class Elevator extends SubsystemBase 
 {
     private TalonFX elevatorMotor1;
-    private TalonFX elevatorMotor2;
-    private Follower follower;
     
-    double elevatorAngle;
-    double elevatorHeight;
+    // This preset is now in degrees.
     double currentHeightPreset;
 
-    private CANdi elevatorCANdi;
+    // Using CANdi for diagnostics (optional)
+    private CoreCANdi elevatorCANdi;
 
-    // PID Declarations
+    // PID control on angle (in degrees)
     private final PositionTorqueCurrentFOC elevator_angle = new PositionTorqueCurrentFOC(0);
 
-    public Elevator()
-    {
+    public Elevator() {
         // Initialize motors and sensors
         elevatorMotor1 = new TalonFX(Constants.Elevator.elevatorMotor1ID);
         elevatorMotor1.setNeutralMode(NeutralModeValue.Brake);
-        //elevatorMotor2 = new TalonFX(Constants.Elevator.elevatorMotor2ID);
-        //elevatorMotor2.setNeutralMode(NeutralModeValue.Brake);
-        follower = new Follower(Constants.Elevator.elevatorMotor1ID, false);
         elevatorCANdi = new CANdi(Constants.Elevator.elevatorCANdiID);
-
-        // How to control it:
-            //elevatorMotor1.set(x);
-            //elevatorMotor2.setControl(follower);
 
         configElevator();
     }
-
-    public boolean isAligned()
-    {
-        return (Math.abs(getHeight() - currentHeightPreset)) <= (Constants.Elevator.elevatorHeightTolerance);
+    
+    /**
+     * Returns true if the current angle is within a specified tolerance of the preset angle.
+     */
+    public boolean isAligned() {
+        return Math.abs(getAngle() - currentHeightPreset) <= Constants.Elevator.elevatorHeightTolerance;
     }
 
-    public void setHeightPreset(double angle)
-    {
-        currentHeightPreset = angle;    // TODO - Change to height, rn it's angle
+    public void setHeightPreset(double angle) {
+        currentHeightPreset = angle;
     }
 
-    public double getHeightPreset()
-    {
+    public double getHeightPreset() {
         return currentHeightPreset;
     }
 
+    /**
+     * Command the elevator to a specific angle (in degrees).
+     */
     public void setAngle(double angle) 
     {
-        // Convert desired elevator angle (in degrees) to sensor rotations
-        double desiredSensorRotations = (angle / 360) * Constants.Elevator.TOTAL_GEAR_REDUCTION;
-        elevatorMotor1.setControl(elevator_angle.withPosition(desiredSensorRotations));
+        // Convert desired physical angle to sensor space by adding the sensor offset.
+        elevatorMotor1.setControl(elevator_angle.withPosition(angle));
+        SmartDashboard.putNumber("Desired Angle", angle);
     }
     
+    /**
+     * Overloaded method that uses the current preset angle.
+     */
     public void setAngle() 
-    {  
-        // Use currentHeightPreset (assumed to be in degrees) and apply same conversion
-        double desiredSensorRotations = (currentHeightPreset / 360) * Constants.Elevator.TOTAL_GEAR_REDUCTION;
-        elevatorMotor1.setControl(elevator_angle.withPosition(desiredSensorRotations));
-    }
-
-    public double getAngle() {
-        // Read the sensor value (already in mechanism rotations due to SensorToMechanismRatio)
-        double raw = elevatorCANdi.getPWM1Position().getValueAsDouble();
-        SmartDashboard.putNumber("Elevator Angle B4 Math", raw);
-        
-        // Convert mechanism rotations directly to degrees.
-        double elevatorAngleDegrees = raw * 360;
-        
-        // Shift the angle so that -78° becomes 0° (i.e., add 78° to the result)
-        double adjustedAngle = elevatorAngleDegrees + 78;
-        
-        // Optionally, wrap the angle into the [0, 360) range:
-        adjustedAngle = (adjustedAngle % 360 + 360) % 360;
-        
-        return adjustedAngle;
-    }
-    
-    
-    
-
-    public void setHeight(double setPoint)
     {
-        // TODO - Implement
+        setAngle(currentHeightPreset);
     }
 
-    public double getHeight() 
+    /**
+     * Returns the measured angle from the CANdi sensor (for diagnostics).
+     */
+    public double getAngle() 
     {
-        // Assuming getAngle() returns the elevator angle in degrees, and GearRatio converts to height.
-        elevatorHeight = getAngle() * Constants.Elevator.GearRatio; 
-        return elevatorHeight;
+        return elevatorMotor1.getPosition().getValueAsDouble();
     }
-    
 
-    public void ManualElevator(CommandXboxController controller)
+    public void ManualElevator(CommandXboxController controller) 
     {
-        if(controller.getRightY() < -Constants.STICK_DEADBAND)  // Down
-        {
-            elevatorMotor1.set(.2);  // Go up
-        }
-        else if(controller.getRightY() > Constants.STICK_DEADBAND) // Up
-        {
-            elevatorMotor1.set(-.2); // Go down
-        }
-        else
-        {
-            // Hold Position
+        if (controller.getRightY() < -Constants.STICK_DEADBAND) {  // Down
+            elevatorMotor1.set(0.2);
+        } else if (controller.getRightY() > Constants.STICK_DEADBAND) { // Up
+            elevatorMotor1.set(-0.2);
+        } else {
             elevatorMotor1.set(0);
         }
     }
 
-    public void configElevator()
+    public void configElevator() 
     {
         TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
         var limitConfigs = new CurrentLimitsConfigs();
-
-        // enable stator current limit
+    
+        // Enable stator current limit.
         limitConfigs.StatorCurrentLimit = 40;
-        limitConfigs.StatorCurrentLimitEnable = true;
-
-        /* Configure gear ratio */
+        limitConfigs.StatorCurrentLimitEnable = false; // or true as needed
+    
+        /* Configure the Talon FX to use the CANdi sensor as its feedback source.
+           Using the helper method withRemoteCANdiPwm1, we pass in the CANdi object.
+           Then, we set the SensorToMechanismRatio to convert the remote sensor's
+           native units (assumed to be rotations) into degrees. For example, if one
+           mechanism rotation equals 360° and the CANdi outputs in encoder rotations,
+           and your mechanism's reduction is given by your constants, you can set:
+           360.0 / Constants.Elevator.MECHANISM_TO_ENCODER.
+        */
         FeedbackConfigs fdb = elevatorConfig.Feedback;
-        fdb.SensorToMechanismRatio = Constants.Elevator.TOTAL_GEAR_REDUCTION;
+        fdb.FeedbackRemoteSensorID = Constants.Elevator.elevatorCANdiID;
+        fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANdiPWM1;
+        fdb.SensorToMechanismRatio = 1/Constants.Elevator.MECHANISM_TO_ENCODER;
+        fdb.RotorToSensorRatio = 11.9*12;
 
-        /* Configure Motion Magic */
-        MotionMagicConfigs mm = elevatorConfig.MotionMagic; // TODO - TUNE
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(5)) // 5 (mechanism) rotations per second cruise
-            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10)) // Take approximately 0.5 seconds to reach max vel
-            .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));  // Take approximately 0.1 seconds to reach max accel 
-        
-        elevatorConfig.Slot0.kS = 0;        // TODO - Tune
-        elevatorConfig.Slot0.kG = 0.09;     // Estimated from ReCalc        // TODO - Tune
-        elevatorConfig.Slot0.kV = 3.11;     // Estimated from ReCalc        // TODO - Tune
-        elevatorConfig.Slot0.kA = 0.01;     // Estimated from ReCalc        // TODO - Tune
-        elevatorConfig.Slot0.kP = 0;        // TODO - Tune
-        elevatorConfig.Slot0.kI = 0;        // TODO - Tune
-        elevatorConfig.Slot0.kD = 0;        // TODO - Tune
+        /* Configure Motion Magic parameters as needed */
+        /*
+        MotionMagicConfigs mm = elevatorConfig.MotionMagic;
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(5))
+          .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10))
+          .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
+        */
 
+        // PID and feedforward tuning constants
+        elevatorConfig.Slot0.kS = 0.9;   // Tune as needed. / was 0.9
+        elevatorConfig.Slot0.kG = 10;   // Tune as needed.    // was .09
+        elevatorConfig.Slot0.kV = 3.11;   // Tune as needed.    // was 3.11
+        elevatorConfig.Slot0.kA = 0.01;   // Tune as needed.    // was 0.01
+        elevatorConfig.Slot0.kP =;      // Your tuned P value.    // was 5
+        elevatorConfig.Slot0.kI = 0;      // Tune as needed.
+        elevatorConfig.Slot0.kD = 0;      // Tune as needed.
+        elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    
         StatusCode status = StatusCode.StatusCodeNotInitialized;
-        for (int i = 0; i < 5; ++i) 
-        {
+        for (int i = 0; i < 5; ++i) {
             status = elevatorMotor1.getConfigurator().apply(elevatorConfig);
             if (status.isOK()) break;
         }
-        if (!status.isOK()) 
-        {
+        if (!status.isOK()) {
             System.out.println("Could not configure device. Error: " + status.toString());
         }
     }
-
-    public void printDiagnostics()
+    
+    public void printDiagnostics() 
     {
-        SmartDashboard.putNumber("Elevator Height", getHeight());
-        SmartDashboard.putNumber("Elevator Angle", getAngle());
-        SmartDashboard.putNumber("currentHeightPreset", currentHeightPreset);
+        SmartDashboard.putNumber("Current Preset Angle", currentHeightPreset);
         SmartDashboard.putBoolean("Elevator Aligned", isAligned());
+        SmartDashboard.putNumber("CANDdi from TALON Angle", elevatorMotor1.getPosition().getValueAsDouble());
     }
 
     // SYS ID Stuff (Manual)
-    public void determineKs()   // TODO - Assign to button
-    {
+    public void determineKs() {   // TODO - Assign to button
         double voltage = 0.0;
         double velocity = 0.0;
         
-        while (voltage <= 12.0)     // Prevent over-volting
-        {
+        while (voltage <= 12.0) {     // Prevent over-volting
             elevatorMotor1.setVoltage(voltage);
-            velocity = elevatorMotor1.getVelocity().getValueAsDouble(); // Assuming this method gets velocity
+            velocity = elevatorMotor1.getVelocity().getValueAsDouble();
     
             SmartDashboard.putNumber("Testing Voltage", voltage);
             SmartDashboard.putNumber("Elevator Velocity", velocity);
     
-            if (Math.abs(velocity) > 0.01)  // Detect motion (adjust threshold if needed)
-            { 
+            if (Math.abs(velocity) > 0.01) {
                 System.out.println("Motion detected at " + voltage + "V");
                 break;
             }
     
             voltage += 0.1;
-            try 
-            {
-                Thread.sleep(500); // Small delay to allow motor to react
-            } 
-            catch (InterruptedException e) 
-            {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
     
-        elevatorMotor1.setVoltage(0); // Stop the motor
+        elevatorMotor1.setVoltage(0);
         System.out.println("Final kS estimate: " + voltage);
     }
 }

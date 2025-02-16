@@ -1,13 +1,12 @@
 package frc.robot;
 
+import java.util.function.Function;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-
-
-import java.util.function.Function;
 
 public class Constants 
 {
@@ -104,15 +103,31 @@ public class Constants
 
     public static final class Elevator
     {
-        public static final double TOTAL_GEAR_REDUCTION = 12.0 * 11.9;  // 142.8
+        // There is a 12:1 reduction between the motor and the mechanism
+    // and an additional 11.9:1 between the mechanism and the encoder.
+    public static final double MOTOR_TO_MECHANISM = 12.0;       
+    public static final double MECHANISM_TO_ENCODER = 11.9;       
+    public static final double TOTAL_GEAR_REDUCTION = MOTOR_TO_MECHANISM * MECHANISM_TO_ENCODER;  // 142.8
 
-        public static final int elevatorMotor1ID = 7;
-        public static final int elevatorMotor2ID = 8;
-        public static final int elevatorCANdiID = 9;
+    public static final int elevatorMotor1ID = 7;
+    public static final int elevatorMotor2ID = 8;
+    public static final int elevatorCANdiID = 9;
+    
+    public static final double elevatorHeightTolerance = 1; // adjust as needed
 
-        public static final double elevatorHeightTolerance = 0; // TODO
-        public static final double GearRatio = 0; // TODO
-
+    // If your sensor's “zero” (i.e. its output when the elevator is at your desired physical zero)
+    // is not actually 0°, then set this offset (in degrees) accordingly.
+    public static final double SENSOR_ZERO_OFFSET = 0; // For example, set to 5.0 if needed.
+    
+        public static final double maxAngle = 287.35546875; // at max height
+        public static final double maxHeight = 77.0;
+        public static final double minHeight = 8.0;
+    
+        public static final double DRUM_DIAMETER = 1;
+        
+        // Calculate the circumference (in inches)
+        public static final double CIRCUMFERENCE = Math.PI * Constants.Elevator.DRUM_DIAMETER;
+    
         public static final class HeightPresets // TODO
         {
             public static final double L1 = 0;
@@ -122,10 +137,10 @@ public class Constants
             public static final double Barge = 0;
             public static final double A1 = 0;
             public static final double A2 = 0;
-
+    
             public static final double handoffHeight = 0;
         }
-
+    
         public static final class AnglePresets  // TODO
         {
             public static final double L1 = 0;
@@ -135,10 +150,11 @@ public class Constants
             public static final double Barge = 0;
             public static final double A1 = 0;
             public static final double A2 = 0;
-
+    
             public static final double handoffAngle = 0;
         }
     }
+    
 
     public static final class Carriage
     {
