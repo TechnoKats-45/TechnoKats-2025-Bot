@@ -135,7 +135,7 @@ public class Elevator extends SubsystemBase
         elevatorConfig.Slot0.kG = 10;   // Tune as needed.    // was .09
         elevatorConfig.Slot0.kV = 3.11;   // Tune as needed.    // was 3.11
         elevatorConfig.Slot0.kA = 0.01;   // Tune as needed.    // was 0.01
-        elevatorConfig.Slot0.kP =;      // Your tuned P value.    // was 5
+        elevatorConfig.Slot0.kP = 50;      // Your tuned P value.    // was 5
         elevatorConfig.Slot0.kI = 0;      // Tune as needed.
         elevatorConfig.Slot0.kD = 0;      // Tune as needed.
         elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
