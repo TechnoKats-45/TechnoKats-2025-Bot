@@ -24,9 +24,9 @@ public class GoToHeightPreset extends Command
 
     public void execute()
     {
-        if(s_carriage.isCoralDetected())
+        if(true)    // TODO - was s_carriage.isCoralDetected()
         {
-            s_elevator.setAngle();  // TODO - Change to height once implemented
+            s_elevator.GoToPreset();
         }
         else
         {
@@ -36,7 +36,8 @@ public class GoToHeightPreset extends Command
 
     public boolean isFinished()
     {
-        return s_elevator.isAligned();
+        //return s_elevator.isAligned();
+        return false;
     }
     
 

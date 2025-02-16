@@ -49,16 +49,56 @@ public class Elevator extends SubsystemBase
     
     /**
      * Returns true if the current angle is within a specified tolerance of the preset angle.
-     */
-    public boolean isAligned() {
-        return Math.abs(getAngle() - currentHeightPreset) <= Constants.Elevator.elevatorHeightTolerance;
+    */
+    public boolean isAligned() 
+    {
+        //return Math.abs(getHeight() - currentHeightPreset) <= Constants.Elevator.elevatorHeightTolerance;
+        return false;
     }
 
-    public void setHeightPreset(double angle) {
-        currentHeightPreset = angle;
+    private double getHeightFromAngle(double angle) 
+    {
+        double minAngle = 8.01;
+        double maxAngle = 19.0;
+        double minHeight = 8.0;
+        double maxHeight = 79.0;
+        double height = minHeight + (angle - minAngle) * (maxHeight - minHeight) / (maxAngle - minAngle);
+        return height;
     }
 
-    public double getHeightPreset() {
+    private double getAngleFromHeight(double height) 
+    {
+        double minAngle = 8.01;
+        double maxAngle = 19.0;
+        double minHeight = 8.0;
+        double maxHeight = 79.0;
+        double angle = minAngle + (height - minHeight) * (maxAngle - minAngle) / (maxHeight - minHeight);
+        return angle;
+    }
+
+    public double getHeight()
+    {
+        return(getHeightFromAngle(getAngle()));
+    }
+    
+    public void setHeight(double height)
+    {
+        setAngle(getAngleFromHeight(height));
+        SmartDashboard.putNumber("Desired Height", height);
+    }
+
+    public void GoToPreset()
+    {
+        setHeight(currentHeightPreset);
+    }
+
+    public void setHeightPreset(double heightPreset) 
+    {
+        currentHeightPreset = heightPreset;
+    }
+
+    public double getHeightPreset() 
+    {
         return currentHeightPreset;
     }
 
@@ -69,13 +109,10 @@ public class Elevator extends SubsystemBase
     {
         // Convert desired physical angle to sensor space by adding the sensor offset.
         elevatorMotor1.setControl(elevator_angle.withPosition(angle));
-        SmartDashboard.putNumber("Desired Angle", angle);
+        SmartDashboard.putNumber("Desired Angle", angle);   // TODO - comment out
     }
-    
-    /**
-     * Overloaded method that uses the current preset angle.
-     */
-    public void setAngle() 
+
+    public void setAngle()  // TODO - remove
     {
         setAngle(currentHeightPreset);
     }
@@ -155,6 +192,7 @@ public class Elevator extends SubsystemBase
         SmartDashboard.putNumber("Current Preset Angle", currentHeightPreset);
         SmartDashboard.putBoolean("Elevator Aligned", isAligned());
         SmartDashboard.putNumber("CANDdi from TALON Angle", elevatorMotor1.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Height", getHeight());
     }
 
     // SYS ID Stuff (Manual)

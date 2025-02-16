@@ -130,15 +130,15 @@ public class Constants
     
         public static final class HeightPresets // TODO
         {
-            public static final double L1 = 0;
-            public static final double L2 = 0;
-            public static final double L3 = 0;
-            public static final double L4 = 0;
-            public static final double Barge = 0;
-            public static final double A1 = 0;
-            public static final double A2 = 0;
+            public static final double L1 = 22;
+            public static final double L2 = 40;
+            public static final double L3 = 59;
+            public static final double L4 = 72;
+            public static final double Barge = 79;
+            public static final double A1 = 31;
+            public static final double A2 = 49;
     
-            public static final double handoffHeight = 0;
+            public static final double handoffHeight = 12;
         }
     
         public static final class AnglePresets  // TODO

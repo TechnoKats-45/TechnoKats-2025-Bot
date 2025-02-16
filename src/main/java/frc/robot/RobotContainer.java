@@ -102,11 +102,30 @@ public class RobotContainer
         /// TEST CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         
-        testController.leftTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(8.02)));
-        testController.leftBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(12)));
-        testController.rightBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(16)));
-        testController.rightTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(19)));
-        testController.a().onTrue(s_elevator.runOnce(() -> s_elevator.determineKs()));
+        //testController.leftTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(16)));   // 8.02 deg
+        //testController.leftBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(8+24)));      // 12 deg
+        //testController.rightBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(8+24+24)));     // 16 deg
+        //testController.rightTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(79)));    // 19 deg
+        //testController.a().onTrue(s_elevator.runOnce(() -> s_elevator.determineKs()));
+        
+        
+        testController.leftTrigger().whileTrue
+        (
+            new SequentialCommandGroup
+            (
+                //new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
+                new GoToHeightPreset(s_carriage, s_elevator, s_swerve) // 2. Go to height
+                /*new ConditionalCommand  // 3. Score / Clean
+                (
+                    // If the condition is TRUE, run AutoClean
+                    new AutoClean(s_carriage, s_elevator),  
+                    // Otherwise, run AutoScore - passes if is set to Barge Height
+                    new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),
+                    // The condition (must be a BooleanSupplier)
+                    () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
+                )*/
+            )
+        );
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
