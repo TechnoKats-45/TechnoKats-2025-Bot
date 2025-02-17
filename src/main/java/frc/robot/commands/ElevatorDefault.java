@@ -21,7 +21,7 @@ public class ElevatorDefault extends Command
 
     public void execute()
     {
-        s_elevator.setAngle(Constants.Elevator.HeightPresets.handoffHeight);
+        s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight);
     }
 
     public boolean isFinished()
@@ -29,7 +29,6 @@ public class ElevatorDefault extends Command
         return false;
     }
     
-
     public void end(boolean interrupted)
     {
 

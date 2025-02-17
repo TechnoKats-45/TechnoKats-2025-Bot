@@ -20,7 +20,7 @@ public class CarriageDefault extends Command
 
         addRequirements(s_carriage);
 
-        //s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight); // TODO
+        s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight); // TODO
     }
 
     public void execute()

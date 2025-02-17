@@ -6,9 +6,12 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Map;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,9 +25,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.generated.TunerConstants;
 
 import frc.robot.commands.*;
@@ -127,6 +130,80 @@ public class RobotContainer
             )
         );
 
+        /*
+        // TODO - Test if this works
+        // Fixing the blocking issue
+        // Parallel - raise elevator while alinging to position
+        testController.leftTrigger().whileTrue
+        (
+            new SequentialCommandGroup
+            (
+                new ParallelCommandGroup
+                (
+                    new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
+                    new ConditionalCommand  // Go to height if within X inches of target
+                    (
+                        // If the condition is TRUE, go to height
+                        new GoToHeightPreset(s_carriage, s_elevator, s_swerve),  
+                        // Otherwise, run elevator default
+                        new ElevatorDefault(s_elevator),
+                        // The condition (must be a BooleanSupplier)
+                        () -> s_swerve.isWithinTolerance(24) && s_swerve.isRotationComplete() // Check if within X inches of target and rotation is complete
+                    )
+                ),
+                new ParallelCommandGroup
+                (
+                    new ConditionalCommand  // 3. Score / Clean // Potnetially need to change to "either" command
+                    (
+                        // If the condition is TRUE, run AutoClean
+                        new AutoClean(s_carriage, s_elevator),  
+                        // Otherwise, run AutoScore - passes if is set to Barge Height
+                        new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),
+                        // The condition (must be a BooleanSupplier)
+                        () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
+                    ),
+                    // go to height - for if the operator changes preset at this point
+                    new GoToHeightPreset(s_carriage, s_elevator, s_swerve)
+                )
+            )
+        );   
+        */     
+
+        /*
+        // TODO - Test if this works
+        // Fixing the blocking issue
+        // Parallel - raise elevator while aligning to position
+        testController.leftTrigger().whileTrue
+        (
+            new SequentialCommandGroup
+            (
+                new ParallelCommandGroup
+                (
+                    new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
+                    new SelectCommand<>  // Dynamically selects between GoToHeightPreset or ElevatorDefault
+                    (
+                        Map.of
+                        (
+                            true, new GoToHeightPreset(s_carriage, s_elevator, s_swerve),
+                            false, new ElevatorDefault(s_elevator)
+                        ),
+                        () -> s_swerve.isWithinTolerance(24) && s_swerve.isRotationComplete() // Live condition check
+                    )
+                ),
+                new SelectCommand<>  // Dynamically selects between AutoClean and AutoScore
+                (
+                    Map.of
+                    (
+                        true, new AutoClean(s_carriage, s_elevator),  
+                        false, new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean())
+                    ),
+                    () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean() // Live condition check
+                )
+            )
+        );
+        */
+
+
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -137,6 +214,8 @@ public class RobotContainer
         driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));     // POV Down - Set climber to down angle
         driver.rightBumper().onTrue(new FloorCoralIntake(s_carriage, s_elevator));                              // Right bumper - Coral Floor Intake
         
+        /*
+        // Sequential - raise elevator once aligned to position
         driver.leftTrigger().whileTrue
         (
             new SequentialCommandGroup
@@ -154,6 +233,38 @@ public class RobotContainer
                 )
             )
         );
+        */
+
+        // Parallel - raise elevator while alinging to position
+        driver.leftTrigger().whileTrue
+        (
+            new SequentialCommandGroup
+            (
+                new ParallelCommandGroup
+                (
+                    new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
+                    new ConditionalCommand  // Go to height if within X inches of target
+                    (
+                        // If the condition is TRUE, go to height
+                        new GoToHeightPreset(s_carriage, s_elevator, s_swerve),  
+                        // Otherwise, run elevator default
+                        new ElevatorDefault(s_elevator),
+                        // The condition (must be a BooleanSupplier)
+                        () -> s_swerve.isWithinTolerance(24) && s_swerve.isRotationComplete() // Check if within X inches of target and rotation is complete
+                    )
+                ),
+                new ConditionalCommand  // 3. Score / Clean
+                (
+                    // If the condition is TRUE, run AutoClean
+                    new AutoClean(s_carriage, s_elevator),  
+                    // Otherwise, run AutoScore - passes if is set to Barge Height
+                    new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),
+                    // The condition (must be a BooleanSupplier)
+                    () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
+                )
+            )
+        );
+
         /*  Add back in once SysID is completed
         // Start Button - Cancel All Commands
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
@@ -210,11 +321,6 @@ public class RobotContainer
         return autoChooser.getSelected();
     }
 
-    public void registerNamedCommands()
-    {
-        // TODO
-    }
-
     public void registerEventTriggers()
     {
         // TODO
@@ -226,5 +332,68 @@ public class RobotContainer
     public void printDiagnostics()
     {
         s_elevator.printDiagnostics();
+    }
+
+    public void registerNamedCommands()
+    {
+        NamedCommands.registerCommand
+        (
+            "GoToL1Height",
+            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToL2Height",
+            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L2), s_elevator)
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToL3Height",
+            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L3), s_elevator)
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToL4Height",
+            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L4), s_elevator)
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToBargeHeight",
+            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.Barge), s_elevator)
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToA1Height",
+            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.A1), s_elevator)
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToA2Height",
+            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.A2), s_elevator)
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToHandoffHeight",
+            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight), s_elevator)
+        );
+
+        NamedCommands.registerCommand   // TODO - check
+        (
+            "ScoreCoral",
+            new AutoScore(s_carriage, s_elevator, false)
+        );
+
+        NamedCommands.registerCommand   // TODO - check
+        (
+            "ScoreAlgae",
+            new AutoScore(s_carriage, s_elevator, true)
+        );
     }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
 
@@ -25,8 +26,8 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -130,7 +131,46 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
+    public boolean isWithinTolerance(double tolerance) 
+    {
+        // Get the current robot position
+        Pose2d currentPose = getState().Pose;
+    
+        // Get the destination position
+        Pose2d targetPose = onTheFlyDestination;
+    
+        // If no target is set, return false
+        if (targetPose == null) 
+        {
+            return false;
+        }
+    
+        // Calculate Euclidean distance between current position and target
+        double distance = Math.sqrt
+        (
+            Math.pow(targetPose.getX() - currentPose.getX(), 2) +
+            Math.pow(targetPose.getY() - currentPose.getY(), 2)
+        );
+    
+        // Return true if within tolerance
+        return distance <= tolerance;
+    }
 
+    public boolean isRotationComplete() 
+    {
+        // Get the current rotation
+        double currentAngle = getState().Pose.getRotation().getDegrees();
+    
+        // Get the desired rotation from the target pose
+        double targetAngle = onTheFlyDestination.getRotation().getDegrees();
+    
+        // Define the acceptable tolerance for rotation (adjust as needed)
+        double rotationTolerance = 5.0; // degrees // TODO - Tune ?
+    
+        // Return true if within tolerance
+        return Math.abs(targetAngle - currentAngle) <= rotationTolerance;
+    }
+    
 
     public void setDestination(Pose2d destination)
     {

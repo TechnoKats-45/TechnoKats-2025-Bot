@@ -65,6 +65,6 @@ public class AutoScore extends Command
     {
         s_carriage.setCoralSpeed(0);
         s_carriage.setAlgaeAngle(Constants.Carriage.algaeStowAngle);
-        s_elevator.setAngle(Constants.Elevator.HeightPresets.handoffHeight);
+        s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight);
     }
 }
