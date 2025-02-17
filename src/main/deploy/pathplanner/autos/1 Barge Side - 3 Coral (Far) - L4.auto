@@ -11,9 +11,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "1.2 Reef JI-Coral Station"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStationIntake"
           }
         },
         {
@@ -23,9 +35,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "1.4 Reef JI-Coral Station"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStationIntake"
           }
         },
         {
@@ -35,9 +59,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "1.6 Reef KL-Coral Station"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStationIntake"
           }
         }
       ]

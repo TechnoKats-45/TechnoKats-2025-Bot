@@ -9,6 +9,12 @@
           "data": {
             "pathName": "0 Leave"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL1"
+          }
         }
       ]
     }

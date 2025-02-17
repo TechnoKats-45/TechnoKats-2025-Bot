@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.300629058441558,
-        "y": 4.05349025974026
+        "x": 5.299188311688312,
+        "y": 7.087702922077922
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.854179103286221,
-        "y": 4.042179916656363
+        "x": 5.519987824675325,
+        "y": 6.062053571428571
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Push - End"
     },
     {
       "anchor": {
-        "x": 5.804890422077921,
-        "y": 4.05349025974026
+        "x": 5.156737012987013,
+        "y": 5.164610389610389
       },
       "prevControl": {
-        "x": 6.539390819078885,
-        "y": 4.057862936051712
+        "x": 5.3812996647439935,
+        "y": 5.662074234372937
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Reef - JI"
     }
   ],
   "rotationTargets": [],
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.23097531742192
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "0 Leave",
+  "folder": "7 Push Partner - Coral L1",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

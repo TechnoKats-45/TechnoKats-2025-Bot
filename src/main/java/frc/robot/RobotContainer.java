@@ -56,6 +56,7 @@ public class RobotContainer
     public final Carriage s_carriage = new Carriage();
     public final Elevator s_elevator = new Elevator();
     public final Climber s_climber = new Climber();
+    public final Hopper s_hopper = new Hopper();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -338,62 +339,108 @@ public class RobotContainer
     {
         NamedCommands.registerCommand
         (
-            "GoToL1Height",
-            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+            "CoralStationIntake",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight), s_elevator),
+                new HopperIntake(s_carriage, s_elevator, s_hopper)
+            )
         );
 
         NamedCommands.registerCommand
         (
-            "GoToL2Height",
-            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L2), s_elevator)
+            "ScoreL1",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator),
+                new AutoScore(s_carriage, s_elevator, false)
+            )
         );
 
         NamedCommands.registerCommand
         (
-            "GoToL3Height",
-            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L3), s_elevator)
+            "ScoreL4",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L4), s_elevator),
+                new AutoScore(s_carriage, s_elevator, false)
+            )
+        );
+        
+        NamedCommands.registerCommand
+        (
+            "ScoreBarge",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.Barge), s_elevator),
+                new AutoScore(s_carriage, s_elevator, true)
+            )
         );
 
         NamedCommands.registerCommand
         (
-            "GoToL4Height",
-            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L4), s_elevator)
+            "CleanA1",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.A1), s_elevator),
+                new AutoClean(s_carriage, s_elevator)
+            )
         );
 
         NamedCommands.registerCommand
         (
-            "GoToBargeHeight",
-            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.Barge), s_elevator)
+            "CleanA2",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.A2), s_elevator),
+                new AutoClean(s_carriage, s_elevator)
+            )
         );
 
         NamedCommands.registerCommand
         (
-            "GoToA1Height",
-            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.A1), s_elevator)
+            "GoToHeightL1",
+            new SequentialCommandGroup
+            (
+                
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+            )
         );
 
         NamedCommands.registerCommand
         (
-            "GoToA2Height",
-            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.A2), s_elevator)
+            "GoToHeightL2",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+            )
         );
 
         NamedCommands.registerCommand
         (
-            "GoToHandoffHeight",
-            new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight), s_elevator)
+            "GoToHeightL3",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+            )
         );
 
-        NamedCommands.registerCommand   // TODO - check
+        NamedCommands.registerCommand
         (
-            "ScoreCoral",
-            new AutoScore(s_carriage, s_elevator, false)
+            "GoToHeightL4",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+            )
         );
 
-        NamedCommands.registerCommand   // TODO - check
+        NamedCommands.registerCommand
         (
-            "ScoreAlgae",
-            new AutoScore(s_carriage, s_elevator, true)
+            "GoToHeightBarge",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+            )
         );
     }
 }
