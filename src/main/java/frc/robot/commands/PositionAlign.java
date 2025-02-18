@@ -27,12 +27,12 @@ public class PositionAlign extends Command
     private Pose2d targetPose;
     private CommandXboxController controller;
 
-    public PositionAlign(Swerve s_swerve, Carriage s_carriage, Elevator s_elevator, CommandXboxController controller)
+    public PositionAlign(Swerve s_swerve, Carriage s_carriage, CommandXboxController controller)
     {
         this.s_swerve = s_swerve;
         this.controller = controller;
         
-        addRequirements(s_swerve, s_carriage, s_elevator);
+        addRequirements(s_swerve, s_carriage);
     }
 
     public void execute()

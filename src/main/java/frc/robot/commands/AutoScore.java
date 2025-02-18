@@ -20,7 +20,7 @@ public class AutoScore extends Command
         this.s_elevator = s_elevator;
         this.isBarge = isBarge;
 
-        addRequirements(s_carriage, s_elevator);
+        addRequirements(s_carriage);
 
         if(isBarge)
         {

@@ -10,16 +10,13 @@ import frc.robot.Constants;
 
 public class GoToHeightPreset extends Command
 {
-    private Carriage s_carriage;
     private Elevator s_elevator;    
-    private Swerve s_swerve;
 
-    public GoToHeightPreset(Carriage s_carriage, Elevator s_elevator, Swerve s_swerve)
+    public GoToHeightPreset(Elevator s_elevator)
     {
-        this.s_carriage = s_carriage;
         this.s_elevator = s_elevator;
 
-        addRequirements(s_carriage, s_elevator);
+        addRequirements(s_elevator);
     }
 
     public void execute()

@@ -62,11 +62,12 @@ public class RobotContainer
 
     public RobotContainer() 
     {
-        autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
-        SmartDashboard.putData("Auto Mode", autoChooser);
-
         registerNamedCommands();
         configureBindings();
+
+        autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+
+        SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
     private void configureBindings() 
@@ -112,13 +113,12 @@ public class RobotContainer
         //testController.rightTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(79)));    // 19 deg
         //testController.a().onTrue(s_elevator.runOnce(() -> s_elevator.determineKs()));
         
-        
         testController.leftTrigger().whileTrue
         (
             new SequentialCommandGroup
             (
                 //new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
-                new GoToHeightPreset(s_carriage, s_elevator, s_swerve) // 2. Go to height
+                new GoToHeightPreset(s_elevator) // 2. Go to height
                 /*new ConditionalCommand  // 3. Score / Clean
                 (
                     // If the condition is TRUE, run AutoClean
@@ -130,8 +130,7 @@ public class RobotContainer
                 )*/
             )
         );
-
-        /*
+/*
         // TODO - Test if this works
         // Fixing the blocking issue
         // Parallel - raise elevator while alinging to position
@@ -141,11 +140,11 @@ public class RobotContainer
             (
                 new ParallelCommandGroup
                 (
-                    new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
+                    //new PositionAlign(s_swerve, s_carriage, driver), // 1. Align to position
                     new ConditionalCommand  // Go to height if within X inches of target
                     (
                         // If the condition is TRUE, go to height
-                        new GoToHeightPreset(s_carriage, s_elevator, s_swerve),  
+                        new GoToHeightPreset(s_elevator),  
                         // Otherwise, run elevator default
                         new ElevatorDefault(s_elevator),
                         // The condition (must be a BooleanSupplier)
@@ -164,12 +163,11 @@ public class RobotContainer
                         () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
                     ),
                     // go to height - for if the operator changes preset at this point
-                    new GoToHeightPreset(s_carriage, s_elevator, s_swerve)
+                    new GoToHeightPreset(s_elevator)
                 )
             )
         );   
-        */     
-
+*/
         /*
         // TODO - Test if this works
         // Fixing the blocking issue
@@ -243,11 +241,11 @@ public class RobotContainer
             (
                 new ParallelCommandGroup
                 (
-                    new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
+                    new PositionAlign(s_swerve, s_carriage, driver), // 1. Align to position
                     new ConditionalCommand  // Go to height if within X inches of target
                     (
                         // If the condition is TRUE, go to height
-                        new GoToHeightPreset(s_carriage, s_elevator, s_swerve),  
+                        new GoToHeightPreset(s_elevator),  
                         // Otherwise, run elevator default
                         new ElevatorDefault(s_elevator),
                         // The condition (must be a BooleanSupplier)
