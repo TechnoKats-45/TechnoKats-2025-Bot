@@ -89,11 +89,13 @@ public class RobotContainer
             )
         );
 
+        /*
         s_carriage.setDefaultCommand
         (
             // Carriage will execute this command periodically
             new CarriageDefault(s_carriage, s_elevator)
         );
+        */
 
         /*
         s_elevator.setDefaultCommand
@@ -211,7 +213,8 @@ public class RobotContainer
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
         driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));     // POV Down - Set climber to down angle
-        driver.rightBumper().onTrue(new FloorCoralIntake(s_carriage, s_elevator));                              // Right bumper - Coral Floor Intake
+        //driver.rightBumper().onTrue(new FloorCoralIntake(s_carriage, s_elevator));                              // Right bumper - Coral Floor Intake
+        driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));
         
         /*
         // Sequential - raise elevator once aligned to position
@@ -331,6 +334,7 @@ public class RobotContainer
     public void printDiagnostics()
     {
         s_elevator.printDiagnostics();
+        s_carriage.printDiagnostics();
     }
 
     public void registerNamedCommands()

@@ -90,7 +90,8 @@ public class Carriage extends SubsystemBase
 
     public boolean isCoralDetected()
     {
-        return coralCANdi.getS2State().getValueAsDouble() > 0;
+        SmartDashboard.putNumber("Coral RAW Data", coralCANdi.getS2State().getValueAsDouble());
+        return (coralCANdi.getS2State().getValueAsDouble() < 2);    // For some reason fasle is 2, and true is 1... we're just rollin' with it.
     }
 
     public void setCoralSpeed(double speed)
