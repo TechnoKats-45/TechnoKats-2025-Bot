@@ -1,5 +1,8 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Carriage;
@@ -21,9 +24,10 @@ public class GoToHeightPreset extends Command
 
     public void execute()
     {
-        if(true)    // TODO - was s_carriage.isCoralDetected()
+        double currentPreset = s_elevator.getHeightPreset();
+        if(true)    // if coral detected
         {
-            s_elevator.GoToPreset();
+            s_elevator.setHeight(currentPreset);
         }
         else
         {

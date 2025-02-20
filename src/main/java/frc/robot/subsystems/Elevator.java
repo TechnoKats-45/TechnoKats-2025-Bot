@@ -190,6 +190,7 @@ public class Elevator extends SubsystemBase
     public void printDiagnostics() 
     {
         SmartDashboard.putNumber("Current Preset Angle", currentHeightPreset);
+        SmartDashboard.putNumber("Stashed Value", getHeightPreset());
         SmartDashboard.putBoolean("Elevator Aligned", isAligned());
         SmartDashboard.putNumber("CANDdi from TALON Angle", elevatorMotor1.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Height", getHeight());

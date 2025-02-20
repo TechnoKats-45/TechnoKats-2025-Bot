@@ -13,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -113,12 +114,14 @@ public class RobotContainer
         //testController.rightTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(79)));    // 19 deg
         //testController.a().onTrue(s_elevator.runOnce(() -> s_elevator.determineKs()));
         
+/*
         testController.leftTrigger().whileTrue
         (
             new SequentialCommandGroup
             (
                 //new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
-                new GoToHeightPreset(s_elevator) // 2. Go to height
+                new GoToHeightPreset(s_elevator, () -> s_elevator.getHeightPreset()) // 2. Go to height
+               
                 /*new ConditionalCommand  // 3. Score / Clean
                 (
                     // If the condition is TRUE, run AutoClean
@@ -127,80 +130,14 @@ public class RobotContainer
                     new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),
                     // The condition (must be a BooleanSupplier)
                     () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
-                )*/
-            )
-        );
-/*
-        // TODO - Test if this works
-        // Fixing the blocking issue
-        // Parallel - raise elevator while alinging to position
-        testController.leftTrigger().whileTrue
-        (
-            new SequentialCommandGroup
-            (
-                new ParallelCommandGroup
-                (
-                    //new PositionAlign(s_swerve, s_carriage, driver), // 1. Align to position
-                    new ConditionalCommand  // Go to height if within X inches of target
-                    (
-                        // If the condition is TRUE, go to height
-                        new GoToHeightPreset(s_elevator),  
-                        // Otherwise, run elevator default
-                        new ElevatorDefault(s_elevator),
-                        // The condition (must be a BooleanSupplier)
-                        () -> s_swerve.isWithinTolerance(24) && s_swerve.isRotationComplete() // Check if within X inches of target and rotation is complete
-                    )
-                ),
-                new ParallelCommandGroup
-                (
-                    new ConditionalCommand  // 3. Score / Clean // Potnetially need to change to "either" command
-                    (
-                        // If the condition is TRUE, run AutoClean
-                        new AutoClean(s_carriage, s_elevator),  
-                        // Otherwise, run AutoScore - passes if is set to Barge Height
-                        new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),
-                        // The condition (must be a BooleanSupplier)
-                        () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
-                    ),
-                    // go to height - for if the operator changes preset at this point
-                    new GoToHeightPreset(s_elevator)
                 )
             )
-        );   
-*/
-        /*
-        // TODO - Test if this works
-        // Fixing the blocking issue
-        // Parallel - raise elevator while aligning to position
+        );    */
+
         testController.leftTrigger().whileTrue
         (
-            new SequentialCommandGroup
-            (
-                new ParallelCommandGroup
-                (
-                    new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
-                    new SelectCommand<>  // Dynamically selects between GoToHeightPreset or ElevatorDefault
-                    (
-                        Map.of
-                        (
-                            true, new GoToHeightPreset(s_carriage, s_elevator, s_swerve),
-                            false, new ElevatorDefault(s_elevator)
-                        ),
-                        () -> s_swerve.isWithinTolerance(24) && s_swerve.isRotationComplete() // Live condition check
-                    )
-                ),
-                new SelectCommand<>  // Dynamically selects between AutoClean and AutoScore
-                (
-                    Map.of
-                    (
-                        true, new AutoClean(s_carriage, s_elevator),  
-                        false, new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean())
-                    ),
-                    () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean() // Live condition check
-                )
-            )
+            new GoToHeightPreset(s_elevator) // 2. Go to height
         );
-        */
 
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +185,7 @@ public class RobotContainer
                     new ConditionalCommand  // Go to height if within X inches of target
                     (
                         // If the condition is TRUE, go to height
-                        new GoToHeightPreset(s_elevator),  
+                        new GoToHeightPreset(s_elevator),
                         // Otherwise, run elevator default
                         new ElevatorDefault(s_elevator),
                         // The condition (must be a BooleanSupplier)
@@ -276,35 +213,35 @@ public class RobotContainer
         /// OPERATOR CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         
-        operator.button(Constants.Button.height.L1).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1)));
-        operator.button(Constants.Button.height.L2).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L2)));
-        operator.button(Constants.Button.height.L3).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L3)));
-        operator.button(Constants.Button.height.L4).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4)));
-        operator.button(Constants.Button.height.Barge).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Barge)));
+        operator.button(Constants.Button.height.L1).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1)));
+        operator.button(Constants.Button.height.L2).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L2)));
+        operator.button(Constants.Button.height.L3).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L3)));
+        operator.button(Constants.Button.height.L4).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4)));
+        operator.button(Constants.Button.height.Barge).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Barge)));
 
-        operator.button(Constants.Button.height.A1).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.A1)));
-        operator.button(Constants.Button.height.A2).onTrue(s_elevator.runOnce(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.A2)));
+        operator.button(Constants.Button.height.A1).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.A1)));
+        operator.button(Constants.Button.height.A2).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.A2)));
 
-        operator.button(Constants.Button.location.A).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.A)));
-        operator.button(Constants.Button.location.B).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.B)));
-        operator.button(Constants.Button.location.C).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.C)));
-        operator.button(Constants.Button.location.D).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.D)));
-        operator.button(Constants.Button.location.E).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.E)));
-        operator.button(Constants.Button.location.F).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.F)));
-        operator.button(Constants.Button.location.G).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.G)));
-        operator.button(Constants.Button.location.H).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.H)));
-        operator.button(Constants.Button.location.I).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.I)));
-        operator.button(Constants.Button.location.J).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.J)));
-        operator.button(Constants.Button.location.K).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.K)));
-        operator.button(Constants.Button.location.L).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.L)));
+        operator.button(Constants.Button.location.A).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.A)));
+        operator.button(Constants.Button.location.B).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.B)));
+        operator.button(Constants.Button.location.C).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.C)));
+        operator.button(Constants.Button.location.D).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.D)));
+        operator.button(Constants.Button.location.E).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.E)));
+        operator.button(Constants.Button.location.F).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.F)));
+        operator.button(Constants.Button.location.G).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.G)));
+        operator.button(Constants.Button.location.H).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.H)));
+        operator.button(Constants.Button.location.I).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.I)));
+        operator.button(Constants.Button.location.J).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.J)));
+        operator.button(Constants.Button.location.K).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.K)));
+        operator.button(Constants.Button.location.L).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.L)));
 
-        operator.button(Constants.Button.location.LeftCoral).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.LeftCoral)));
-        operator.button(Constants.Button.location.RightCoral).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.RightCoral)));
+        operator.button(Constants.Button.location.LeftCoral).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.LeftCoral)));
+        operator.button(Constants.Button.location.RightCoral).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.RightCoral)));
 
-        operator.button(Constants.Button.location.Barge).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.Barge)));
-        operator.button(Constants.Button.location.Processor).onTrue(s_swerve.runOnce(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
+        operator.button(Constants.Button.location.Barge).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Barge)));
+        operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
-        operator.button(Constants.Button.location.H).onTrue(s_climber.runOnce(() -> s_climber.openHopper()));
+        operator.button(Constants.Button.location.H).onTrue(new InstantCommand(() -> s_climber.openHopper()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES
