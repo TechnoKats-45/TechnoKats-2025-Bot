@@ -15,14 +15,14 @@ public class CoralIntake extends Command
 {
     private Carriage s_carriage;
     private Elevator s_elevator;   
-    private boolean coralHasBeenSeen = false;
-    private boolean reverse = false;
+    private boolean coralHasBeenSeen;
+    private boolean reverse;
 
     public CoralIntake(Carriage s_carriage, Elevator s_elevator)
     {
         this.s_carriage = s_carriage;
         this.s_elevator = s_elevator;
-
+        
         addRequirements(s_carriage);
 
         s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight); // TODO
@@ -30,18 +30,18 @@ public class CoralIntake extends Command
 
     public void execute()
     {
-        if (!s_carriage.isCoralDetected() && !coralHasBeenSeen) // no coral, never been seen = passive intake   // NOPE
+        if (!s_carriage.isCoralDetected() && !coralHasBeenSeen) // no coral, never been seen = passive intake
         {
             s_carriage.setCoralSpeed(Constants.Carriage.coralPassiveIntakeSpeed);
             SmartDashboard.putNumber("Intake Stage", 1);
         }
-        else if (s_carriage.isCoralDetected() && !reverse)  // yes coral, and not reversed yet = slow intake    //
+        else if (s_carriage.isCoralDetected() && !reverse)  // yes coral, and not reversed yet = slow intake
         {
             coralHasBeenSeen = true;
             s_carriage.setCoralSpeed(Constants.Carriage.coralSlowIntakeSpeed);
             SmartDashboard.putNumber("Intake Stage", 2);
         }
-        else if (!s_carriage.isCoralDetected() && coralHasBeenSeen) // no coral, was seen = reverse // YES[]\
+        else if (!s_carriage.isCoralDetected() && coralHasBeenSeen) // no coral, was seen = reverse
         {
             reverse = true;
             s_carriage.setCoralSpeed(Constants.Carriage.coralReverseSpeed);
@@ -51,8 +51,8 @@ public class CoralIntake extends Command
         {
             SmartDashboard.putNumber("Intake Stage", 0);
         }
-        SmartDashboard.putBoolean("COral Seen?", coralHasBeenSeen);
-        SmartDashboard.putBoolean("REVERSE", reverse);
+        SmartDashboard.putBoolean("Coral Seen?", coralHasBeenSeen);
+        SmartDashboard.putBoolean("Coral Reverse", reverse);
     }
 
     public boolean isFinished()
@@ -65,5 +65,7 @@ public class CoralIntake extends Command
     {
         s_carriage.setCoralSpeed(0);
         SmartDashboard.putNumber("Intake Stage", -1);
+        coralHasBeenSeen = false;
+        reverse = false;
     }
 }

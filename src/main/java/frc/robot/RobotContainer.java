@@ -89,13 +89,11 @@ public class RobotContainer
             )
         );
 
-        /*
         s_carriage.setDefaultCommand
         (
             // Carriage will execute this command periodically
-            new CarriageDefault(s_carriage, s_elevator)
+            new CarriageDefault(s_carriage)
         );
-        */
 
         /*
         s_elevator.setDefaultCommand
@@ -215,6 +213,8 @@ public class RobotContainer
         driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));     // POV Down - Set climber to down angle
         //driver.rightBumper().onTrue(new FloorCoralIntake(s_carriage, s_elevator));                              // Right bumper - Coral Floor Intake
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));
+        driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed)));
+
         
         /*
         // Sequential - raise elevator once aligned to position
