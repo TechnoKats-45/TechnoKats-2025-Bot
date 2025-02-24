@@ -13,6 +13,7 @@ import static edu.wpi.first.units.Units.Amps;
 import edu.wpi.first.hal.ConstantsJNI;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -92,9 +93,21 @@ public class Climber extends SubsystemBase
         winchMotor.setPosition(0);
     }
 
-        public void printDiagnostics()
+    public void ManualClimber(CommandXboxController controller) 
+    {
+        if (controller.getRightY() < -Constants.STICK_DEADBAND) {  // Down
+            winchMotor.set(-1);
+        } else if (controller.getRightY() > Constants.STICK_DEADBAND) { // Up
+            winchMotor.set(1);
+        } else {
+            winchMotor.set(0);
+        }
+    }
+
+    public void printDiagnostics()
     {
         SmartDashboard.putNumber("Climber Winch Angle", getAngle());
+        SmartDashboard.putNumber("Winch Current", winchMotor.getSupplyCurrent().getValueAsDouble());
     }
 
     // Custom SYS ID:
@@ -116,7 +129,7 @@ public class Climber extends SubsystemBase
                 System.out.println("Climber motion detected at " + voltage + "V");
                 break;
             }
-    
+
             voltage += 0.1;
             try 
             {

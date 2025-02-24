@@ -30,6 +30,8 @@ public class CoralIntake extends Command
 
     public void execute()
     {
+        s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight); // TODO
+
         if (!s_carriage.isCoralDetected() && !coralHasBeenSeen) // no coral, never been seen = passive intake
         {
             s_carriage.setCoralSpeed(Constants.Carriage.coralPassiveIntakeSpeed);

@@ -104,6 +104,11 @@ public class RobotContainer
         );
         */
 
+        s_climber.setDefaultCommand
+        (
+            new ManualClimber(s_climber, testController)
+        );
+
         //////////////////////////////////////////////////////////////////////////////////////////
         /// TEST CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -113,6 +118,7 @@ public class RobotContainer
         //testController.rightBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(8+24+24)));     // 16 deg
         //testController.rightTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(79)));    // 19 deg
         //testController.a().onTrue(s_elevator.runOnce(() -> s_elevator.determineKs()));
+        testController.leftTrigger().whileTrue(new PositionAlign(s_swerve, s_carriage, driver));
         
 /*
         testController.leftTrigger().whileTrue
@@ -134,7 +140,7 @@ public class RobotContainer
             )
         );    */
 
-        testController.leftTrigger().whileTrue
+        driver.leftTrigger().whileTrue
         (
             new GoToHeightPreset(s_elevator) // 2. Go to height
         );
@@ -175,6 +181,7 @@ public class RobotContainer
         */
 
         // Parallel - raise elevator while alinging to position
+        /*
         driver.leftTrigger().whileTrue
         (
             new SequentialCommandGroup
@@ -202,7 +209,7 @@ public class RobotContainer
                     () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
                 )
             )
-        );
+        );*/
 
         /*  Add back in once SysID is completed
         // Start Button - Cancel All Commands
@@ -272,6 +279,7 @@ public class RobotContainer
     {
         s_elevator.printDiagnostics();
         s_carriage.printDiagnostics();
+        s_climber.printDiagnostics();
     }
 
     public void registerNamedCommands()

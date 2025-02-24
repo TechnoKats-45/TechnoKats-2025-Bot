@@ -179,8 +179,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
 
     public Pose2d getDestination(CommandXboxController controller)
     {        
-        isAlgae = (controller.button(Constants.Button.height.A1).getAsBoolean() || controller.button(Constants.Button.height.A2).getAsBoolean());
+        //isAlgae = (controller.button(Constants.Button.height.A1).getAsBoolean() || controller.button(Constants.Button.height.A2).getAsBoolean());
 
+        return onTheFlyDestination;
+
+        /*
         if(isAlgae) // Change requested Posed2d to the Algae Cleaning Pose2d if Height is set to Algae
         {
             if(onTheFlyDestination == Constants.Destinations.A || onTheFlyDestination == Constants.Destinations.B)
@@ -209,6 +212,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
             }
         }
         return onTheFlyDestination;
+        */
     }
     
     /**

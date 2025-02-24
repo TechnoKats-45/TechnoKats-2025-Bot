@@ -41,7 +41,7 @@ public class Robot extends TimedRobot
       double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
       // Limelight names
-      String[] limelights = {"limelight0", "limelight1", "limelight2"};
+      String[] limelights = {"limelightBackLeft", "limelightBackRight", "limelightFront"};
 
       // Place to store standard deviations of the limelights' readings
       double limelightAvgStdDev[] = new double[limelights.length];

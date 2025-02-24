@@ -37,7 +37,8 @@ public class PositionAlign extends Command
 
     public void execute()
     {
-        targetPose = s_swerve.getDestination(controller);
+        //targetPose = s_swerve.getDestination(controller);
+        targetPose =  new Pose2d(2.871, 4.086, Rotation2d.fromDegrees(-60));    // For Testing - L location
         Pose2d currentPose = s_swerve.getState().Pose;
 
         // The rotation component in these poses represents the direction of travel

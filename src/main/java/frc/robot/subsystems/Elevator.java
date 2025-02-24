@@ -127,9 +127,9 @@ public class Elevator extends SubsystemBase
 
     public void ManualElevator(CommandXboxController controller) 
     {
-        if (controller.getRightY() < -Constants.STICK_DEADBAND) {  // Down
+        if (controller.getLeftY() < -Constants.STICK_DEADBAND) {  // Down
             elevatorMotor1.set(0.2);
-        } else if (controller.getRightY() > Constants.STICK_DEADBAND) { // Up
+        } else if (controller.getLeftY() > Constants.STICK_DEADBAND) { // Up
             elevatorMotor1.set(-0.2);
         } else {
             elevatorMotor1.set(0);
@@ -172,9 +172,9 @@ public class Elevator extends SubsystemBase
         elevatorConfig.Slot0.kG = 10;   // Tune as needed.    // was .09
         elevatorConfig.Slot0.kV = 3.11;   // Tune as needed.    // was 3.11
         elevatorConfig.Slot0.kA = 0.01;   // Tune as needed.    // was 0.01
-        elevatorConfig.Slot0.kP = 50;      // Your tuned P value.    // was 5
-        elevatorConfig.Slot0.kI = 0;      // Tune as needed.
-        elevatorConfig.Slot0.kD = 0;      // Tune as needed.
+        elevatorConfig.Slot0.kP = 100;     // Tune as needed // was 50   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
+        elevatorConfig.Slot0.kI = 0;      // Tune as needed // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
+        elevatorConfig.Slot0.kD = 0;      // Tune as needed // In an Elevator: If the elevator is moving too fast toward the target, the D term applies a braking effect, slowing it down before overshooting.
         elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     
         StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -194,6 +194,7 @@ public class Elevator extends SubsystemBase
         SmartDashboard.putBoolean("Elevator Aligned", isAligned());
         SmartDashboard.putNumber("CANDdi from TALON Angle", elevatorMotor1.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Height", getHeight());
+        SmartDashboard.putNumber("Elevator Current", elevatorMotor1.getSupplyCurrent().getValueAsDouble());
     }
 
     // SYS ID Stuff (Manual)
