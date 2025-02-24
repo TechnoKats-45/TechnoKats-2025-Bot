@@ -52,7 +52,7 @@ public class PositionAlign extends Command
             new PathConstraints
             (
                 4.0, 4.0, // TODO - check these numbers
-                Units.degreesToRadians(360), Units.degreesToRadians(540)
+                Units.degreesToRadians(360), Units.degreesToRadians(540)    //TODO - check this angle
             ),
             null, // Ideal starting state can be null for on-the-fly paths
             new GoalEndState(0.0, targetPose.getRotation())
