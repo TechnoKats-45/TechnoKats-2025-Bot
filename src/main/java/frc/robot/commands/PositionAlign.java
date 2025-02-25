@@ -15,7 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Elevator;
@@ -27,18 +27,33 @@ public class PositionAlign extends Command
     private Pose2d targetPose;
     private CommandXboxController controller;
 
-    public PositionAlign(Swerve s_swerve, Carriage s_carriage, CommandXboxController controller)
+    public PositionAlign(Swerve s_swerve, Pose2d targetPose)    // For Auto     // TODO - Make sure this doesn't break anything
     {
         this.s_swerve = s_swerve;
-        this.controller = controller;
+        this.targetPose = targetPose;
         
-        addRequirements(s_swerve, s_carriage);
+        addRequirements(s_swerve);
+    }
+
+    public PositionAlign(Swerve s_swerve)   // For Teleop       // TODO - Make sure this doesn't break anything
+    {
+        this.s_swerve = s_swerve;
+    
+        addRequirements(s_swerve);
     }
 
     public void execute()
     {
-        //targetPose = s_swerve.getDestination(controller);
-        targetPose =  new Pose2d(2.871, 4.086, Rotation2d.fromDegrees(-60));    // For Testing - L location
+        if(DriverStation.isTeleop())
+        {
+            // Check to see if A1 or A2 height is selected
+            targetPose = s_swerve.getDestination();
+        }
+        else    // Is AUTO
+        {
+
+        }
+        //targetPose =  new Pose2d(2.871, 4.086, Rotation2d.fromDegrees(-60));    // For Testing - Mid Blue
         Pose2d currentPose = s_swerve.getState().Pose;
 
         // The rotation component in these poses represents the direction of travel

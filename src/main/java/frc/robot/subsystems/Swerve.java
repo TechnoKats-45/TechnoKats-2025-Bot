@@ -37,9 +37,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
-
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+
+import frc.robot.subsystems.Elevator;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -52,6 +53,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private double m_lastSimTime;
     private Pose2d onTheFlyDestination;
     private final Field2d field = new Field2d();
+    private final Elevator s_elevator = new Elevator();
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -193,9 +195,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         onTheFlyDestination = destination;
     }
 
-    public Pose2d getDestination(CommandXboxController controller)
+    public Pose2d getDestination()
     {        
-        isAlgae = (controller.button(Constants.Button.height.A1).getAsBoolean() || controller.button(Constants.Button.height.A2).getAsBoolean());
+        isAlgae = ((s_elevator.getHeightPreset() == Constants.Elevator.HeightPresets.A1) || (s_elevator.getHeightPreset() == Constants.Elevator.HeightPresets.A2));
         
         if(isAlgae) // Change requested Posed2d to the Algae Cleaning Pose2d if Height is set to Algae
         {

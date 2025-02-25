@@ -14,10 +14,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -151,13 +153,13 @@ public class RobotContainer
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         driver.leftTrigger().whileTrue(new GoToHeightPreset(s_elevator));
-        driver.a().whileTrue(s_swerve.applyRequest(() -> brake));                           // A button - brake the drivetrain
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
-        driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
-        driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));     // POV Down - Set climber to down angle
-        //driver.rightBumper().onTrue(new FloorCoralIntake(s_carriage, s_elevator));                              // Right bumper - Coral Floor Intake
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed)));
+        driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
+
+        driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
+        driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));     // POV Down - Set climber to down angle
 
         /*
         // Sequential - raise elevator once aligned to position
@@ -253,8 +255,7 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR CONTROLLER / TEST CONTROLLER
         //////////////////////////////////////////////////////////////////////////////////////////
-        testController.leftTrigger().whileTrue(new PositionAlign(s_swerve, s_carriage, driver));
-
+        testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
 
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -303,10 +304,174 @@ public class RobotContainer
 
         NamedCommands.registerCommand
         (
+            "FinalAlignment-A",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.A)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-B",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.B)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-C",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.C)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-D",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.D)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-E",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.E)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-F",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.F)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-G",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.G)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-H",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.H)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-I",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.I)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-J",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.J)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-K",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.K)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-L",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.L)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-LeftCoral",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.LeftCoral)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-RightCoral",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.RightCoral)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-Barge",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.Barge)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "FinalAlignment-Processor",
+            new ParallelCommandGroup
+            (
+                new PositionAlign(s_swerve, Constants.Destinations.Processor)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
             "ScoreL1",
             new SequentialCommandGroup
             (
                 new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator),
+                new AutoScore(s_carriage, s_elevator, false)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "ScoreL2",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L2), s_elevator),
+                new AutoScore(s_carriage, s_elevator, false)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "ScoreL3",
+            new SequentialCommandGroup
+            (
+                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L3), s_elevator),
                 new AutoScore(s_carriage, s_elevator, false)
             )
         );
