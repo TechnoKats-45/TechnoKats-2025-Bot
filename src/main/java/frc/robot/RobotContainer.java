@@ -156,10 +156,28 @@ public class RobotContainer
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed)));
-        driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
+        //driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
 
-        driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
-        driver.povDown().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)));     // POV Down - Set climber to down angle
+        driver.povUp().onTrue
+        (
+            new ConditionalCommand
+            (
+                s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)),  // If operator.button(0) is true, set angle
+                new InstantCommand(),  // Do nothing if false
+                () -> operator.button(0).getAsBoolean()  // Condition to check
+            )
+        );
+        
+        driver.povDown().onTrue
+        (
+            new ConditionalCommand
+            (
+                s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)),  // If operator.button(0) is true, set angle
+                new InstantCommand(),  // Do nothing if false
+                () -> operator.button(0).getAsBoolean()  // Condition to check
+            )
+        );
+        
 
         /*
         // Sequential - raise elevator once aligned to position
@@ -250,7 +268,7 @@ public class RobotContainer
         operator.button(Constants.Button.location.Barge).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Barge)));
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
-        operator.button(Constants.Button.location.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
+        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR CONTROLLER / TEST CONTROLLER
@@ -264,10 +282,10 @@ public class RobotContainer
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-            //driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
-            //driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
-            //driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
-            //driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
+            driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
+            driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
+            driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
+            driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
     }
 
     public Command getAutonomousCommand() 

@@ -41,7 +41,8 @@ public class Elevator extends SubsystemBase
     private final MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
 
 
-    public Elevator() {
+    public Elevator() 
+    {
         // Initialize motors and sensors
         elevatorMotor1 = new TalonFX(Constants.Elevator.elevatorMotor1ID);
         elevatorMotor1.setNeutralMode(NeutralModeValue.Brake);
@@ -170,13 +171,13 @@ public class Elevator extends SubsystemBase
             .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
 
         // PID and feedforward tuning constants
-        elevatorConfig.Slot0.kS = 0.9;   // Tune as needed. / was 0.9
-        elevatorConfig.Slot0.kG = 11;   // Tune as needed.    // was .09    // was 10
-        elevatorConfig.Slot0.kV = 3.11;   // Tune as needed.    // was 3.11
-        elevatorConfig.Slot0.kA = 0.01;   // Tune as needed.    // was 0.01
-        elevatorConfig.Slot0.kP = 45;     // Tune as needed // was 50   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
-        elevatorConfig.Slot0.kI = 1;  // Was 5    // Tune as needed // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
-        elevatorConfig.Slot0.kD = 0;      // Tune as needed // In an Elevator: If the elevator is moving too fast toward the target, the D term applies a braking effect, slowing it down before overshooting.
+        elevatorConfig.Slot0.kS = 0.9;      // Tune as needed.
+        elevatorConfig.Slot0.kG = 11;       // Tune as needed.
+        elevatorConfig.Slot0.kV = 3.11;     // Tune as needed.
+        elevatorConfig.Slot0.kA = 0.01;     // Tune as needed.
+        elevatorConfig.Slot0.kP = 45;       // Tune as needed   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
+        elevatorConfig.Slot0.kI = 1;// Was 5 // Tune as needed  // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
+        elevatorConfig.Slot0.kD = 0;        // Tune as needed   // In an Elevator: If the elevator is moving too fast toward the target, the D term applies a braking effect, slowing it down before overshooting.
         elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         StatusCode status = StatusCode.StatusCodeNotInitialized;

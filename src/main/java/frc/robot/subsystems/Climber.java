@@ -11,17 +11,13 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import static edu.wpi.first.units.Units.Amps;
 
-import edu.wpi.first.hal.ConstantsJNI;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
@@ -32,9 +28,6 @@ public class Climber extends SubsystemBase
     double climberAngle;
 
     private TalonFX winchMotor;
-    private DutyCycleEncoder m_absoluteEncoder;
-    private Servo m_hatchServo;
-    private CANdi climberCaNdi;
     private boolean climbEnabled = false;
 
     // PID Declarations
@@ -45,14 +38,13 @@ public class Climber extends SubsystemBase
     {
         // Initialize motors and sensors
         winchMotor = new TalonFX(winchMotorID);
-        climberCaNdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
         configWinchMotor();
     }
 
     public void setAngle(double angle)
     {
-        winchMotor.setControl(winch_angle.withPosition(angle/360));
+        winchMotor.setControl(motionMagicControl.withPosition(angle/360));
     }
     
     public double getAngle()
@@ -63,6 +55,11 @@ public class Climber extends SubsystemBase
     public void enableClimb()
     {
         climbEnabled = true;
+    }
+
+    public boolean isClimbEnabled()
+    {
+        return climbEnabled;
     }
 
     public void configWinchMotor()
@@ -86,8 +83,8 @@ public class Climber extends SubsystemBase
         FeedbackConfigs fdb = winchMotorConfigs.Feedback;
         fdb.FeedbackRemoteSensorID = Constants.Elevator.elevatorCANdiID;
         fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANdiPWM2;
-        fdb.SensorToMechanismRatio = 1;
-        fdb.RotorToSensorRatio = 11.9*12;
+        fdb.SensorToMechanismRatio = 1;     // TODO - Check this value
+        fdb.RotorToSensorRatio = 11.9*12;   // TOOD - Check this value
 
         /* Configure Motion Magic parameters as needed */
         

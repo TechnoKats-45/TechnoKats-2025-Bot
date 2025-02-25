@@ -17,15 +17,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.Elevator;
-import frc.robot.Constants;
 
 public class PositionAlign extends Command
 {
     private Swerve s_swerve;
     private Pose2d targetPose;
-    private CommandXboxController controller;
 
     public PositionAlign(Swerve s_swerve, Pose2d targetPose)    // For Auto     // TODO - Make sure this doesn't break anything
     {
