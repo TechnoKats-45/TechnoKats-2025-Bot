@@ -18,6 +18,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,6 +38,8 @@ public class Elevator extends SubsystemBase
 
     // PID control on angle (in degrees)
     private final PositionTorqueCurrentFOC elevator_angle = new PositionTorqueCurrentFOC(0);
+    private final MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
+
 
     public Elevator() {
         // Initialize motors and sensors
@@ -108,7 +111,7 @@ public class Elevator extends SubsystemBase
     public void setAngle(double angle) 
     {
         // Convert desired physical angle to sensor space by adding the sensor offset.
-        elevatorMotor1.setControl(elevator_angle.withPosition(angle));
+        elevatorMotor1.setControl(motionMagicControl.withPosition(angle));
         SmartDashboard.putNumber("Desired Angle", angle);   // TODO - comment out
     }
 
@@ -160,23 +163,22 @@ public class Elevator extends SubsystemBase
         fdb.RotorToSensorRatio = 11.9*12;
 
         /* Configure Motion Magic parameters as needed */
-        /*
+        
         MotionMagicConfigs mm = elevatorConfig.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(5))
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(100))
           .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10))
           .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
-        */
 
         // PID and feedforward tuning constants
         elevatorConfig.Slot0.kS = 0.9;   // Tune as needed. / was 0.9
-        elevatorConfig.Slot0.kG = 10;   // Tune as needed.    // was .09
+        elevatorConfig.Slot0.kG = 11;   // Tune as needed.    // was .09    // was 10
         elevatorConfig.Slot0.kV = 3.11;   // Tune as needed.    // was 3.11
         elevatorConfig.Slot0.kA = 0.01;   // Tune as needed.    // was 0.01
-        elevatorConfig.Slot0.kP = 100;     // Tune as needed // was 50   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
-        elevatorConfig.Slot0.kI = 0;      // Tune as needed // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
+        elevatorConfig.Slot0.kP = 45;     // Tune as needed // was 50   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
+        elevatorConfig.Slot0.kI = 5;      // Tune as needed // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
         elevatorConfig.Slot0.kD = 0;      // Tune as needed // In an Elevator: If the elevator is moving too fast toward the target, the D term applies a braking effect, slowing it down before overshooting.
         elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    
+
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
             status = elevatorMotor1.getConfigurator().apply(elevatorConfig);
