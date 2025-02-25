@@ -162,9 +162,9 @@ public class RobotContainer
         (
             new ConditionalCommand
             (
-                s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)),  // If operator.button(0) is true, set angle
+                s_climber.runOnce(() -> s_climber.setAngle(s_climber.getAngle() + 5)), // Increase by 5°
                 new InstantCommand(),  // Do nothing if false
-                () -> operator.button(0).getAsBoolean()  // Condition to check
+                () -> s_climber.isClimbEnabled() // Only run if operator.button(0) is pressed / climb is enabled
             )
         );
         
@@ -172,11 +172,12 @@ public class RobotContainer
         (
             new ConditionalCommand
             (
-                s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.floorAngle)),  // If operator.button(0) is true, set angle
+                s_climber.runOnce(() -> s_climber.setAngle(s_climber.getAngle() - 5)), // Decrease by 5°
                 new InstantCommand(),  // Do nothing if false
-                () -> operator.button(0).getAsBoolean()  // Condition to check
+                () -> s_climber.isClimbEnabled() // Only run if operator.button(0) is pressed / climb is enabled
             )
         );
+        
         
 
         /*
