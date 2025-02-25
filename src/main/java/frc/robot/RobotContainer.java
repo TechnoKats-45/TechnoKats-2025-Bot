@@ -79,6 +79,7 @@ public class RobotContainer
         
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
+        /*
         s_swerve.setDefaultCommand
         (
             // Drivetrain will execute this command periodically
@@ -89,6 +90,18 @@ public class RobotContainer
                     .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
+        */
+
+        s_swerve.setDefaultCommand  // TODO - Test if this works, if not, change back to above
+        (
+            s_swerve.applyRequest
+            (() -> 
+                drive.withVelocityX(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed))
+                    .withVelocityY(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed))
+                    .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate))
+            )
+        );
+
 
         s_carriage.setDefaultCommand
         (
@@ -113,14 +126,9 @@ public class RobotContainer
         /// TEST CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         
-        //testController.leftTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setAngle(16)));   // 8.02 deg
-        //testController.leftBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(8+24)));      // 12 deg
-        //testController.rightBumper().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(8+24+24)));     // 16 deg
-        //testController.rightTrigger().onTrue(s_elevator.runOnce(() -> s_elevator.setHeight(79)));    // 19 deg
-        //testController.a().onTrue(s_elevator.runOnce(() -> s_elevator.determineKs()));
         testController.leftTrigger().whileTrue(new PositionAlign(s_swerve, s_carriage, driver));
         
-/*
+        /*
         testController.leftTrigger().whileTrue
         (
             new SequentialCommandGroup
@@ -138,18 +146,13 @@ public class RobotContainer
                     () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
                 )
             )
-        );    */
-
-        driver.leftTrigger().whileTrue
-        (
-            new GoToHeightPreset(s_elevator) // 2. Go to height
-        );
-
+        );    
+        */
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
-
+        driver.leftTrigger().whileTrue(new GoToHeightPreset(s_elevator));
         driver.a().whileTrue(s_swerve.applyRequest(() -> brake));                           // A button - brake the drivetrain
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.povUp().onTrue(s_climber.runOnce(() -> s_climber.setAngle(Constants.Climber.climbAngle)));       // POV Up - Set climber to climb angle
@@ -158,7 +161,6 @@ public class RobotContainer
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed)));
 
-        
         /*
         // Sequential - raise elevator once aligned to position
         driver.leftTrigger().whileTrue
@@ -248,7 +250,7 @@ public class RobotContainer
         operator.button(Constants.Button.location.Barge).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Barge)));
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
-        operator.button(Constants.Button.location.H).onTrue(new InstantCommand(() -> s_climber.openHopper()));
+        operator.button(Constants.Button.location.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES

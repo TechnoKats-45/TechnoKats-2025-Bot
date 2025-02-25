@@ -32,6 +32,9 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
 
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
@@ -64,6 +67,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
+    // Define slew rate limiters to smooth acceleration/deceleration
+    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3.0);  // Limits acceleration in m/s²             // TODO - Tune ?
+    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3.0);  // Limits acceleration in m/s²             // TODO - Tune ?
+    private final SlewRateLimiter rotSpeedLimiter = new SlewRateLimiter(6.0); // Limits rotation acceleration in rad/s² // TODO - Tune ?
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine
@@ -185,11 +193,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
 
     public Pose2d getDestination(CommandXboxController controller)
     {        
-        //isAlgae = (controller.button(Constants.Button.height.A1).getAsBoolean() || controller.button(Constants.Button.height.A2).getAsBoolean());
-
-        return onTheFlyDestination;
-
-        /*
+        isAlgae = (controller.button(Constants.Button.height.A1).getAsBoolean() || controller.button(Constants.Button.height.A2).getAsBoolean());
+        
         if(isAlgae) // Change requested Posed2d to the Algae Cleaning Pose2d if Height is set to Algae
         {
             if(onTheFlyDestination == Constants.Destinations.A || onTheFlyDestination == Constants.Destinations.B)
@@ -218,9 +223,24 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
             }
         }
         return onTheFlyDestination;
-        */
     }
     
+    public double getLimitedXSpeed(double joystickInput, double maxSpeed) 
+    {
+        return xSpeedLimiter.calculate(joystickInput * maxSpeed);
+    }
+    
+    public double getLimitedYSpeed(double joystickInput, double maxSpeed) 
+    {
+        return ySpeedLimiter.calculate(joystickInput * maxSpeed);
+    }
+    
+    public double getLimitedRotSpeed(double joystickInput, double maxAngularRate)
+    {
+        return rotSpeedLimiter.calculate(joystickInput * maxAngularRate);
+    }
+    
+
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>

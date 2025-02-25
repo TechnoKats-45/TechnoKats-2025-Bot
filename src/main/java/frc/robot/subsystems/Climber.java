@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -38,7 +39,7 @@ public class Climber extends SubsystemBase
 
     // PID Declarations
     private final PositionTorqueCurrentFOC winch_angle = new PositionTorqueCurrentFOC(0);
-    // TODO - PID Stuff
+    private final MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
 
     public Climber()
     {
@@ -46,7 +47,7 @@ public class Climber extends SubsystemBase
         winchMotor = new TalonFX(winchMotorID);
         climberCaNdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
-        //configWinchMotor();
+        configWinchMotor();
     }
 
     public void setAngle(double angle)
@@ -56,19 +57,11 @@ public class Climber extends SubsystemBase
     
     public double getAngle()
     {
-        climberAngle = climberCaNdi.getPWM2Position().getValueAsDouble();   // Get the angle of the algae (-16384.0 to 16383.999755859375)
-        climberAngle = ((climberAngle % 360) + 360) % 360;  // Normalize the angle to the range [0, 360)
-        return climberAngle;
-    }
-    
-    public void openHopper()    // Deprecated with removal of servo
-    {
-        m_hatchServo.setAngle(Constants.Climber.hopperReleaseAngle);
+        return winchMotor.getPosition().getValueAsDouble();
     }
 
     public void enableClimb()
     {
-        // TODO - Implement
         climbEnabled = true;
     }
 
