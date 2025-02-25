@@ -59,7 +59,7 @@ public class Constants
     {
         public static final double hopperReleaseAngle = 0;  // TODO
         public static final double climbAngle = 0;          // TODO
-        public static final double floorAngle = 0;           // TODO
+        public static final double floorAngle = 0;          // TODO
     }
     
     // Operator Button Board Mapping

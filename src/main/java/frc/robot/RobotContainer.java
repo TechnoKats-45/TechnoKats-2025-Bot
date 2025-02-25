@@ -92,16 +92,16 @@ public class RobotContainer
         );
         */
 
-        s_swerve.setDefaultCommand  // TODO - Test if this works, if not, change back to above
+        s_swerve.setDefaultCommand
         (
             s_swerve.applyRequest
             (() -> 
-                drive.withVelocityX(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed))
-                    .withVelocityY(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed))
-                    .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate))
+                drive.withVelocityX(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight()))
+                    .withVelocityY(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight()))
+                    .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight()))
             )
         );
-
+        
 
         s_carriage.setDefaultCommand
         (
@@ -116,8 +116,8 @@ public class RobotContainer
             new ManualElevator(s_elevator, testController)
         );
         */
-
-        s_climber.setDefaultCommand
+        
+        s_climber.setDefaultCommand // TODO - Comment out when tuned / tested - still need to get set points
         (
             new ManualClimber(s_climber, testController)
         );
@@ -125,9 +125,7 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// TEST CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
-        
-        testController.leftTrigger().whileTrue(new PositionAlign(s_swerve, s_carriage, driver));
-        
+                
         /*
         testController.leftTrigger().whileTrue
         (
@@ -219,7 +217,7 @@ public class RobotContainer
         */        
 
         //////////////////////////////////////////////////////////////////////////////////////////
-        /// OPERATOR CONTROLS
+        /// OPERATOR BUTTON BOARD CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         
         operator.button(Constants.Button.height.L1).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1)));
@@ -251,6 +249,13 @@ public class RobotContainer
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
         operator.button(Constants.Button.location.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+        /// OPERATOR CONTROLLER / TEST CONTROLLER
+        //////////////////////////////////////////////////////////////////////////////////////////
+        testController.leftTrigger().whileTrue(new PositionAlign(s_swerve, s_carriage, driver));
+
+
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES

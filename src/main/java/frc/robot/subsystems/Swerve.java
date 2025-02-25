@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.lang.invoke.ConstantCallSite;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -15,6 +16,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -224,23 +226,41 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         }
         return onTheFlyDestination;
     }
-    
-    public double getLimitedXSpeed(double joystickInput, double maxSpeed) 
-    {
-        return xSpeedLimiter.calculate(joystickInput * maxSpeed);
-    }
-    
-    public double getLimitedYSpeed(double joystickInput, double maxSpeed) 
-    {
-        return ySpeedLimiter.calculate(joystickInput * maxSpeed);
-    }
-    
-    public double getLimitedRotSpeed(double joystickInput, double maxAngularRate)
-    {
-        return rotSpeedLimiter.calculate(joystickInput * maxAngularRate);
-    }
-    
 
+    public double getLimitedXSpeed(double joystickInput, double maxSpeed, double elevatorHeight) 
+    {
+        double limitedSpeed = getMaxSpeedBasedOnElevator(elevatorHeight, maxSpeed);
+        return xSpeedLimiter.calculate(joystickInput * limitedSpeed);
+    }
+    
+    public double getLimitedYSpeed(double joystickInput, double maxSpeed, double elevatorHeight) 
+    {
+        double limitedSpeed = getMaxSpeedBasedOnElevator(elevatorHeight, maxSpeed);
+        return ySpeedLimiter.calculate(joystickInput * limitedSpeed);
+    }
+    
+    public double getLimitedRotSpeed(double joystickInput, double maxAngularRate, double elevatorHeight) 
+    {
+        double limitedSpeed = getMaxSpeedBasedOnElevator(elevatorHeight, maxAngularRate);
+        return rotSpeedLimiter.calculate(joystickInput * limitedSpeed);
+    }
+    
+    public double getMaxSpeedBasedOnElevator(double elevatorHeight, double baseSpeed) 
+    {
+        double minHeight = Constants.Elevator.HeightPresets.handoffHeight;  // Safe height where max speed is allowed
+        double maxHeight = Constants.Elevator.HeightPresets.Barge;          // Max elevator height
+        double minSpeedFactor = 0.3; // 30% speed when fully extended     // TODO - Tune ?
+
+        // Scale speed linearly based on elevator height
+        double speedFactor = MathUtil.clamp
+        (
+            1.0 - ((elevatorHeight - minHeight) / (maxHeight - minHeight)),
+            minSpeedFactor, 1.0
+        );
+
+        return baseSpeed * speedFactor; // Adjusted max speed
+    }
+    
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>
