@@ -28,6 +28,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -41,6 +46,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private Pose2d onTheFlyDestination;
+    private final Field2d field = new Field2d();
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -301,6 +307,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
             startSimThread();
         }
         configureAutoBuilder();
+        
+        // Publish the Field2d object to SmartDashboard for visualization
+        SmartDashboard.putData("Field", field);
     }
 
         private void configureAutoBuilder() 
@@ -377,6 +386,18 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
          * Otherwise, only check and apply the operator perspective if the DS is disabled.
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
+
+        // Get current pose
+        Pose2d currentPose = getState().Pose;
+
+        // Send pose to Field2d for visualization
+        field.setRobotPose(currentPose);
+
+        // Send pose data to NetworkTables
+        NetworkTableInstance.getDefault().getTable("Swerve").getEntry("PoseX").setDouble(currentPose.getX());
+        NetworkTableInstance.getDefault().getTable("Swerve").getEntry("PoseY").setDouble(currentPose.getY());
+        NetworkTableInstance.getDefault().getTable("Swerve").getEntry("PoseTheta").setDouble(currentPose.getRotation().getDegrees());
+        
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) 
         {
             DriverStation.getAlliance().ifPresent(allianceColor -> 

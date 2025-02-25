@@ -127,7 +127,7 @@ public class RobotContainer
             (
                 //new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
                 new GoToHeightPreset(s_elevator, () -> s_elevator.getHeightPreset()) // 2. Go to height
-               
+            
                 /*new ConditionalCommand  // 3. Score / Clean
                 (
                     // If the condition is TRUE, run AutoClean
@@ -256,10 +256,10 @@ public class RobotContainer
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
-        driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
-        driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
-        driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
+            //driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
+            //driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
+            //driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
+            //driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
     }
 
     public Command getAutonomousCommand() 

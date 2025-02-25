@@ -1,7 +1,13 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Second;
+
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANdi;
@@ -28,6 +34,7 @@ public class Climber extends SubsystemBase
     private DutyCycleEncoder m_absoluteEncoder;
     private Servo m_hatchServo;
     private CANdi climberCaNdi;
+    private boolean climbEnabled = false;
 
     // PID Declarations
     private final PositionTorqueCurrentFOC winch_angle = new PositionTorqueCurrentFOC(0);
@@ -54,19 +61,54 @@ public class Climber extends SubsystemBase
         return climberAngle;
     }
     
-    public void openHopper()
+    public void openHopper()    // Deprecated with removal of servo
     {
         m_hatchServo.setAngle(Constants.Climber.hopperReleaseAngle);
+    }
+
+    public void enableClimb()
+    {
+        // TODO - Implement
+        climbEnabled = true;
     }
 
     public void configWinchMotor()
     {
         TalonFXConfiguration winchMotorConfigs = new TalonFXConfiguration();
-            winchMotorConfigs.Slot0.kS = 0; // To account for friction, add 0.1 V of static feedforward                                                     // TODO - Tune
-            winchMotorConfigs.Slot0.kV = 0; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second     // TODO - Tune
-            winchMotorConfigs.Slot1.kP = 0; // An error of 1 rotation results in 60 A output                                                                // TODO - Tune
-            winchMotorConfigs.Slot1.kI = 0; // No output for integrated error                                                                               // TODO - Tune
-            winchMotorConfigs.Slot1.kD = 0; // A velocity of 1 rps results in 6 A output                                                                    // TODO - Tune
+    
+        var limitConfigs = new CurrentLimitsConfigs();
+
+        // Enable stator current limit.
+        limitConfigs.StatorCurrentLimit = 40;
+        limitConfigs.StatorCurrentLimitEnable = false; // or true as needed
+
+        /*  Configure the Talon FX to use the CANdi sensor as its feedback source.
+            Using the helper method withRemoteCANdiPwm1, we pass in the CANdi object.
+            Then, we set the SensorToMechanismRatio to convert the remote sensor's
+            native units (assumed to be rotations) into degrees. For example, if one
+            mechanism rotation equals 360° and the CANdi outputs in encoder rotations,
+            and your mechanism's reduction is given by your constants, you can set:
+            360.0 / Constants.Elevator.MECHANISM_TO_ENCODER.
+        */
+        FeedbackConfigs fdb = winchMotorConfigs.Feedback;
+        fdb.FeedbackRemoteSensorID = Constants.Elevator.elevatorCANdiID;
+        fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANdiPWM2;
+        fdb.SensorToMechanismRatio = 1;
+        fdb.RotorToSensorRatio = 11.9*12;
+
+        /* Configure Motion Magic parameters as needed */
+        
+        MotionMagicConfigs mm = winchMotorConfigs.MotionMagic;
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(100))
+            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10))
+            .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
+
+
+        winchMotorConfigs.Slot0.kS = 0; // To account for friction, add 0.1 V of static feedforward                                                     // TODO - Tune
+        winchMotorConfigs.Slot0.kV = 0; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second     // TODO - Tune
+        winchMotorConfigs.Slot1.kP = 0; // An error of 1 rotation results in 60 A output                                                                // TODO - Tune
+        winchMotorConfigs.Slot1.kI = 0; // No output for integrated error                                                                               // TODO - Tune
+        winchMotorConfigs.Slot1.kD = 0; // A velocity of 1 rps results in 6 A output                                                                    // TODO - Tune
 
         // Peak output of 120 A
         winchMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(120))
@@ -106,7 +148,7 @@ public class Climber extends SubsystemBase
 
     public void printDiagnostics()
     {
-        SmartDashboard.putNumber("Climber Winch Angle", getAngle());
+        SmartDashboard.putNumber("Climber Encoder Angle", getAngle());
         SmartDashboard.putNumber("Winch Current", winchMotor.getSupplyCurrent().getValueAsDouble());
     }
 

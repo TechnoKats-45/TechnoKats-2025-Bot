@@ -149,12 +149,12 @@ public class Elevator extends SubsystemBase
         limitConfigs.StatorCurrentLimitEnable = false; // or true as needed
     
         /* Configure the Talon FX to use the CANdi sensor as its feedback source.
-           Using the helper method withRemoteCANdiPwm1, we pass in the CANdi object.
-           Then, we set the SensorToMechanismRatio to convert the remote sensor's
-           native units (assumed to be rotations) into degrees. For example, if one
-           mechanism rotation equals 360° and the CANdi outputs in encoder rotations,
-           and your mechanism's reduction is given by your constants, you can set:
-           360.0 / Constants.Elevator.MECHANISM_TO_ENCODER.
+            Using the helper method withRemoteCANdiPwm1, we pass in the CANdi object.
+            Then, we set the SensorToMechanismRatio to convert the remote sensor's
+            native units (assumed to be rotations) into degrees. For example, if one
+            mechanism rotation equals 360° and the CANdi outputs in encoder rotations,
+            and your mechanism's reduction is given by your constants, you can set:
+            360.0 / Constants.Elevator.MECHANISM_TO_ENCODER.
         */
         FeedbackConfigs fdb = elevatorConfig.Feedback;
         fdb.FeedbackRemoteSensorID = Constants.Elevator.elevatorCANdiID;
@@ -166,8 +166,8 @@ public class Elevator extends SubsystemBase
         
         MotionMagicConfigs mm = elevatorConfig.MotionMagic;
         mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(100))
-          .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10))
-          .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
+            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10))
+            .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
 
         // PID and feedforward tuning constants
         elevatorConfig.Slot0.kS = 0.9;   // Tune as needed. / was 0.9
