@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.net.ssl.SNIMatcher;
+
 import com.ctre.phoenix6.Utils;
 
 import edu.wpi.first.math.util.Units;
@@ -47,6 +49,7 @@ public class Robot extends TimedRobot
       var driveState = m_robotContainer.s_swerve.getState();
       double headingDeg = driveState.Pose.getRotation().getDegrees();
       double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
+      SmartDashboard.putNumber("headingDeg", headingDeg);
       SmartDashboard.putNumber("omegaRps", omegaRps);
       LimelightHelpers.SetRobotOrientation("front", headingDeg, 0, 0, 0, 0, 0);
       var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("front");
@@ -56,6 +59,14 @@ public class Robot extends TimedRobot
         m_robotContainer.s_swerve.addVisionMeasurement(llMeasurement.pose, llMeasurement.timestampSeconds);
       }
     }
+
+    // TEST
+    double[] botPose = NetworkTableInstance.getDefault()
+    .getTable("limelight-front")
+    .getEntry("botpose_wpiblue")
+    .getDoubleArray(new double[6]);
+
+    SmartDashboard.putNumberArray("Limelight Raw Pose Data", botPose);
 
     /*
     if (kUseLimelight) 
