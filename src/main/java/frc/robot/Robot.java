@@ -48,7 +48,6 @@ public class Robot extends TimedRobot
     if (kUseLimelight) 
     {
       var driveState = m_robotContainer.s_swerve.getState();
-      //double headingDeg = driveState.Pose.getRotation().getDegrees();
       double headingDeg = m_robotContainer.s_swerve.getPigeon2().getRotation2d().getDegrees();
       double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
@@ -56,6 +55,7 @@ public class Robot extends TimedRobot
       
       LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
       var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+      
       if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) 
       {
         //m_robotContainer.s_swerve.addVisionMeasurement(llMeasurement.pose, llMeasurement.timestampSeconds); // Effects rotation
@@ -67,15 +67,44 @@ public class Robot extends TimedRobot
         var visionPose = llMeasurement.pose;
 
         // Create a new pose that keeps the robot's original heading
-        var filteredPose = new Pose2d(
-            visionPose.getX(),  // Use vision-based X
-            visionPose.getY(),  // Use vision-based Y
-            currentPose.getRotation()  // Keep the current heading
+        var filteredPose = new Pose2d
+        (
+          visionPose.getX(),  // Use vision-based X
+          visionPose.getY(),  // Use vision-based Y
+          currentPose.getRotation()  // Keep the current heading
         );
 
         // Apply vision update with the filtered pose
         m_robotContainer.s_swerve.addVisionMeasurement(filteredPose, llMeasurement.timestampSeconds);
+
+        // ADD GYRO CORRECTION WITH STDEV CHECK
+        double visionHeading = visionPose.getRotation().getDegrees();
+        double gyroHeading = m_robotContainer.s_swerve.getPigeon2().getRotation2d().getDegrees();
+        
+        // Retrieve standard deviation of the Limelight data
+        double[] stddevs = NetworkTableInstance.getDefault()
+          .getTable("limelight")
+          .getEntry("stddevs")
+          .getDoubleArray(new double[6]);
+
+        double avgStdDev = (stddevs[0] + stddevs[1] + stddevs[5]) / 3; // Average X, Y, and Rotation stddev
+
+        // Log gyro vs. vision heading for debugging
+        SmartDashboard.putNumber("HEADING (Gyro)", gyroHeading);
+        SmartDashboard.putNumber("HEADING (Vision)", visionHeading);
+        SmartDashboard.putNumber("HEADING DIFF", Math.abs(gyroHeading - visionHeading));
+        SmartDashboard.putNumber("Vision StDev", avgStdDev);
+
+        // Only correct the gyro if:
+        // - The error between gyro and vision heading is significant (>5°)
+        // - The robot is NOT turning quickly (omegaRps < 0.5)
+        // - The vision data is HIGHLY RELIABLE (stdev < 0.5 meters)
+        if (Math.abs(gyroHeading - visionHeading) > 5.0 && Math.abs(omegaRps) < 0.5 && avgStdDev < 0.5)  
+        {
+          // Reset gyro to match vision heading
+          m_robotContainer.s_swerve.getPigeon2().setYaw(visionHeading);
         }
+      }
     }
 
     /*
