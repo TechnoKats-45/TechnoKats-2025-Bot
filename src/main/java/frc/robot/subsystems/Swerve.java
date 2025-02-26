@@ -509,6 +509,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     {
         double omegaRPS = Units.radiansToRotations(getState().Speeds.omegaRadiansPerSecond);
         double headingDeg = getState().Pose.getRotation().getDegrees();
+        SmartDashboard.putNumber("HEADING", headingDeg);
         LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
         llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
