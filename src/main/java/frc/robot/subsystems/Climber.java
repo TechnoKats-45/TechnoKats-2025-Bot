@@ -83,8 +83,8 @@ public class Climber extends SubsystemBase
         FeedbackConfigs fdb = winchMotorConfigs.Feedback;
         fdb.FeedbackRemoteSensorID = Constants.Elevator.elevatorCANdiID;
         fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANdiPWM2;
-        fdb.SensorToMechanismRatio = 1;     // TODO - Check this value
-        fdb.RotorToSensorRatio = 11.9*12;   // TOOD - Check this value
+        fdb.SensorToMechanismRatio = 1/137;
+        fdb.RotorToSensorRatio = 1644;
 
         /* Configure Motion Magic parameters as needed */
         
@@ -101,15 +101,6 @@ public class Climber extends SubsystemBase
         winchMotorConfigs.Slot1.kI = 0; // No output for integrated error                                                                               // TODO - Tune
         winchMotorConfigs.Slot1.kD = 0; // A velocity of 1 rps results in 6 A output                                                                    // TODO - Tune
 
-        // Peak output of 120 A
-        winchMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(120))
-            .withPeakReverseTorqueCurrent(Amps.of(-120));
-
-        winchMotorConfigs.Feedback = new FeedbackConfigs()
-            .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANdiPWM2)
-            .withFeedbackRemoteSensorID(Constants.Elevator.elevatorCANdiID);
-
-
         /* Retry config apply up to 5 times, report if failure */
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) 
@@ -121,9 +112,6 @@ public class Climber extends SubsystemBase
         {
             System.out.println("Could not apply configs, error code: " + status.toString());
         }
-            
-        /* Make sure we start at 0 */
-        winchMotor.setPosition(0);
     }
 
     public void ManualClimber(CommandXboxController controller) 
