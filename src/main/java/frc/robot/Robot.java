@@ -48,8 +48,8 @@ public class Robot extends TimedRobot
       double headingDeg = driveState.Pose.getRotation().getDegrees();
       double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
       SmartDashboard.putNumber("omegaRps", omegaRps);
-      LimelightHelpers.SetRobotOrientation("limelightFront", headingDeg, 0, 0, 0, 0, 0);
-      var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelightFront");
+      LimelightHelpers.SetRobotOrientation("front", headingDeg, 0, 0, 0, 0, 0);
+      var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("front");
       SmartDashboard.putNumber("llmeasurement X", llMeasurement.pose.getX()); // llMeasurement is NULL
       SmartDashboard.putNumber("llmeasurement Y", llMeasurement.pose.getY()); // llMeasurement is NULL
       if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(1) < 2.0) { // TODO FIX - was Math.abs(omegaRps) < 2.0
