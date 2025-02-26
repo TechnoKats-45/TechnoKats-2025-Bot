@@ -418,7 +418,10 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     }
 
     @Override
-    public void periodic() {
+    public void periodic() 
+    {
+        updateVisionOdometry();
+
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
@@ -426,11 +429,12 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
          * Otherwise, only check and apply the operator perspective if the DS is disabled.
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
-        
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) 
         {
-            DriverStation.getAlliance().ifPresent(allianceColor -> {
-                setOperatorPerspectiveForward(
+            DriverStation.getAlliance().ifPresent(allianceColor -> 
+            {
+                setOperatorPerspectiveForward
+                (
                     allianceColor == Alliance.Red
                         ? kRedAlliancePerspectiveRotation
                         : kBlueAlliancePerspectiveRotation
@@ -438,7 +442,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        updateVisionOdometry();
     }
 
     private void startSimThread() 
@@ -494,36 +497,24 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
-    public void poseToLL()
-    {
-        if(llMeasurement.pose != null && llMeasurement.tagCount >0)
+    public void poseToLL() 
+    { 
+        if(llMeasurement != null && llMeasurement.tagCount > 0)
         {
             resetPose(llMeasurement.pose);
         }
     }
 
-    public void updateVisionOdometry()
+    private void updateVisionOdometry()
     {
-         /*
-        * This example of adding Limelight is very simple and may not be sufficient for on-field use.
-        * Users typically need to provide a standard deviation that scales with the distance to target
-        * and changes with number of tags available.
-        *
-        * This example is sufficient to show that vision integration is possible, though exact implementation
-        * of how to use vision should be tuned per-robot and to the team's specification.
-        */
-        if (kUseLimelight) 
-        {
-            double omegaRps = Units.radiansToRotations(getState().Speeds.omegaRadiansPerSecond);
-            double headingDeg = getState().Pose.getRotation().getDegrees();
-            LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
-            llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-            
-            var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-            if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) 
-            {
-                addVisionMeasurement(llMeasurement.pose, Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
-            }
+        double omegaRPS = Units.radiansToRotations(getState().Speeds.omegaRadiansPerSecond);
+        double headingDeg = getState().Pose.getRotation().getDegrees();
+        LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
+        llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+
+        if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRPS < 2.0) 
+        { 
+            addVisionMeasurement(llMeasurement.pose, Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
         }
     }
 }
