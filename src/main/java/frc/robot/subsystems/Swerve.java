@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -46,11 +47,13 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    LimelightHelpers.PoseEstimate llMeasurement;
 
     private Pose2d onTheFlyDestination;
     private final Field2d field = new Field2d();
     private final Elevator s_elevator = new Elevator();
     private boolean isAlgae;
+    private boolean kUseLimelight = true;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -435,6 +438,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+        updateVisionOdometry();
     }
 
     private void startSimThread() 
@@ -480,11 +484,46 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      *     in the form [x, y, theta]ᵀ, with units in meters and radians.
      */
     @Override
-    public void addVisionMeasurement(
+    public void addVisionMeasurement
+    (
         Pose2d visionRobotPoseMeters,
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs
-    ) {
+    ) 
+    {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    }
+
+    public void poseToLL()
+    {
+        if(llMeasurement.pose != null && llMeasurement.tagCount >0)
+        {
+            resetPose(llMeasurement.pose);
+        }
+    }
+
+    public void updateVisionOdometry()
+    {
+         /*
+        * This example of adding Limelight is very simple and may not be sufficient for on-field use.
+        * Users typically need to provide a standard deviation that scales with the distance to target
+        * and changes with number of tags available.
+        *
+        * This example is sufficient to show that vision integration is possible, though exact implementation
+        * of how to use vision should be tuned per-robot and to the team's specification.
+        */
+        if (kUseLimelight) 
+        {
+            double omegaRps = Units.radiansToRotations(getState().Speeds.omegaRadiansPerSecond);
+            double headingDeg = getState().Pose.getRotation().getDegrees();
+            LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
+            llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            
+            var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) 
+            {
+                addVisionMeasurement(llMeasurement.pose, Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
+            }
+        }
     }
 }
