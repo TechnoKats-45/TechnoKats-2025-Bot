@@ -249,9 +249,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     
     public double getMaxSpeedBasedOnElevator(double elevatorHeight, double baseSpeed) 
     {
-        double minHeight = Constants.Elevator.HeightPresets.handoffHeight;  // Safe height where max speed is allowed
+        double minHeight = Constants.Elevator.HeightPresets.L1;  // Safe height where max speed is allowed
         double maxHeight = Constants.Elevator.HeightPresets.Barge;          // Max elevator height
-        double minSpeedFactor = 0.3; // 30% speed when fully extended     // TODO - Tune ?
+        double minSpeedFactor = 0.5; // 50% speed when fully extended     // TODO - Tune ?
 
         // Scale speed linearly based on elevator height
         double speedFactor = MathUtil.clamp

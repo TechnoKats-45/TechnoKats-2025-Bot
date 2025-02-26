@@ -94,13 +94,26 @@ public class RobotContainer
         );
         */
 
+        /*
         s_swerve.setDefaultCommand
         (
             s_swerve.applyRequest
             (() -> 
-                drive.withVelocityX(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight()))
-                    .withVelocityY(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight()))
-                    .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight()))
+                drive.withVelocityX(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight()))    //-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight())
+                    .withVelocityY(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight())) //-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight())
+                    .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight()))   //-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight())
+            )
+        );
+        */
+
+        s_swerve.setDefaultCommand
+        (
+            // Drivetrain will execute this command periodically
+            s_swerve.applyRequest
+            (() ->
+                drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
         
@@ -158,6 +171,7 @@ public class RobotContainer
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed)));
         //driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
 
+        /*
         driver.povUp().onTrue
         (
             new ConditionalCommand
@@ -177,6 +191,7 @@ public class RobotContainer
                 () -> s_climber.isClimbEnabled() // Only run if operator.button(0) is pressed / climb is enabled
             )
         );
+        */
         
         
 
@@ -225,7 +240,7 @@ public class RobotContainer
                     // If the condition is TRUE, run AutoClean
                     new AutoClean(s_carriage, s_elevator),  
                     // Otherwise, run AutoScore - passes if is set to Barge Height
-                    new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),
+                    new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),   
                     // The condition (must be a BooleanSupplier)
                     () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
                 )

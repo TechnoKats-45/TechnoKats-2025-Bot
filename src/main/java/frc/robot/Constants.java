@@ -132,13 +132,13 @@ public class Constants
         {
             public static final double L1 = 30;
             public static final double L2 = 37.75;
-            public static final double L3 = 51;
+            public static final double L3 = 50;
             public static final double L4 = 68.5;   // DONT CHANGD
             public static final double Barge = 70;
             public static final double A1 = 31;
             public static final double A2 = 49;
     
-            public static final double handoffHeight = 25.5;
+            public static final double handoffHeight = 24.5;
         }
     
         public static final class AnglePresets  // TODO

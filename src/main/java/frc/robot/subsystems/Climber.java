@@ -32,7 +32,7 @@ public class Climber extends SubsystemBase
 
     // PID Declarations
     private final PositionTorqueCurrentFOC winch_angle = new PositionTorqueCurrentFOC(0);
-    private final MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
+    //private final MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
 
     public Climber()
     {
@@ -44,7 +44,7 @@ public class Climber extends SubsystemBase
 
     public void setAngle(double angle)
     {
-        winchMotor.setControl(motionMagicControl.withPosition(angle/360));
+        winchMotor.setControl(winch_angle.withPosition(angle/360));
     }
     
     public double getAngle()
@@ -88,11 +88,12 @@ public class Climber extends SubsystemBase
 
         /* Configure Motion Magic parameters as needed */
         
+        /*
         MotionMagicConfigs mm = winchMotorConfigs.MotionMagic;
         mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(100))
             .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10))
             .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));
-
+        */
 
         winchMotorConfigs.Slot0.kS = 0; // To account for friction, add 0.1 V of static feedforward                                                     // TODO - Tune
         winchMotorConfigs.Slot0.kV = 0; // Kraken X60 is a 500 kV motor, 500 rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / rotation per second     // TODO - Tune
