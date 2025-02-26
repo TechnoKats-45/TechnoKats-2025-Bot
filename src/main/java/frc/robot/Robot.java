@@ -8,6 +8,7 @@ import javax.net.ssl.SNIMatcher;
 
 import com.ctre.phoenix6.Utils;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -52,9 +53,26 @@ public class Robot extends TimedRobot
       
       LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
       var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-      if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
-        m_robotContainer.s_swerve.addVisionMeasurement(llMeasurement.pose, llMeasurement.timestampSeconds);
-      }
+      if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) 
+      {
+        //m_robotContainer.s_swerve.addVisionMeasurement(llMeasurement.pose, llMeasurement.timestampSeconds); // Effects rotation
+
+        // Get current robot pose
+        Pose2d currentPose = m_robotContainer.s_swerve.getState().Pose;
+
+        // Get vision-based pose, but only use X and Y, not rotation
+        var visionPose = llMeasurement.pose;
+
+        // Create a new pose that keeps the robot's original heading
+        var filteredPose = new Pose2d(
+            visionPose.getX(),  // Use vision-based X
+            visionPose.getY(),  // Use vision-based Y
+            currentPose.getRotation()  // Keep the current heading
+        );
+
+        // Apply vision update with the filtered pose
+        m_robotContainer.s_swerve.addVisionMeasurement(filteredPose, llMeasurement.timestampSeconds);
+        }
     }
 
     /*
