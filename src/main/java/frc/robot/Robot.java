@@ -58,8 +58,6 @@ public class Robot extends TimedRobot
       var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
       if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) 
       {
-        //m_robotContainer.s_swerve.addVisionMeasurement(llMeasurement.pose, llMeasurement.timestampSeconds); // Effects rotation
-
         // Get current robot pose
         Pose2d currentPose = m_robotContainer.s_swerve.getState().Pose;
 
@@ -67,15 +65,28 @@ public class Robot extends TimedRobot
         var visionPose = llMeasurement.pose;
 
         // Create a new pose that keeps the robot's original heading
-        var filteredPose = new Pose2d(
-            visionPose.getX(),  // Use vision-based X
-            visionPose.getY(),  // Use vision-based Y
-            currentPose.getRotation()  // Keep the current heading
+        var filteredPose = new Pose2d
+        (
+          visionPose.getX(),  // Use vision-based X
+          visionPose.getY(),  // Use vision-based Y
+          currentPose.getRotation()  // Keep the current heading
         );
 
         // Apply vision update with the filtered pose
         m_robotContainer.s_swerve.addVisionMeasurement(filteredPose, llMeasurement.timestampSeconds);
+
+        // If the AprilTag data is reliable, use it to correct the gyro heading
+        double visionHeading = visionPose.getRotation().getDegrees();
+        double gyroHeading = m_robotContainer.s_swerve.getPigeon2().getRotation2d().getDegrees();
+          
+        // Only correct the gyro if there's minimal movement (low angular velocity)
+        if (Math.abs(gyroHeading - visionHeading) > 5.0 && Math.abs(omegaRps) < 0.5)  
+        {
+          // Reset gyro to match vision heading
+          m_robotContainer.s_swerve.getPigeon2().setYaw(visionHeading);
         }
+      }
+
     }
 
     /*
