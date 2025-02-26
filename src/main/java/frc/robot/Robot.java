@@ -62,7 +62,7 @@ public class Robot extends TimedRobot
 
     // TEST
     double[] botPose = NetworkTableInstance.getDefault()
-    .getTable("limelight-front")
+    .getTable("front")
     .getEntry("botpose_wpiblue")
     .getDoubleArray(new double[6]);
 
