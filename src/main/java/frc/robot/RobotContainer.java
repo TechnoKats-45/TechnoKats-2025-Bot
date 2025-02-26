@@ -302,6 +302,8 @@ public class RobotContainer
             driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
             driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
             driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
+
+            s_swerve.registerTelemetry(logger::telemeterize);
     }
 
     public Command getAutonomousCommand() 
