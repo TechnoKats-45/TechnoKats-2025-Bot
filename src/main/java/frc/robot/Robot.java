@@ -47,8 +47,11 @@ public class Robot extends TimedRobot
     if (kUseLimelight) 
     {
       var driveState = m_robotContainer.s_swerve.getState();
-      double headingDeg = driveState.Pose.getRotation().getDegrees();
+      //double headingDeg = driveState.Pose.getRotation().getDegrees();
+      double headingDeg = m_robotContainer.s_swerve.getPigeon2().getRotation2d().getDegrees();
       double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
+
+      SmartDashboard.putNumber("HEADING", headingDeg);
       
       LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
       var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
