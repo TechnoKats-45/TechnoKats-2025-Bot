@@ -172,7 +172,7 @@ public class Elevator extends SubsystemBase
 
         // PID and feedforward tuning constants
         elevatorConfig.Slot0.kS = 0.9;      // Tune as needed.
-        elevatorConfig.Slot0.kG = 12;       // Tune as needed.
+        elevatorConfig.Slot0.kG = 14;       // Tune as needed.
         elevatorConfig.Slot0.kV = 3.11;     // Tune as needed.
         elevatorConfig.Slot0.kA = 0.01;     // Tune as needed.
         elevatorConfig.Slot0.kP = 40;       // Tune as needed   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.

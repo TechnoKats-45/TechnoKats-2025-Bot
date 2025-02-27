@@ -338,6 +338,7 @@ public class RobotContainer
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
         operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
+        operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR CONTROLLER / TEST CONTROLLER
