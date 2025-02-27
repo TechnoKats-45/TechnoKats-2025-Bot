@@ -41,6 +41,10 @@ public class RobotContainer
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
+    private enum DestinationSelector {
+        A, B, C, D, E, F, G, H, I, J, K, L, LeftCoral, RightCoral, Barge, Processor, NONE
+    }
+
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -61,8 +65,10 @@ public class RobotContainer
     public final Elevator s_elevator = new Elevator();
     public final Climber s_climber = new Climber();
     public final Hopper s_hopper = new Hopper();
+    
 
     private final SendableChooser<Command> autoChooser;
+    private Command activeDriveCommand = null; // Track active drive-to-pose command
 
     public RobotContainer() 
     {
@@ -72,6 +78,22 @@ public class RobotContainer
         autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
 
         SmartDashboard.putData("Auto Mode", autoChooser);
+    }
+
+    private DestinationSelector selectDestination() 
+    {
+        Pose2d destination = s_swerve.getDestination();
+        if (destination.equals(Constants.Destinations.A)) return DestinationSelector.A;
+        if (destination.equals(Constants.Destinations.B)) return DestinationSelector.B;
+        if (destination.equals(Constants.Destinations.C)) return DestinationSelector.C;
+        if (destination.equals(Constants.Destinations.D)) return DestinationSelector.D;
+        if (destination.equals(Constants.Destinations.E)) return DestinationSelector.E;
+        if (destination.equals(Constants.Destinations.F)) return DestinationSelector.F;
+        if (destination.equals(Constants.Destinations.G)) return DestinationSelector.G;
+        if (destination.equals(Constants.Destinations.H)) return DestinationSelector.H;
+        if (destination.equals(Constants.Destinations.Barge)) return DestinationSelector.Barge;
+        if (destination.equals(Constants.Destinations.Processor)) return DestinationSelector.Processor;
+        return DestinationSelector.NONE;
     }
 
     private void configureBindings() 
@@ -135,7 +157,7 @@ public class RobotContainer
         
         s_climber.setDefaultCommand // TODO - Comment out when tuned / tested - still need to get set points
         (
-            new ManualClimber(s_climber, testController)
+            new ManualClimber(s_climber, testController, driver)
         );
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -172,6 +194,35 @@ public class RobotContainer
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed)));
         //driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
         driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));
+        
+        // LT (Left Trigger) selects and runs the drive-to-pose command, releasing cancels it
+        driver.leftTrigger().onTrue(new InstantCommand(() -> {
+            if (activeDriveCommand == null || !activeDriveCommand.isScheduled()) {
+                activeDriveCommand = new SelectCommand<>(
+                        Map.ofEntries(
+                                Map.entry(DestinationSelector.A, s_swerve.driveToPose(Constants.Destinations.A)),
+                                Map.entry(DestinationSelector.B, s_swerve.driveToPose(Constants.Destinations.B)),
+                                Map.entry(DestinationSelector.C, s_swerve.driveToPose(Constants.Destinations.C)),
+                                Map.entry(DestinationSelector.D, s_swerve.driveToPose(Constants.Destinations.D)),
+                                Map.entry(DestinationSelector.E, s_swerve.driveToPose(Constants.Destinations.E)),
+                                Map.entry(DestinationSelector.F, s_swerve.driveToPose(Constants.Destinations.F)),
+                                Map.entry(DestinationSelector.G, s_swerve.driveToPose(Constants.Destinations.G)),
+                                Map.entry(DestinationSelector.H, s_swerve.driveToPose(Constants.Destinations.H)),
+                                Map.entry(DestinationSelector.Barge, s_swerve.driveToPose(Constants.Destinations.Barge)),
+                                Map.entry(DestinationSelector.Processor, s_swerve.driveToPose(Constants.Destinations.Processor))
+                        ),
+                        this::selectDestination
+                );
+                activeDriveCommand.schedule();
+            }
+        }));
+
+        driver.leftTrigger().onFalse(new InstantCommand(() -> {
+            if (activeDriveCommand != null) {
+                activeDriveCommand.cancel();
+                activeDriveCommand = null;
+            }
+        }));
 
         /*
         driver.povUp().onTrue
@@ -291,6 +342,7 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR CONTROLLER / TEST CONTROLLER
         //////////////////////////////////////////////////////////////////////////////////////////
+        //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d())));
         testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
 
 
@@ -305,7 +357,7 @@ public class RobotContainer
             driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
             driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
 
-            s_swerve.registerTelemetry(logger::telemeterize);
+            s_swerve.registerTelemetry(logger::telemeterize);           
     }
 
     public Command getAutonomousCommand() 

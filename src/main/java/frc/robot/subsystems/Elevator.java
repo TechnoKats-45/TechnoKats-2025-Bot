@@ -172,10 +172,10 @@ public class Elevator extends SubsystemBase
 
         // PID and feedforward tuning constants
         elevatorConfig.Slot0.kS = 0.9;      // Tune as needed.
-        elevatorConfig.Slot0.kG = 11;       // Tune as needed.
+        elevatorConfig.Slot0.kG = 12;       // Tune as needed.
         elevatorConfig.Slot0.kV = 3.11;     // Tune as needed.
         elevatorConfig.Slot0.kA = 0.01;     // Tune as needed.
-        elevatorConfig.Slot0.kP = 45;       // Tune as needed   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
+        elevatorConfig.Slot0.kP = 40;       // Tune as needed   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
         elevatorConfig.Slot0.kI = 1;// Was 5 // Tune as needed  // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
         elevatorConfig.Slot0.kD = 0;        // Tune as needed   // In an Elevator: If the elevator is moving too fast toward the target, the D term applies a braking effect, slowing it down before overshooting.
         elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

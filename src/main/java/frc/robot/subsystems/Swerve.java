@@ -15,6 +15,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
@@ -49,7 +50,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private double m_lastSimTime;
     LimelightHelpers.PoseEstimate llMeasurement;
 
-    private Pose2d onTheFlyDestination;
+    private Pose2d onTheFlyDestination = new Pose2d();
     private final Field2d field = new Field2d();
     private final Elevator s_elevator = new Elevator();
     private boolean isAlgae;
@@ -191,12 +192,14 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     public void setDestination(Pose2d destination)
     {
         onTheFlyDestination = destination;
+        System.out.println("Set Destination" + destination);
     }
 
     public Pose2d getDestination()
     {        
-        isAlgae = ((s_elevator.getHeightPreset() == Constants.Elevator.HeightPresets.A1) || (s_elevator.getHeightPreset() == Constants.Elevator.HeightPresets.A2));
+        //isAlgae = ((s_elevator.getHeightPreset() == Constants.Elevator.HeightPresets.A1) || (s_elevator.getHeightPreset() == Constants.Elevator.HeightPresets.A2));
         
+        /*
         if(isAlgae) // Change requested Posed2d to the Algae Cleaning Pose2d if Height is set to Algae
         {
             if(onTheFlyDestination == Constants.Destinations.A || onTheFlyDestination == Constants.Destinations.B)
@@ -224,6 +227,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 return Constants.Destinations.KL;
             }
         }
+    */
+        System.out.println("GET Destination" + onTheFlyDestination);
         return onTheFlyDestination;
     }
 
@@ -496,6 +501,53 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
+
+
+    /*
+    public Command driveToSetPose(Supplier<Pose2d> suppliedPose) 
+    {
+        Pose2d pose = suppliedPose.get();
+        System.out.println("Pathfinding to: " + pose);
+        return AutoBuilder.pathfindToPose(pose, new PathConstraints(2.2352, 4.0, Units.degreesToRadians(360), Units.degreesToRadians(720)), 0.0);
+    }
+*/
+    
+    public Command driveToPose(Pose2d pose)
+    {
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(2.2352, 4.0,Units.degreesToRadians(360) , Units.degreesToRadians(720));   // TODO - Tune
+        
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(pose, constraints,0.0);
+    }
+
+    /*
+    public Command driveToSetPose()
+    {
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(2.2352, 4.0,Units.degreesToRadians(360) , Units.degreesToRadians(720));   // TODO - Tune
+        
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(onTheFlyDestination, constraints,0.0);
+    }
+        */
+
+
+        /*
+    public Command driveToSetPose(Supplier<Pose2d> suppliedPose)
+    {
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(2.2352, 4.0,Units.degreesToRadians(360) , Units.degreesToRadians(720));   // TODO - Tune
+        
+        
+        System.out.println("Supplied pose is: " + suppliedPose.get().getX() + suppliedPose.get().getY());
+        
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(suppliedPose.get(), constraints,0.0);
+    }
+        */
+
 
     public void poseToLL() 
     { 

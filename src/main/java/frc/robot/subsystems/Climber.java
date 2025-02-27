@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import static edu.wpi.first.units.Units.Amps;
 
@@ -38,8 +39,10 @@ public class Climber extends SubsystemBase
     {
         // Initialize motors and sensors
         winchMotor = new TalonFX(winchMotorID);
+        winchMotor.setNeutralMode(NeutralModeValue.Brake);
 
-        configWinchMotor();
+
+        //configWinchMotor();
     }
 
     public void setAngle(double angle)
@@ -114,11 +117,13 @@ public class Climber extends SubsystemBase
         }
     }
 
-    public void ManualClimber(CommandXboxController controller) 
+    public void ManualClimber(CommandXboxController controller, CommandXboxController controller2)  // Set max 3.95 degree as max climb // 0.78 minimum angle (STOWED)
     {
-        if (controller.getRightY() < -Constants.STICK_DEADBAND) {  // Down
+        if ((controller.getRightY() < -Constants.STICK_DEADBAND) || controller2.povDown().getAsBoolean()) 
+        {  // Down
             winchMotor.set(-1);
-        } else if (controller.getRightY() > Constants.STICK_DEADBAND) { // Up
+        } else if ((controller.getRightY() > Constants.STICK_DEADBAND) || controller2.povUp().getAsBoolean())
+        { // Up
             winchMotor.set(1);
         } else {
             winchMotor.set(0);
