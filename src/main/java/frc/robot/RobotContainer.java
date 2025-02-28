@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -188,13 +189,14 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
-        driver.leftTrigger().whileTrue(new GoToHeightPreset(s_elevator));
+        driver.leftTrigger().whileTrue(new GoToHeightPreset(s_elevator, s_carriage));
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));
-        driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed)));
+        driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));
         //driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
         driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));
         
+        /*
         // LT (Left Trigger) selects and runs the drive-to-pose command, releasing cancels it
         driver.leftTrigger().onTrue(new InstantCommand(() -> {
             if (activeDriveCommand == null || !activeDriveCommand.isScheduled()) {
@@ -217,6 +219,7 @@ public class RobotContainer
             }
         }));
 
+
         driver.leftTrigger().onFalse(new InstantCommand(() -> {
             if (activeDriveCommand != null) {
                 activeDriveCommand.cancel();
@@ -224,6 +227,7 @@ public class RobotContainer
             }
         }));
 
+        */
         /*
         driver.povUp().onTrue
         (
@@ -338,6 +342,7 @@ public class RobotContainer
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
         operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
+        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Stow)));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -345,7 +350,7 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d())));
         testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
-
+        testController.a().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(45)));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES
@@ -539,11 +544,35 @@ public class RobotContainer
 
         NamedCommands.registerCommand
         (
+            "SetPoseBlue",
+            new SequentialCommandGroup
+            (                
+                new InstantCommand(() -> s_swerve.resetRotation(Rotation2d.k180deg)),
+                new InstantCommand(() -> s_swerve.poseToLL())
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "SetAutoPose",
+            new SequentialCommandGroup
+            (                
+                new setAutoPose(s_swerve)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
             "ScoreL1",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator),
-                new AutoScore(s_carriage, s_elevator, false)
+                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1), s_elevator),
+                new GoToHeightPreset(s_elevator, s_carriage),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(2),
+                    new AutoScoreWithDeadline(s_carriage, s_elevator, false)
+                )
             )
         );
 
@@ -552,8 +581,13 @@ public class RobotContainer
             "ScoreL2",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L2), s_elevator),
-                new AutoScore(s_carriage, s_elevator, false)
+                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L2), s_elevator),
+                new GoToHeightPreset(s_elevator, s_carriage),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(2),
+                    new AutoScoreWithDeadline(s_carriage, s_elevator, false)
+                )
             )
         );
 
@@ -562,8 +596,13 @@ public class RobotContainer
             "ScoreL3",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L3), s_elevator),
-                new AutoScore(s_carriage, s_elevator, false)
+                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L3), s_elevator),
+                new GoToHeightPreset(s_elevator, s_carriage),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(2),
+                    new AutoScoreWithDeadline(s_carriage, s_elevator, false)
+                )
             )
         );
 
@@ -572,8 +611,14 @@ public class RobotContainer
             "ScoreL4",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L4), s_elevator),
-                new AutoScore(s_carriage, s_elevator, false)
+                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4), s_elevator),
+                new GoToHeightPreset(s_elevator, s_carriage),
+                new WaitCommand(1),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(2),
+                    new AutoScoreWithDeadline(s_carriage, s_elevator, false)
+                )
             )
         );
         
@@ -609,10 +654,20 @@ public class RobotContainer
 
         NamedCommands.registerCommand
         (
+            "AutoScoreWithDeadline",
+            new ParallelDeadlineGroup
+            (
+                new WaitCommand(1),
+                new AutoScoreWithDeadline(s_carriage, s_elevator, false)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
             "GoToHeightL1",
             new SequentialCommandGroup
             (
-                
+                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1)),
                 new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
             )
         );
@@ -622,7 +677,7 @@ public class RobotContainer
             "GoToHeightL2",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
             )
         );
 
@@ -631,7 +686,7 @@ public class RobotContainer
             "GoToHeightL3",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
             )
         );
 
@@ -640,7 +695,7 @@ public class RobotContainer
             "GoToHeightL4",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
             )
         );
 
@@ -649,7 +704,7 @@ public class RobotContainer
             "GoToHeightBarge",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
+                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
             )
         );
     }

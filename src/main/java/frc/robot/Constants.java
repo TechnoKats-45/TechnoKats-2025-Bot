@@ -113,7 +113,7 @@ public class Constants
     public static final int elevatorMotor2ID = 8;
     public static final int elevatorCANdiID = 9;
     
-    public static final double elevatorHeightTolerance = 1; // adjust as needed
+    public static final double elevatorHeightTolerance = 0.5; // adjust as needed
 
     // If your sensor's “zero” (i.e. its output when the elevator is at your desired physical zero)
     // is not actually 0°, then set this offset (in degrees) accordingly.
@@ -133,12 +133,14 @@ public class Constants
             public static final double L1 = 30;
             public static final double L2 = 37.75;
             public static final double L3 = 50;
-            public static final double L4 = 64;
+            public static final double L4 = 68;
             public static final double Barge = 70;
             public static final double A1 = 31;
             public static final double A2 = 49;
     
             public static final double handoffHeight = 24.5;
+
+            public static final double Stow = 12;
         }
     
         public static final class AnglePresets  // TODO
@@ -175,6 +177,7 @@ public class Constants
         public static final double coralPassiveIntakeSpeed = -45; // TODO
         public static final double coralReverseSpeed = 45; // TODO;
         public static final double coralSlowIntakeSpeed = -30; // TODO
-        public static final double coralScoreSpeed = -45; // TODO
+        public static final double coralScoreSpeed = -35; // TODO
+        public static final double autoCoralScoreSpeed = -15;
     }
 }

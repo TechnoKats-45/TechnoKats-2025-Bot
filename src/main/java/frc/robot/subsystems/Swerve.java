@@ -373,9 +373,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(10, 0, 0),
+                    new PIDConstants(15, 0, 0),   // 18, 0, .5
                     // PID constants for rotation
-                    new PIDConstants(.001, 0, 0)   // P was 7
+                    new PIDConstants(10, 0, 0)   // P was 7   // was .001
                 ),
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case

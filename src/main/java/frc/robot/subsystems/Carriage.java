@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.System_StateValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -90,14 +91,24 @@ public class Carriage extends SubsystemBase
 
     public boolean isCoralDetected()
     {
-        SmartDashboard.putNumber("Coral RAW Data", coralCANdi.getS2State().getValueAsDouble());
+        //SmartDashboard.putNumber("Coral RAW Data", coralCANdi.getS2State().getValueAsDouble());
         return (coralCANdi.getS2State().getValueAsDouble() < 2);    // For some reason fasle is 2, and true is 1... we're just rollin' with it.
     }
 
     public void setCoralSpeed(double speed)
     {
         coralMotor.setControl(coral_velocity.withVelocity(speed));
-        SmartDashboard.putNumber("Coral Speed", speed);
+        //SmartDashboard.putNumber("Coral Speed", speed);
+    }
+
+    public void setCoralSpeed(double speed, Elevator s_elevator)
+    {
+        if (s_elevator.getHeightPreset() == Constants.Elevator.HeightPresets.L4)
+        {
+            speed = Constants.Carriage.autoCoralScoreSpeed;
+        }
+        coralMotor.setControl(coral_velocity.withVelocity(speed));
+        //SmartDashboard.putNumber("Coral Speed", speed);
     }
 
     public void setCoralSpeedDumb(double dumbSpeed)

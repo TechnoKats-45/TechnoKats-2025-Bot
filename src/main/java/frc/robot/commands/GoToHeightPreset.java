@@ -14,10 +14,12 @@ import frc.robot.Constants;
 public class GoToHeightPreset extends Command
 {
     private Elevator s_elevator;    
+    private Carriage s_carriage;
 
-    public GoToHeightPreset(Elevator s_elevator)
+    public GoToHeightPreset(Elevator s_elevator, Carriage s_carriage)
     {
         this.s_elevator = s_elevator;
+        this.s_carriage = s_carriage;
 
         addRequirements(s_elevator);
     }
@@ -25,7 +27,7 @@ public class GoToHeightPreset extends Command
     public void execute()
     {
         double currentPreset = s_elevator.getHeightPreset();
-        if(true)    // if coral detected
+        if(s_carriage.isCoralDetected())    // if coral detected
         {
             s_elevator.setHeight(currentPreset);
         }
@@ -37,8 +39,7 @@ public class GoToHeightPreset extends Command
 
     public boolean isFinished()
     {
-        //return s_elevator.isAligned();
-        return false;
+        return s_elevator.isAligned();
     }
     
 

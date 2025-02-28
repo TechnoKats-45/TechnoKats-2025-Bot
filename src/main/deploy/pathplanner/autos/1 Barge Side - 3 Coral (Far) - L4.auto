@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "SetAutoPose"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "1.1 Barge-Reef JI"
