@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.7338815789473685,
-        "y": 5.083388157894737
+        "x": 5.282319078947368,
+        "y": 4.996792763157894
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.107095864661654,
-        "y": 5.674561047505126
+        "x": 4.655533364661654,
+        "y": 5.5879656527682835
       },
       "isLocked": false,
-      "linkedName": "Reef - JI"
+      "linkedName": "Reef - I"
     },
     {
       "anchor": {
-        "x": 1.2700657894736842,
-        "y": 7.075082236842105
+        "x": 1.135361842105263,
+        "y": 7.190542763157895
       },
       "prevControl": {
-        "x": 2.211039289746118,
-        "y": 6.440625394382748
+        "x": 2.0763353423776962,
+        "y": 6.556085920698537
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": -119.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

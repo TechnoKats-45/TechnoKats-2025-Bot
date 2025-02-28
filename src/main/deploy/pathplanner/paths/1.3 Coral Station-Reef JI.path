@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2700657894736842,
-        "y": 7.075082236842105
+        "x": 1.135361842105263,
+        "y": 7.190542763157895
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6292330357800948,
-        "y": 6.861990919357375
+        "x": 1.7319078947368418,
+        "y": 6.988486842105263
       },
       "isLocked": false,
       "linkedName": "Coral Station - Barge Side"
     },
     {
       "anchor": {
-        "x": 4.7338815789473685,
-        "y": 5.083388157894737
+        "x": 4.955180921052631,
+        "y": 5.150740131578948
       },
       "prevControl": {
-        "x": 4.085728169856459,
-        "y": 5.69592874231032
+        "x": 4.570312499999999,
+        "y": 6.0359375
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Reef - JI"
+      "linkedName": "Reef - J"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": -54.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

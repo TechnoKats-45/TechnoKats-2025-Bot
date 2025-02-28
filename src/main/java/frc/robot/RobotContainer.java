@@ -393,8 +393,8 @@ public class RobotContainer
             "CoralStationIntake",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight), s_elevator),
-                new HopperIntake(s_carriage, s_elevator, s_hopper)
+                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight), s_elevator),
+                new CoralIntake(s_carriage, s_elevator)
             )
         );
 
@@ -539,16 +539,6 @@ public class RobotContainer
             new ParallelCommandGroup
             (
                 new PositionAlign(s_swerve, Constants.Destinations.Processor)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "SetPoseBlue",
-            new SequentialCommandGroup
-            (                
-                new InstantCommand(() -> s_swerve.resetRotation(Rotation2d.k180deg)),
-                new InstantCommand(() -> s_swerve.poseToLL())
             )
         );
 

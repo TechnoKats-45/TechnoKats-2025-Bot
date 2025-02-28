@@ -25,9 +25,9 @@ public class HopperIntake extends Command
 
     public void execute()
     {
-        if(!s_carriage.isAlgaeDetected() && s_elevator.isAligned())
+        if(!s_carriage.isCoralDetected())
         {
-            s_carriage.setAlgaeSpeed(Constants.Carriage.algaeCleanSpeed);
+            s_carriage.setCoralSpeed(Constants.Carriage.coralIntakeSpeed);
         }
         else
         {

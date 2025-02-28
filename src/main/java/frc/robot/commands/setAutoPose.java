@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class setAutoPose extends Command
     {
         if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red)
         {
-             s_swerve.resetRotation(Rotation2d.kZero);
+             s_swerve.resetRotation(Rotation2d.kZero);    // was kzero
              s_swerve.poseToLL();
         }
         else
