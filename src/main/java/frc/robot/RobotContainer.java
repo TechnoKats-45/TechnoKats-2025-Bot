@@ -193,122 +193,10 @@ public class RobotContainer
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));
-        //driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
+        driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
         driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));
         
-        /*
-        // LT (Left Trigger) selects and runs the drive-to-pose command, releasing cancels it
-        driver.leftTrigger().onTrue(new InstantCommand(() -> {
-            if (activeDriveCommand == null || !activeDriveCommand.isScheduled()) {
-                activeDriveCommand = new SelectCommand<>(
-                        Map.ofEntries(
-                                Map.entry(DestinationSelector.A, s_swerve.driveToPose(Constants.Destinations.A)),
-                                Map.entry(DestinationSelector.B, s_swerve.driveToPose(Constants.Destinations.B)),
-                                Map.entry(DestinationSelector.C, s_swerve.driveToPose(Constants.Destinations.C)),
-                                Map.entry(DestinationSelector.D, s_swerve.driveToPose(Constants.Destinations.D)),
-                                Map.entry(DestinationSelector.E, s_swerve.driveToPose(Constants.Destinations.E)),
-                                Map.entry(DestinationSelector.F, s_swerve.driveToPose(Constants.Destinations.F)),
-                                Map.entry(DestinationSelector.G, s_swerve.driveToPose(Constants.Destinations.G)),
-                                Map.entry(DestinationSelector.H, s_swerve.driveToPose(Constants.Destinations.H)),
-                                Map.entry(DestinationSelector.Barge, s_swerve.driveToPose(Constants.Destinations.Barge)),
-                                Map.entry(DestinationSelector.Processor, s_swerve.driveToPose(Constants.Destinations.Processor))
-                        ),
-                        this::selectDestination
-                );
-                activeDriveCommand.schedule();
-            }
-        }));
-
-
-        driver.leftTrigger().onFalse(new InstantCommand(() -> {
-            if (activeDriveCommand != null) {
-                activeDriveCommand.cancel();
-                activeDriveCommand = null;
-            }
-        }));
-
-        */
-        /*
-        driver.povUp().onTrue
-        (
-            new ConditionalCommand
-            (
-                s_climber.runOnce(() -> s_climber.setAngle(s_climber.getAngle() + 5)), // Increase by 5°
-                new InstantCommand(),  // Do nothing if false
-                () -> s_climber.isClimbEnabled() // Only run if operator.button(0) is pressed / climb is enabled
-            )
-        );
-        
-        driver.povDown().onTrue
-        (
-            new ConditionalCommand
-            (
-                s_climber.runOnce(() -> s_climber.setAngle(s_climber.getAngle() - 5)), // Decrease by 5°
-                new InstantCommand(),  // Do nothing if false
-                () -> s_climber.isClimbEnabled() // Only run if operator.button(0) is pressed / climb is enabled
-            )
-        );
-        */
-        
-        
-
-        /*
-        // Sequential - raise elevator once aligned to position
-        driver.leftTrigger().whileTrue
-        (
-            new SequentialCommandGroup
-            (
-                new PositionAlign(s_swerve, s_carriage, s_elevator, driver), // 1. Align to position
-                new GoToHeightPreset(s_carriage, s_elevator, s_swerve), // 2. Go to height
-                new ConditionalCommand  // 3. Score / Clean
-                (
-                    // If the condition is TRUE, run AutoClean
-                    new AutoClean(s_carriage, s_elevator),  
-                    // Otherwise, run AutoScore - passes if is set to Barge Height
-                    new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),
-                    // The condition (must be a BooleanSupplier)
-                    () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
-                )
-            )
-        );
-        */
-
-        // Parallel - raise elevator while alinging to position
-        /*
-        driver.leftTrigger().whileTrue
-        (
-            new SequentialCommandGroup
-            (
-                new ParallelCommandGroup
-                (
-                    new PositionAlign(s_swerve, s_carriage, driver), // 1. Align to position
-                    new ConditionalCommand  // Go to height if within X inches of target
-                    (
-                        // If the condition is TRUE, go to height
-                        new GoToHeightPreset(s_elevator),
-                        // Otherwise, run elevator default
-                        new ElevatorDefault(s_elevator),
-                        // The condition (must be a BooleanSupplier)
-                        () -> s_swerve.isWithinTolerance(24) && s_swerve.isRotationComplete() // Check if within X inches of target and rotation is complete
-                    )
-                ),
-                new ConditionalCommand  // 3. Score / Clean
-                (
-                    // If the condition is TRUE, run AutoClean
-                    new AutoClean(s_carriage, s_elevator),  
-                    // Otherwise, run AutoScore - passes if is set to Barge Height
-                    new AutoScore(s_carriage, s_elevator, operator.button(Constants.Button.height.Barge).getAsBoolean()),   
-                    // The condition (must be a BooleanSupplier)
-                    () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
-                )
-            )
-        );*/
-
-        /*  Add back in once SysID is completed
-        // Start Button - Cancel All Commands
-        driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-        */        
-
+       
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR BUTTON BOARD CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -342,15 +230,16 @@ public class RobotContainer
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
         operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
-        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Stow)));
+        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.handoffHeight)));
+        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.GoToPreset()));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR CONTROLLER / TEST CONTROLLER
         //////////////////////////////////////////////////////////////////////////////////////////
         //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d())));
-        testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
-        testController.a().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(45)));
+            //testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
+            //testController.a().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(45)));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES
@@ -358,10 +247,10 @@ public class RobotContainer
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-            driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
-            driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
-            driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
-            driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
+            //driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
+            //driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
+            //driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
+            //driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
 
             s_swerve.registerTelemetry(logger::telemeterize);           
     }
@@ -373,10 +262,7 @@ public class RobotContainer
 
     public void registerEventTriggers()
     {
-        // TODO
-        //Example:
-            // Use event markers as triggers
-            new EventTrigger("Example Marker").onTrue(Commands.print("Passed an event marker"));
+        new EventTrigger("Example Marker").onTrue(Commands.print("Passed an event marker"));
     }
 
     public void printDiagnostics()
@@ -573,6 +459,7 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L2), s_elevator),
                 new GoToHeightPreset(s_elevator, s_carriage),
+                new WaitCommand(1),
                 new ParallelDeadlineGroup
                 (
                     new WaitCommand(2),
@@ -588,6 +475,8 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L3), s_elevator),
                 new GoToHeightPreset(s_elevator, s_carriage),
+                new WaitCommand(1),
+
                 new ParallelDeadlineGroup
                 (
                     new WaitCommand(2),

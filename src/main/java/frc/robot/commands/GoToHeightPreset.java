@@ -27,7 +27,7 @@ public class GoToHeightPreset extends Command
     public void execute()
     {
         double currentPreset = s_elevator.getHeightPreset();
-        if(s_carriage.isCoralDetected())    // if coral detected
+        if(true)    // if coral detected
         {
             s_elevator.setHeight(currentPreset);
         }

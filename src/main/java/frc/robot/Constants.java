@@ -130,15 +130,16 @@ public class Constants
     
         public static final class HeightPresets // TODO
         {
-            public static final double L1 = 30;
-            public static final double L2 = 37.75;
-            public static final double L3 = 50;
+            public static final double L1 = 28;     // was 30
+            public static final double L2 = 35;  // was 37.75
+            public static final double L3 = 48;
             public static final double L4 = 68;
             public static final double Barge = 70;
             public static final double A1 = 31;
+
             public static final double A2 = 49;
     
-            public static final double handoffHeight = 24.5;
+            public static final double handoffHeight = 23;
 
             public static final double Stow = 12;
         }
@@ -178,6 +179,6 @@ public class Constants
         public static final double coralReverseSpeed = 45; // TODO;
         public static final double coralSlowIntakeSpeed = -30; // TODO
         public static final double coralScoreSpeed = -35; // TODO
-        public static final double autoCoralScoreSpeed = -15;
+        public static final double autoCoralScoreSpeed = -25;   // -15 for L4
     }
 }

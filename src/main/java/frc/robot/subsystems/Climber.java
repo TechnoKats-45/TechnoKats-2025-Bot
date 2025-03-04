@@ -98,11 +98,11 @@ public class Climber extends SubsystemBase
     {
         double angle = getAngle();  // Get current climber position
     
-        if (controller2.povDown().getAsBoolean() && climbEnabled && getAngle() < 235)   // Moving IN (Stowing)
+        if (controller2.povDown().getAsBoolean() && climbEnabled)   // Moving IN (Stowing)  // 300
         {  
             winchMotor.set(-1);
         } 
-        else if (controller2.povUp().getAsBoolean() && climbEnabled && getAngle() > -140)  // Moving OUT (Extending)
+        else if (controller2.povUp().getAsBoolean() && climbEnabled)  // Moving OUT (Extending)        // =-140
         {  
             winchMotor.set(1);
         } 
@@ -112,7 +112,6 @@ public class Climber extends SubsystemBase
         }
     }
     
-
     public void printDiagnostics()
     {
         SmartDashboard.putNumber("Climber Encoder Angle", getAngle());
