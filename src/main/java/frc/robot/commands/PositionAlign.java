@@ -23,15 +23,7 @@ public class PositionAlign extends Command
     private Swerve s_swerve;
     private Pose2d targetPose;
 
-    public PositionAlign(Swerve s_swerve, Pose2d targetPose)    // For Auto     // TODO - Make sure this doesn't break anything
-    {
-        this.s_swerve = s_swerve;
-        this.targetPose = targetPose;
-        
-        addRequirements(s_swerve);
-    }
-
-    public PositionAlign(Swerve s_swerve)   // For Teleop       // TODO - Make sure this doesn't break anything
+    public PositionAlign(Swerve s_swerve)   // For Teleop
     {
         this.s_swerve = s_swerve;
     
@@ -41,23 +33,29 @@ public class PositionAlign extends Command
     @Override
     public void initialize()
     {
-        
+
     }
 
     @Override
-    public void execute() {
-        Pose2d destination = s_swerve.getDestination();
-        if (destination == null) {
+    public void execute() 
+    {
+        targetPose = s_swerve.getDestination();
+
+        if (targetPose == null) 
+        {
             DriverStation.reportError("Destination pose is null!", false);
             return;
         }
     
-        System.out.println("Executing PositionAlign to: " + destination);
+        System.out.println("Executing PositionAlign to: " + targetPose);
     
-        Command pathCommand = s_swerve.driveToPose(destination);
-        if (pathCommand != null) {
+        Command pathCommand = s_swerve.driveToPose(targetPose);
+        if (pathCommand != null) 
+        {
             pathCommand.schedule(); // Ensure the command runs!
-        } else {
+        } 
+        else 
+        {
             DriverStation.reportError("Failed to generate pathfinding command!", false);
         }
     }
@@ -66,7 +64,19 @@ public class PositionAlign extends Command
     @Override
     public boolean isFinished()
     {
-        return false;
+        if(DriverStation.isTeleop())
+        {
+            return false;
+        }
+        if(DriverStation.isAutonomous())
+        {
+            return true;
+        }
+        else
+        {
+            System.out.println("Error: Not in Teleop or Autonomous = PositionAlign Failed");
+            return false;
+        }
     }
     
     @Override

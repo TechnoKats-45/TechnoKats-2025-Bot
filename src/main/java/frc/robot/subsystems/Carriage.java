@@ -20,11 +20,11 @@ import frc.robot.Constants;
 public class Carriage extends SubsystemBase
 {
     // CAN IDs:
-    int coralMotorID = 1;           // TODO - Replace with actual CAN ID
-    int coralCANdiID = 2;           // TODO - Replace with actual CAN ID
-    int algaeMotorID = 3;           // TODO - Replace with actual CAN ID
-    int algaeAngleMotorID = 4;      // TODO - Replace with actual CAN ID
-    int algaeCANdiID = 5;           // TODO - Replace with actual CAN ID
+    int coralMotorID = 1;
+    int coralCANdiID = 2;
+    int algaeMotorID = 3;
+    int algaeAngleMotorID = 4;
+    int algaeCANdiID = 5;
     double algaeAngle;
     double algaeAnglePreset;
 

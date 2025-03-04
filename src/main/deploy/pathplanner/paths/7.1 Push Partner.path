@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.21231737012987,
+        "x": 8.020008116883115,
         "y": 7.087702922077922
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.121239939740582,
+        "x": 6.928930686493827,
         "y": 7.122853681996561
       },
       "isLocked": false,
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Push - End"
+      "linkedName": "Barge Push - End"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "7 Push Partner - Coral L1",
+  "folder": "7 Push Partner - Barge Side + 1 Coral",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

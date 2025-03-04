@@ -196,7 +196,7 @@ public class RobotContainer
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
         driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));
         
-       
+        
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR BUTTON BOARD CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -237,20 +237,20 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR CONTROLLER / TEST CONTROLLER
         //////////////////////////////////////////////////////////////////////////////////////////
-        //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d())));
-            //testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
+        //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d()))); // THIS WORKS
+        testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
             //testController.a().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(45)));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES
         //////////////////////////////////////////////////////////////////////////////////////////
 
-        // Run SysId routines when holding back/start and X/Y.
+        // Run SysId routines when holding back/start and X/Y.  // TODO
         // Note that each routine should be run exactly once in a single log.
-            //driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
-            //driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
-            //driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
-            //driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
+            driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
+            driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
+            driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
+            driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
 
             s_swerve.registerTelemetry(logger::telemeterize);           
     }
@@ -281,159 +281,6 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight), s_elevator),
                 new CoralIntake(s_carriage, s_elevator)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-A",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.A)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-B",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.B)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-C",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.C)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-D",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.D)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-E",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.E)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-F",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.F)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-G",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.G)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-H",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.H)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-I",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.I)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-J",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.J)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-K",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.K)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-L",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.L)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-LeftCoral",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.LeftCoral)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-RightCoral",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.RightCoral)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-Barge",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.Barge)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "FinalAlignment-Processor",
-            new ParallelCommandGroup
-            (
-                new PositionAlign(s_swerve, Constants.Destinations.Processor)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "SetAutoPose",
-            new SequentialCommandGroup
-            (                
-                new setAutoPose(s_swerve)
             )
         );
 
@@ -508,26 +355,6 @@ public class RobotContainer
             (
                 new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.Barge), s_elevator),
                 new AutoScore(s_carriage, s_elevator, true)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "CleanA1",
-            new SequentialCommandGroup
-            (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.A1), s_elevator),
-                new AutoClean(s_carriage, s_elevator)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "CleanA2",
-            new SequentialCommandGroup
-            (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.A2), s_elevator),
-                new AutoClean(s_carriage, s_elevator)
             )
         );
 

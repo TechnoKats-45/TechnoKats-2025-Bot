@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.299188311688312,
-        "y": 7.087702922077922
+        "x": 8.020008116883115,
+        "y": 1.6816761363636363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.519987824675325,
-        "y": 6.062053571428571
+        "x": 7.093636467329693,
+        "y": 1.6816761363636366
       },
       "isLocked": false,
-      "linkedName": "Barge Push - End"
+      "linkedName": "Processor Start"
     },
     {
       "anchor": {
-        "x": 4.964802631578947,
-        "y": 5.160361842105263
+        "x": 5.306310876623376,
+        "y": 1.6816761363636363
       },
       "prevControl": {
-        "x": 5.189365283335928,
-        "y": 5.6578256868678105
+        "x": 5.934107503656374,
+        "y": 1.6816761363636363
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Processor Push - End"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "7 Push Partner - Barge Side + 1 Coral",
+  "folder": "8 Push Partner - Processor Side + 1 Coral",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
