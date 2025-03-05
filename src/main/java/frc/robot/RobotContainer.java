@@ -6,32 +6,25 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.Map;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.generated.TunerConstants;
 
 import frc.robot.commands.*;
@@ -52,6 +45,7 @@ public class RobotContainer
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
+        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -105,7 +99,8 @@ public class RobotContainer
         
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
-        /*
+
+        /*   THIS IS THE WORKING ONE 3-4-25:
         s_swerve.setDefaultCommand
         (
             // Drivetrain will execute this command periodically
@@ -118,28 +113,22 @@ public class RobotContainer
         );
         */
 
-        /*
         s_swerve.setDefaultCommand
         (
             s_swerve.applyRequest
-            (() -> 
-                drive.withVelocityX(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight()))    //-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight())
-                    .withVelocityY(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight())) //-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight())
-                    .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight()))   //-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight())
+            (
+                () -> driver.x().getAsBoolean()  // This checks the button state continuously
+                    ? forwardStraight
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed)   // Robot-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed)   // Robot-centric strafe left/right
+                        .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Robot-centric rotation
+                    : drive
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed)   // Field-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed)   // Field-centric strafe left/right
+                        .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Field-centric rotation
             )
         );
-        */
 
-        s_swerve.setDefaultCommand
-        (
-            // Drivetrain will execute this command periodically
-            s_swerve.applyRequest
-            (() ->
-                drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
         
 
         s_carriage.setDefaultCommand

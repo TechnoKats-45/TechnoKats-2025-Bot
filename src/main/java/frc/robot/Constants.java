@@ -132,7 +132,7 @@ public class Constants
         {
             public static final double L1 = 28;     // was 30
             public static final double L2 = 35;  // was 37.75
-            public static final double L3 = 48;
+            public static final double L3 = 49;
             public static final double L4 = 68;
             public static final double Barge = 70;
             public static final double A1 = 31;
