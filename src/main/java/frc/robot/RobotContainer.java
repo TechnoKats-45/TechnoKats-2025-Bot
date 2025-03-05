@@ -35,7 +35,8 @@ public class RobotContainer
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-    private enum DestinationSelector {
+    private enum DestinationSelector 
+    {
         A, B, C, D, E, F, G, H, I, J, K, L, LeftCoral, RightCoral, Barge, Processor, NONE
     }
 
@@ -171,12 +172,13 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
-        driver.leftTrigger().whileTrue(new GoToHeightPreset(s_elevator, s_carriage));
+        driver.leftTrigger().whileTrue(new GoToHeightPreset(s_elevator, s_carriage));       // Go to selected preset
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
-        driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));
-        driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));
+        driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
+        driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // shoot coral
+        
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
-        driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));
+        driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));                  // Back Button - Set Pose to LL
         
         
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -212,8 +214,8 @@ public class RobotContainer
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
         operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
-        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.handoffHeight)));
-        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.GoToPreset()));
+        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Stow)));
+        operator.button(Constants.Button.H).whileTrue(new RunCommand(() -> s_elevator.GoToPreset()));   // TODO - Test this
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +223,6 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d()))); // THIS WORKS
         testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
-            //testController.a().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(45)));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES

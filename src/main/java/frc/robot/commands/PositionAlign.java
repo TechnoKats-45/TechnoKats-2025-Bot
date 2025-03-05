@@ -22,6 +22,7 @@ public class PositionAlign extends Command
 {
     private Swerve s_swerve;
     private Pose2d targetPose;
+    private Command pathCommand;
 
     public PositionAlign(Swerve s_swerve)   // For Teleop
     {
@@ -49,7 +50,7 @@ public class PositionAlign extends Command
     
         System.out.println("Executing PositionAlign to: " + targetPose);
     
-        Command pathCommand = s_swerve.driveToPose(targetPose);
+        pathCommand = s_swerve.driveToPose(targetPose);
         if (pathCommand != null) 
         {
             pathCommand.schedule(); // Ensure the command runs!
@@ -82,6 +83,6 @@ public class PositionAlign extends Command
     @Override
     public void end(boolean interrupted)
     {
-        
+        pathCommand.cancel();
     }
 }
