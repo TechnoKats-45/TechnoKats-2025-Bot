@@ -75,22 +75,6 @@ public class RobotContainer
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
-    private DestinationSelector selectDestination() 
-    {
-        Pose2d destination = s_swerve.getDestination();
-        if (destination.equals(Constants.Destinations.A)) return DestinationSelector.A;
-        if (destination.equals(Constants.Destinations.B)) return DestinationSelector.B;
-        if (destination.equals(Constants.Destinations.C)) return DestinationSelector.C;
-        if (destination.equals(Constants.Destinations.D)) return DestinationSelector.D;
-        if (destination.equals(Constants.Destinations.E)) return DestinationSelector.E;
-        if (destination.equals(Constants.Destinations.F)) return DestinationSelector.F;
-        if (destination.equals(Constants.Destinations.G)) return DestinationSelector.G;
-        if (destination.equals(Constants.Destinations.H)) return DestinationSelector.H;
-        if (destination.equals(Constants.Destinations.Barge)) return DestinationSelector.Barge;
-        if (destination.equals(Constants.Destinations.Processor)) return DestinationSelector.Processor;
-        return DestinationSelector.NONE;
-    }
-
     private void configureBindings() 
     {
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -113,6 +97,7 @@ public class RobotContainer
         );
         */
 
+        /*
         s_swerve.setDefaultCommand
         (
             s_swerve.applyRequest
@@ -128,22 +113,30 @@ public class RobotContainer
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Field-centric rotation
             )
         );
+        */
 
-        
+        // Same as above, but with height limiters as well:
+        s_swerve.setDefaultCommand
+        (
+            s_swerve.applyRequest
+            (
+                () -> driver.x().getAsBoolean()  // This checks the button state continuously
+                    ? forwardStraight
+                        .withVelocityX(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight()))   // Robot-centric forward/backward
+                        .withVelocityY(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight()))   // Robot-centric strafe left/right
+                        .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight())) // Robot-centric rotation
+                    : drive
+                        .withVelocityX(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight()))   // Field-centric forward/backward
+                        .withVelocityY(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight()))   // Field-centric strafe left/right
+                        .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight())) // Field-centric rotation
+            )
+        );
 
         s_carriage.setDefaultCommand
         (
             // Carriage will execute this command periodically
             new CarriageDefault(s_carriage)
         );
-
-        /*
-        s_elevator.setDefaultCommand
-        (
-            // Elevator will execute this command periodically  // TODO - Comment out when tuned / tested
-            new ManualElevator(s_elevator, testController)
-        );
-        */
         
         s_climber.setDefaultCommand // TODO - Comment out when tuned / tested - still need to get set points
         (
