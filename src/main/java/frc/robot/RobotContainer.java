@@ -135,7 +135,6 @@ public class RobotContainer
 
         s_carriage.setDefaultCommand
         (
-            // Carriage will execute this command periodically
             new CarriageDefault(s_carriage)
         );
         
@@ -175,11 +174,11 @@ public class RobotContainer
         driver.leftTrigger().whileTrue(new GoToHeightPreset(s_elevator, s_carriage));       // Go to selected preset
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
-        driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // shoot coral
+        driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
         
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
         driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));                  // Back Button - Set Pose to LL
-        
+        driver.leftBumper().whileTrue(new AutoClean(s_carriage, s_elevator));               // Left Bumper - Clean Coral
         
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR BUTTON BOARD CONTROLS

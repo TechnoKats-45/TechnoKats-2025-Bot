@@ -42,7 +42,6 @@ public class AutoScoreWithDeadline extends Command
     public void end(boolean interrupted)
     {
         s_carriage.setCoralSpeed(0);
-        s_carriage.setAlgaeAngle(Constants.Carriage.algaeStowAngle);
         s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight);
     }
 }

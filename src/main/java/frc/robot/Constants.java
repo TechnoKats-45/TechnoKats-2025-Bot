@@ -142,35 +142,24 @@ public class Constants
             public static final double handoffHeight = 23;
 
             public static final double Stow = 12;
-        }
-    
-        public static final class AnglePresets  // TODO
-        
-        {
-            public static final double L1 = 0;
-            public static final double L2 = 0;
-            public static final double L3 = 0;
-            public static final double L4 = 0;
-            public static final double Barge = 0;
-            public static final double A1 = 0;
-            public static final double A2 = 0;
-    
-            public static final double handoffAngle = 0;
+
+            public static final double algaeCleanStartHeight = 68;  // TODO - Tune
+            public static final double algaeCleanEndHeight = 23;  // TODO - Tune
         }
     }
     
 
     public static final class Carriage
     {
-        public static final double algaeCleanSpeed = .10; // TODO
-        public static final double algaeCleanAngle = 45; // TODO
+        public static final double algaeCleanSpeed = .50; // TODO - Tune
+        public static final double algaeCleanAngle = 45; // TODO - Tune
         
-        public static final double algaeScoreSpeed = 1; // TODO
-        public static final double algaeScoreAngle = 90; // TODO
+        public static final double algaeScoreSpeed = 1; // TODO - Tune
+        public static final double algaeScoreAngle = 90; // TODO - Tune
 
-        public static final double algaeAngleTolerance = 5; // TODO
+        public static final double algaeAngleTolerance = 1; // TODO - Tune
 
-        public static final double algaeStowAngle = -90; // TODO
+        public static final double algaeStowAngle = -90; // TODO - Tune
 
         ////////////////////////////////////////////////////////////////
 
