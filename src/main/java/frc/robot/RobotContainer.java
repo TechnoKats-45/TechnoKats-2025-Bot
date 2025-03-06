@@ -64,7 +64,6 @@ public class RobotContainer
     
 
     private final SendableChooser<Command> autoChooser;
-    private Command activeDriveCommand = null; // Track active drive-to-pose command
 
     public RobotContainer() 
     {
@@ -84,55 +83,22 @@ public class RobotContainer
         
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
-
-        /*   THIS IS THE WORKING ONE 3-4-25:
-        s_swerve.setDefaultCommand
-        (
-            // Drivetrain will execute this command periodically
-            s_swerve.applyRequest
-            (() ->
-                drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
-        */
-
-        /*
         s_swerve.setDefaultCommand
         (
             s_swerve.applyRequest
             (
                 () -> driver.x().getAsBoolean()  // This checks the button state continuously
                     ? forwardStraight
-                        .withVelocityX(-driver.getLeftY() * MaxSpeed)   // Robot-centric forward/backward
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed)   // Robot-centric strafe left/right
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getElevatorSpeedFactor(s_elevator.getHeight()))   // Robot-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getElevatorSpeedFactor(s_elevator.getHeight()))   // Robot-centric strafe left/right
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Robot-centric rotation
                     : drive
-                        .withVelocityX(-driver.getLeftY() * MaxSpeed)   // Field-centric forward/backward
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed)   // Field-centric strafe left/right
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getElevatorSpeedFactor(s_elevator.getHeight()))   // Field-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getElevatorSpeedFactor(s_elevator.getHeight()))   // Field-centric strafe left/right
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Field-centric rotation
             )
         );
-        */
-
-        // Same as above, but with height limiters as well:
-        s_swerve.setDefaultCommand
-        (
-            s_swerve.applyRequest
-            (
-                () -> driver.x().getAsBoolean()  // This checks the button state continuously
-                    ? forwardStraight
-                        .withVelocityX(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight()))   // Robot-centric forward/backward
-                        .withVelocityY(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight()))   // Robot-centric strafe left/right
-                        .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight())) // Robot-centric rotation
-                    : drive
-                        .withVelocityX(-s_swerve.getLimitedYSpeed(driver.getLeftX(), MaxSpeed, s_elevator.getHeight()))   // Field-centric forward/backward
-                        .withVelocityY(-s_swerve.getLimitedXSpeed(driver.getLeftY(), MaxSpeed, s_elevator.getHeight()))   // Field-centric strafe left/right
-                        .withRotationalRate(-s_swerve.getLimitedRotSpeed(driver.getRightX(), MaxAngularRate, s_elevator.getHeight())) // Field-centric rotation
-            )
-        );
-
+    
         s_carriage.setDefaultCommand
         (
             new CarriageDefault(s_carriage)
@@ -178,7 +144,7 @@ public class RobotContainer
         
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
         driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));                  // Back Button - Set Pose to LL
-        driver.leftBumper().whileTrue(new AutoClean(s_carriage, s_elevator));               // Left Bumper - Clean Coral
+        //driver.leftBumper().whileTrue(new AutoClean(s_carriage, s_elevator));               // Left Bumper - Clean Coral
         
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR BUTTON BOARD CONTROLS
@@ -214,14 +180,14 @@ public class RobotContainer
 
         operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
         operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Stow)));
-        operator.button(Constants.Button.H).whileTrue(new RunCommand(() -> s_elevator.GoToPreset()));   // TODO - Test this
+        operator.button(Constants.Button.H).whileTrue(new RunCommand(() -> s_elevator.GoToPreset()));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR CONTROLLER / TEST CONTROLLER
         //////////////////////////////////////////////////////////////////////////////////////////
         //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d()))); // THIS WORKS
-        testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
+           //testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES
@@ -229,10 +195,10 @@ public class RobotContainer
 
         // Run SysId routines when holding back/start and X/Y.  // TODO
         // Note that each routine should be run exactly once in a single log.
-            driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
-            driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
-            driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
-            driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
+            //driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
+            //driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
+            //driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
+            //driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
 
             s_swerve.registerTelemetry(logger::telemeterize);           
     }

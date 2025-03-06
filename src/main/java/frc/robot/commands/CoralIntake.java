@@ -23,7 +23,7 @@ public class CoralIntake extends Command
         this.s_carriage = s_carriage;
         this.s_elevator = s_elevator;
         
-        addRequirements(s_carriage);
+        addRequirements(s_carriage, s_elevator);    // Elevator NEEDED - trust me bro
 
         s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight); // TODO
     }

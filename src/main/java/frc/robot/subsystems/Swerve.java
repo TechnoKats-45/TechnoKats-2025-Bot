@@ -55,6 +55,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private final Elevator s_elevator = new Elevator();
     private boolean isAlgae;
     private boolean kUseLimelight = true;
+    private double speedFactor;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -70,11 +71,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
-
-    // Define slew rate limiters to smooth acceleration/deceleration
-    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3.0);  // Limits acceleration in m/s²             // TODO - Tune ?
-    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3.0);  // Limits acceleration in m/s²             // TODO - Tune ?
-    private final SlewRateLimiter rotSpeedLimiter = new SlewRateLimiter(6.0); // Limits rotation acceleration in rad/s² // TODO - Tune ?
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine
@@ -231,39 +227,18 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         System.out.println("GET Destination" + onTheFlyDestination);
         return onTheFlyDestination;
     }
-
-    public double getLimitedXSpeed(double joystickInput, double maxSpeed, double elevatorHeight) 
-    {
-        double limitedSpeed = getMaxSpeedBasedOnElevator(elevatorHeight, maxSpeed);
-        return xSpeedLimiter.calculate(joystickInput * limitedSpeed);
-    }
     
-    public double getLimitedYSpeed(double joystickInput, double maxSpeed, double elevatorHeight) 
+    public double getElevatorSpeedFactor(double elevatorHeight) 
     {
-        double limitedSpeed = getMaxSpeedBasedOnElevator(elevatorHeight, maxSpeed);
-        return ySpeedLimiter.calculate(joystickInput * limitedSpeed);
-    }
-    
-    public double getLimitedRotSpeed(double joystickInput, double maxAngularRate, double elevatorHeight) 
-    {
-        double limitedSpeed = getMaxSpeedBasedOnElevator(elevatorHeight, maxAngularRate);
-        return rotSpeedLimiter.calculate(joystickInput * limitedSpeed);
-    }
-    
-    public double getMaxSpeedBasedOnElevator(double elevatorHeight, double baseSpeed) 
-    {
-        double minHeight = Constants.Elevator.HeightPresets.L1;  // Safe height where max speed is allowed
-        double maxHeight = Constants.Elevator.HeightPresets.Barge;          // Max elevator height
-        double minSpeedFactor = 0.5; // 50% speed when fully extended     // TODO - Tune ?
-
-        // Scale speed linearly based on elevator height
-        double speedFactor = MathUtil.clamp
-        (
-            1.0 - ((elevatorHeight - minHeight) / (maxHeight - minHeight)),
-            minSpeedFactor, 1.0
-        );
-
-        return baseSpeed * speedFactor; // Adjusted max speed
+        if (elevatorHeight > Constants.Elevator.HeightPresets.handoffHeight + .5) // 0.5 inch saftety
+        {
+            speedFactor = .5;
+        }
+        else
+        {
+            speedFactor = 1;
+        }
+        return speedFactor;
     }
     
     /**
@@ -373,9 +348,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(15, 0, 0),   // 18, 0, .5
+                    new PIDConstants(.64, 0, 0),   // 18, 0, .5
                     // PID constants for rotation
-                    new PIDConstants(10, 0, 0)   // P was 7   // was .001
+                    new PIDConstants(25, 0, 0)   // P was 7   // was .001
                 ),
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case

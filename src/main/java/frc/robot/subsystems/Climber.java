@@ -44,8 +44,6 @@ public class Climber extends SubsystemBase
     private boolean climbEnabled = false;
     DutyCycleEncoder encoder = new DutyCycleEncoder(0);
 
-    //private final CANdi CANdi = new CANdi(Constants.Elevator.elevatorCANdiID);
-
     public Climber()
     {
         // Initialize motors and sensors
