@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "7.1 Push Partner"
+                  "pathName": "8.1 Push Partner"
                 }
               },
               {
@@ -26,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "7.2 Score Coral (L1)"
+            "pathName": "8.2 Score Coral"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreL2"
+            "name": "ScoreL1"
           }
         }
       ]

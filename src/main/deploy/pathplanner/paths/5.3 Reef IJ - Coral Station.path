@@ -3,35 +3,52 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.817694805194805,
-        "y": 5.164610389610389
+        "x": 5.130452764688786,
+        "y": 5.153085639851249
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4125910141674103,
-        "y": 6.584247029051021
+        "x": 4.636789772727273,
+        "y": 5.798518668831168
       },
       "isLocked": false,
-      "linkedName": "Reef - KL"
+      "linkedName": "Reef - JI"
     },
     {
       "anchor": {
-        "x": 1.135361842105263,
-        "y": 7.190542763157895
+        "x": 1.225081168831169,
+        "y": 7.080580357142857
       },
       "prevControl": {
-        "x": 2.4856058542701716,
-        "y": 5.840568510599563
+        "x": 1.8146613185069786,
+        "y": 6.241094235690142
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Coral Station - Barge Side"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5884917175239796,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "SpitAlgae",
+      "waypointRelativePos": 0.5955056179775229,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "SpitAlgae"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 1.0,
@@ -45,10 +62,10 @@
     "rotation": -54.0
   },
   "reversed": false,
-  "folder": "1 Barge Side - 3 Coral (Far) - L4",
+  "folder": "5 Barge Side - 2 Coral (Far) - L4 + Algae Remove",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

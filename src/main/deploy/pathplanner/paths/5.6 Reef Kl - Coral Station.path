@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.955180921052631,
-        "y": 5.150740131578948
+        "x": 3.8216671094453303,
+        "y": 5.1352703021548765
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.231798338767206,
-        "y": 5.647537960967511
+        "x": 3.060047359867826,
+        "y": 5.749536779221635
       },
       "isLocked": false,
-      "linkedName": "Reef - J"
+      "linkedName": "Reef - KL"
     },
     {
       "anchor": {
-        "x": 1.135361842105263,
-        "y": 7.190542763157895
+        "x": 1.225081168831169,
+        "y": 7.080580357142857
       },
       "prevControl": {
-        "x": 2.541459047111312,
-        "y": 6.271969961810477
+        "x": 1.8457111486680953,
+        "y": 6.561024370407154
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,10 +45,10 @@
     "rotation": -54.0
   },
   "reversed": false,
-  "folder": "1 Barge Side - 3 Coral (Far) - L4",
+  "folder": "5 Barge Side - 2 Coral (Far) - L4 + Algae Remove",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

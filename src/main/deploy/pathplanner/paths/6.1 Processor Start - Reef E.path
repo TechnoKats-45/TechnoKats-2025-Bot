@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.964802631578947,
-        "y": 5.160361842105263
+        "x": 8.020008116883115,
+        "y": 1.6816761363636363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.456384452075593,
-        "y": 5.5013732155355495
+        "x": 7.04755752164059,
+        "y": 1.615281570850862
       },
       "isLocked": false,
-      "linkedName": "Reef - JI"
+      "linkedName": "Processor Start"
     },
     {
       "anchor": {
-        "x": 7.66387987012987,
-        "y": 6.332711038961038
+        "x": 4.957305194805195,
+        "y": 2.828409090909091
       },
       "prevControl": {
-        "x": 6.6560307167149935,
-        "y": 5.900948719651944
+        "x": 5.456501297008913,
+        "y": 2.0066771066058173
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Barge Score"
+      "linkedName": "Reef - E"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "5 Barge Side - 3 Coral (Far) & 2 Algae - L4",
+  "folder": "6 Processor Side - 2 Coral (Far) - L4 + Algae Remove",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

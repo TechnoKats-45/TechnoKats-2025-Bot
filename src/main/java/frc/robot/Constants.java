@@ -14,9 +14,9 @@ public class Constants
 
     public static final class Vision
     {
-        public static final String LIMELIGHT_FRONT_TABLE = "limelight-front";   // TODO
-        public static final String LIMELIGHT_LEFT_TABLE = "limelight-left"; // TODO
-        public static final String LIMELIGHT_RIGHT_TABLE = "limelight-right";   // TODO
+        public static final String LIMELIGHT_FRONT_TABLE = "limelight-front";
+        public static final String LIMELIGHT_LEFT_TABLE = "limelight-left";
+        public static final String LIMELIGHT_RIGHT_TABLE = "limelight-right";
 
         public static Matrix<N3, N1> ODOM_STD_DEV;
         public static Function<Double, Matrix<N3, N1>> VISION_STD_DEV_MULTITAG_FUNCTION;
@@ -47,8 +47,8 @@ public class Constants
         public static final Pose2d KL = new Pose2d(3.823, 5.166, Rotation2d.fromDegrees(300));
 
         // For Coral Aquisition - Numbers taken from PathPlanner manually
-        public static final Pose2d LeftCoral = new Pose2d(1.693, 7.354, Rotation2d.fromDegrees(130+180));   // TODO - get more accurate values from actual field
-        public static final Pose2d RightCoral = new Pose2d(1.665, 0.696, Rotation2d.fromDegrees(220+180));  // TODO - get more accurate value from actual field
+        public static final Pose2d LeftCoral = new Pose2d(1.693, 7.354, Rotation2d.fromDegrees(130+180));   // TODO - get more accurate values from actual field - if we choose to use this
+        public static final Pose2d RightCoral = new Pose2d(1.665, 0.696, Rotation2d.fromDegrees(220+180));  // TODO - get more accurate value from actual field - if we choose to use this
 
         // For Algae Scoring - Numbers taken from PathPlanner manually
         public static final Pose2d Barge = new Pose2d(7.755, 6.498, Rotation2d.fromDegrees(0.180));
@@ -57,9 +57,7 @@ public class Constants
     
     public static final class Climber
     {
-        public static final double hopperReleaseAngle = 0;  // TODO
-        public static final double climbAngle = 0;          // TODO
-        public static final double floorAngle = 0;          // TODO
+
     }
     
     // Operator Button Board Mapping
@@ -151,23 +149,23 @@ public class Constants
 
     public static final class Carriage
     {
-        public static final double algaeCleanSpeed = .50; // TODO - Tune
-        public static final double algaeCleanAngle = 45; // TODO - Tune
+        public static final double algaeCleanSpeed = .50;   // TODO - Tune
+        public static final double algaeCleanAngle = 45;    // TODO - Tune
         
-        public static final double algaeScoreSpeed = 1; // TODO - Tune
-        public static final double algaeScoreAngle = 90; // TODO - Tune
+        public static final double algaeScoreSpeed = 1;     // TODO - Tune
+        public static final double algaeScoreAngle = 90;    // TODO - Tune
 
         public static final double algaeAngleTolerance = 1; // TODO - Tune
 
-        public static final double algaeStowAngle = -90; // TODO - Tune
+        public static final double algaeStowAngle = -90;    // TODO - Tune
 
         ////////////////////////////////////////////////////////////////
 
-        public static final double coralIntakeSpeed = 45; // TODO
-        public static final double coralPassiveIntakeSpeed = -45; // TODO
-        public static final double coralReverseSpeed = 45; // TODO;
-        public static final double coralSlowIntakeSpeed = -30; // TODO
-        public static final double coralScoreSpeed = -35; // TODO
+        public static final double coralIntakeSpeed = 45;
+        public static final double coralPassiveIntakeSpeed = -45;
+        public static final double coralReverseSpeed = 45;
+        public static final double coralSlowIntakeSpeed = -30;
+        public static final double coralScoreSpeed = -35;
         public static final double autoCoralScoreSpeed = -25;   // -15 for L4
     }
 }

@@ -8,8 +8,8 @@
     "2 Barge Side - 4 Coral (Close) - L4",
     "3 Processor Side - 3 Coral (Far) - L4",
     "4 Processor Side - 4 Coral (Close) - L4",
-    "5 Barge Side - 3 Coral (Far) & 2 Algae - L4",
-    "6 Processor Side - 3 Coral (Far) & 2 Algae - L4",
+    "5 Barge Side - 2 Coral (Far) - L4 + Algae Remove",
+    "6 Processor Side - 2 Coral (Far) - L4 + Algae Remove",
     "7 Push Partner - Barge Side + 1 Coral",
     "8 Push Partner - Processor Side + 1 Coral"
   ],
@@ -38,5 +38,7 @@
   "brModuleY": -0.276225,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.1,\"y\":0.0},\"size\":{\"width\":0.8,\"length\":0.2},\"borderRadius\":0.01,\"strokeWidth\":0.02,\"filled\":false}}"
+  ]
 }

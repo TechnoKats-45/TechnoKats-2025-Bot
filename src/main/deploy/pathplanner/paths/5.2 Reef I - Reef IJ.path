@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.817694805194805,
-        "y": 5.164610389610389
+        "x": 5.285047231961906,
+        "y": 5.04827583153049
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.000040584415584,
-        "y": 5.997950487012987
+        "x": 4.932826072156848,
+        "y": 5.227331861045436
       },
       "isLocked": false,
-      "linkedName": "Reef - KL"
+      "linkedName": "Reef - I"
     },
     {
       "anchor": {
-        "x": 7.66387987012987,
-        "y": 6.332711038961038
+        "x": 5.130452764688786,
+        "y": 5.153085639851249
       },
       "prevControl": {
-        "x": 5.883238636363636,
-        "y": 6.261485389610389
+        "x": 5.713029015843399,
+        "y": 4.878145911640551
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Barge Score"
+      "linkedName": "Reef - JI"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "5 Barge Side - 3 Coral (Far) & 2 Algae - L4",
+  "folder": "5 Barge Side - 2 Coral (Far) - L4 + Algae Remove",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

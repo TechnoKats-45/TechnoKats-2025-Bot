@@ -11,8 +11,8 @@ import frc.robot.Constants;
 public class AutoScoreWithDeadline extends Command
 {
     private Carriage s_carriage;
-    private Elevator s_elevator;    
-    private Boolean isBarge;
+    private Elevator s_elevator;   
+    private Boolean isBarge; 
 
     public AutoScoreWithDeadline(Carriage s_carriage, Elevator s_elevator, Boolean isBarge)
     {
@@ -30,18 +30,37 @@ public class AutoScoreWithDeadline extends Command
 
     public void execute()
     {
-        s_carriage.setCoralSpeed(Constants.Carriage.autoCoralScoreSpeed);
+        if(!isBarge)    // Is not barge - scoring coral
+        {
+            s_carriage.setCoralSpeed(Constants.Carriage.autoCoralScoreSpeed);
+        }
+        else            // Is barge - scoring algae
+        {
+            s_carriage.setCoralSpeed(Constants.Carriage.algaeScoreSpeed);
+        }
+    
     }
 
     public boolean isFinished()
     {
-        return false;
+        //return false;
+
+        if(!isBarge)// If Scoring Coral
+        {
+            return !s_carriage.isCoralDetected();
+        }
+        else        // If Scoring Algae
+        {
+            return !s_carriage.isAlgaeDetected();
+        }
+
     }
-    
 
     public void end(boolean interrupted)
     {
         s_carriage.setCoralSpeed(0);
+        s_carriage.setAlgaeSpeed(0);
+        s_carriage.setAlgaeAngle(Constants.Carriage.algaeStowAngle);
         s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight);
     }
 }

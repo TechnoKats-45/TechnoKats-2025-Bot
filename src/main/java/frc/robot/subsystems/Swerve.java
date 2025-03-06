@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
-import java.lang.invoke.ConstantCallSite;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -17,7 +16,6 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -33,8 +31,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
@@ -52,9 +48,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
 
     private Pose2d onTheFlyDestination = new Pose2d();
     private final Field2d field = new Field2d();
-    private final Elevator s_elevator = new Elevator();
-    private boolean isAlgae;
-    private boolean kUseLimelight = true;
+
     private double speedFactor;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */

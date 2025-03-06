@@ -7,43 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "5.1 Barge-Reef JI"
+            "pathName": "0 Leave"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "5.2 Reef JI-Barge"
+            "pathName": "0.1 Algae Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CleanAlgae"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "5.3 Barge-Coral Station"
+            "pathName": "0.2 Barge Score"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "5.4 Coral Station-Reef KL"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5.5 Reef KL-Barge"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5.6 Barge-Coral Station"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5.7 Coral Station-Reef AB"
+            "name": "ScoreBarge"
           }
         }
       ]

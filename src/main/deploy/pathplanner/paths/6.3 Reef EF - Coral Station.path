@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.519741732132104,
-        "y": 2.5233195109318665
+        "x": 3.8385314133330475,
+        "y": 1.9004004897418978
       },
       "isLocked": false,
       "linkedName": "Reef - EF"
@@ -20,18 +20,35 @@
         "y": 0.7130073051948045
       },
       "prevControl": {
-        "x": 2.095953298346859,
-        "y": 1.0392194730468285
+        "x": 1.769699207716191,
+        "y": 1.2487789797902795
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Coral Station - Processor Side"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 121.80702712359152
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "SpitAlgae",
+      "waypointRelativePos": 0.5271535580524335,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "SpitAlgae"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 1.0,
@@ -45,7 +62,7 @@
     "rotation": 54.0
   },
   "reversed": false,
-  "folder": "3 Processor Side - 3 Coral (Far) - L4",
+  "folder": "6 Processor Side - 2 Coral (Far) - L4 + Algae Remove",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

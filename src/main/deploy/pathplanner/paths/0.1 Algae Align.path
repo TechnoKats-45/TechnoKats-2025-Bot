@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.121124188311688,
-        "y": 2.8853896103896104
+        "x": 5.780850234320349,
+        "y": 4.17609604391877
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.536850193390017,
-        "y": 1.9236913751902804
+        "x": 6.0270461577815935,
+        "y": 4.132649901730251
       },
       "isLocked": false,
-      "linkedName": "Reef - EF"
+      "linkedName": "Reef - H"
     },
     {
       "anchor": {
-        "x": 5.968709415584416,
-        "y": 0.5705560064935059
+        "x": 5.780850234320349,
+        "y": 4.0347319753376905
       },
       "prevControl": {
-        "x": 5.223649454945383,
-        "y": 1.6185834872904157
+        "x": 5.505589857743464,
+        "y": 4.06456861630359
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Processor"
+      "linkedName": "Reef - GH"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "6 Processor Side - 3 Coral (Far) & 2 Algae - L4",
+  "folder": "0 Leave",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

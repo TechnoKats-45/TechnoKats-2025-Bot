@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1.1 Barge-Reef I"
+            "pathName": "6.1 Processor Start - Reef E"
           }
         },
         {
@@ -19,7 +19,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1.2 Reef I-Coral Station"
+            "pathName": "6.2 Reef E - Reef EF"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CleanAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6.3 Reef EF - Coral Station"
           }
         },
         {
@@ -31,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1.3 Coral Station-Reef J"
+            "pathName": "6.4 Coral Station - Reef D"
           }
         },
         {
@@ -43,31 +55,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1.4 Reef J-Coral Station"
+            "pathName": "6.5 Reef D - Reef CD"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralStationIntake"
+            "name": "CleanAlgae"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1.5 Coral Station-Reef K"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreL4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1.6 Reef K-Coral Station"
+            "pathName": "6.6 Reef CD - Coral Station"
           }
         },
         {

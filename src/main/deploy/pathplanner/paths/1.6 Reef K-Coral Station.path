@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.135361842105263,
-        "y": 7.190542763157895
+        "x": 3.976261576718451,
+        "y": 5.206016922771389
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7319078947368418,
-        "y": 6.988486842105263
+        "x": 2.571157785691056,
+        "y": 6.625653562212021
       },
       "isLocked": false,
-      "linkedName": "Coral Station - Barge Side"
+      "linkedName": "Reef - K"
     },
     {
       "anchor": {
-        "x": 4.955180921052631,
-        "y": 5.150740131578948
+        "x": 1.225081168831169,
+        "y": 7.080580357142857
       },
       "prevControl": {
-        "x": 4.570312499999999,
-        "y": 6.0359375
+        "x": 2.5753251809960775,
+        "y": 5.730606104584525
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Reef - J"
+      "linkedName": "Coral Station - Barge Side"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 0.5,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -54.0
   },
   "reversed": false,
   "folder": "1 Barge Side - 3 Coral (Far) - L4",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": -59.99999999999999
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

@@ -9,18 +9,12 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.CANdi;
-import com.ctre.phoenix6.hardware.core.CoreCANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,10 +28,8 @@ public class Elevator extends SubsystemBase
     double currentHeightPreset;
 
     // Using CANdi for diagnostics (optional)
-    private CoreCANdi elevatorCANdi;
 
     // PID control on angle (in degrees)
-    private final PositionTorqueCurrentFOC elevator_angle = new PositionTorqueCurrentFOC(0);
     private final MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
 
 
@@ -46,7 +38,6 @@ public class Elevator extends SubsystemBase
         // Initialize motors and sensors
         elevatorMotor1 = new TalonFX(Constants.Elevator.elevatorMotor1ID);
         elevatorMotor1.setNeutralMode(NeutralModeValue.Brake);
-        elevatorCANdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
         configElevator();
     }

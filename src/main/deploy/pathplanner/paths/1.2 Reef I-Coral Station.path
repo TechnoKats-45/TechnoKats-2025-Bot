@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.968709415584416,
-        "y": 0.5705560064935059
+        "x": 5.285047231961906,
+        "y": 5.04827583153049
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.028530844155844,
-        "y": 0.8768262987012986
+        "x": 4.658261517676192,
+        "y": 5.639448721140879
       },
       "isLocked": false,
-      "linkedName": "Processor"
+      "linkedName": "Reef - I"
     },
     {
       "anchor": {
-        "x": 1.6025771103896103,
-        "y": 0.7130073051948045
+        "x": 1.225081168831169,
+        "y": 7.080580357142857
       },
       "prevControl": {
-        "x": 2.5356331168831168,
-        "y": 0.9124391233766233
+        "x": 2.1660546691036022,
+        "y": 6.446123514683499
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral Station - Processor Side"
+      "linkedName": "Coral Station - Barge Side"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": -54.0
   },
   "reversed": false,
-  "folder": "6 Processor Side - 3 Coral (Far) & 2 Algae - L4",
+  "folder": "1 Barge Side - 3 Coral (Far) - L4",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -119.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

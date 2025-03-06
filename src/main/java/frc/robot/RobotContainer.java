@@ -11,7 +11,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -34,11 +32,6 @@ public class RobotContainer
 {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
-    private enum DestinationSelector 
-    {
-        A, B, C, D, E, F, G, H, I, J, K, L, LeftCoral, RightCoral, Barge, Processor, NONE
-    }
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -59,9 +52,7 @@ public class RobotContainer
     public final Swerve s_swerve = TunerConstants.createDrivetrain();
     public final Carriage s_carriage = new Carriage();
     public final Elevator s_elevator = new Elevator();
-    public final Climber s_climber = new Climber();
-    public final Hopper s_hopper = new Hopper();
-    
+    public final Climber s_climber = new Climber();    
 
     private final SendableChooser<Command> autoChooser;
 
@@ -104,7 +95,7 @@ public class RobotContainer
             new CarriageDefault(s_carriage)
         );
         
-        s_climber.setDefaultCommand // TODO - Comment out when tuned / tested - still need to get set points
+        s_climber.setDefaultCommand // TODO - Still need to get set points
         (
             new ManualClimber(s_climber, testController, driver)
         );
@@ -184,16 +175,16 @@ public class RobotContainer
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
 
         //////////////////////////////////////////////////////////////////////////////////////////
-        /// OPERATOR CONTROLLER / TEST CONTROLLER
+        /// TEST CONTROLLER
         //////////////////////////////////////////////////////////////////////////////////////////
-        //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d()))); // THIS WORKS
-           //testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
+            //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d()))); // THIS WORKS
+            //testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         // SYSID ROUTINES
         //////////////////////////////////////////////////////////////////////////////////////////
 
-        // Run SysId routines when holding back/start and X/Y.  // TODO
+        // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
             //driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
             //driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
@@ -239,6 +230,7 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1), s_elevator),
                 new GoToHeightPreset(s_elevator, s_carriage),
+                new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
                     new WaitCommand(2),
@@ -254,7 +246,7 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L2), s_elevator),
                 new GoToHeightPreset(s_elevator, s_carriage),
-                new WaitCommand(1),
+                new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
                     new WaitCommand(2),
@@ -270,7 +262,7 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L3), s_elevator),
                 new GoToHeightPreset(s_elevator, s_carriage),
-                new WaitCommand(1),
+                new WaitCommand(.1),
 
                 new ParallelDeadlineGroup
                 (
@@ -287,7 +279,7 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4), s_elevator),
                 new GoToHeightPreset(s_elevator, s_carriage),
-                new WaitCommand(1),
+                new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
                     new WaitCommand(2),
@@ -302,7 +294,24 @@ public class RobotContainer
             new SequentialCommandGroup
             (
                 new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.Barge), s_elevator),
-                new AutoScore(s_carriage, s_elevator, true)
+                new GoToHeightPreset(s_elevator, s_carriage),
+                new WaitCommand(.1),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(2),
+                    new AutoScoreWithDeadline(s_carriage, s_elevator, true)
+                )
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "CleanAlgae",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4), s_elevator),
+                new GoToHeightPreset(s_elevator, s_carriage),
+                new AutoClean(s_carriage, s_elevator)
             )
         );
 
@@ -313,52 +322,6 @@ public class RobotContainer
             (
                 new WaitCommand(1),
                 new AutoScoreWithDeadline(s_carriage, s_elevator, false)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "GoToHeightL1",
-            new SequentialCommandGroup
-            (
-                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1)),
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "GoToHeightL2",
-            new SequentialCommandGroup
-            (
-                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "GoToHeightL3",
-            new SequentialCommandGroup
-            (
-                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "GoToHeightL4",
-            new SequentialCommandGroup
-            (
-                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
-            )
-        );
-
-        NamedCommands.registerCommand
-        (
-            "GoToHeightBarge",
-            new SequentialCommandGroup
-            (
-                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.L1), s_elevator)
             )
         );
     }

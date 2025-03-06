@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.968709415584416,
-        "y": 0.5705560064935059
+        "x": 3.976261576718451,
+        "y": 5.206016922771389
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.085511363636364,
-        "y": 0.8697037337662334
+        "x": 3.6883666948570304,
+        "y": 5.057424843455788
       },
       "isLocked": false,
-      "linkedName": "Processor"
+      "linkedName": "Reef - K"
     },
     {
       "anchor": {
-        "x": 1.6025771103896103,
-        "y": 0.7130073051948045
+        "x": 3.8216671094453303,
+        "y": 5.1352703021548765
       },
       "prevControl": {
-        "x": 2.528510551948052,
-        "y": 0.8839488636363637
+        "x": 4.207250361998998,
+        "y": 5.345200066102097
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral Station - Processor Side"
+      "linkedName": "Reef - KL"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "6 Processor Side - 3 Coral (Far) & 2 Algae - L4",
+  "folder": "5 Barge Side - 2 Coral (Far) - L4 + Algae Remove",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }
