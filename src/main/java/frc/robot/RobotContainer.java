@@ -80,12 +80,12 @@ public class RobotContainer
             (
                 () -> driver.x().getAsBoolean()  // This checks the button state continuously
                     ? forwardStraight
-                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getElevatorSpeedFactor(s_elevator.getHeight()))   // Robot-centric forward/backward
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getElevatorSpeedFactor(s_elevator.getHeight()))   // Robot-centric strafe left/right
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getHeight(), s_climber.isClimbEnabled()))   // Robot-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getHeight(), s_climber.isClimbEnabled()))   // Robot-centric strafe left/right
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Robot-centric rotation
                     : drive
-                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getElevatorSpeedFactor(s_elevator.getHeight()))   // Field-centric forward/backward
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getElevatorSpeedFactor(s_elevator.getHeight()))   // Field-centric strafe left/right
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getHeight(), s_climber.isClimbEnabled()))   // Field-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getHeight(), s_climber.isClimbEnabled()))   // Field-centric strafe left/right
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Field-centric rotation
             )
         );
@@ -173,6 +173,8 @@ public class RobotContainer
         operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Stow)));
         operator.button(Constants.Button.H).whileTrue(new RunCommand(() -> s_elevator.GoToPreset()));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
+        operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.handoffHeight)));
+
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// TEST CONTROLLER

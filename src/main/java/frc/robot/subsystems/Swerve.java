@@ -222,13 +222,17 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         return onTheFlyDestination;
     }
     
-    public double getElevatorSpeedFactor(double elevatorHeight) 
+    public double getSpeedFactor(double elevatorHeight, boolean climbEnabled) 
     {
-        if (elevatorHeight > Constants.Elevator.HeightPresets.handoffHeight + .5) // 0.5 inch saftety
+        if (elevatorHeight > Constants.Elevator.HeightPresets.handoffHeight + .5) // 0.5 inch saftety   // If height is above handoff height, drive at 1/2 speed
         {
             speedFactor = .5;
         }
-        else
+        else if(climbEnabled) // If climb is enabled, drive at 1/2 speed
+        {
+            speedFactor = .5;
+        }
+        else    // If climber is not enabled and height is at or below handoff height, drive at full speed
         {
             speedFactor = 1;
         }
@@ -342,9 +346,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(.64, 0, 0),   // 18, 0, .5
+                    new PIDConstants(10, 0, 0),    // .64, 0, 0 -3/6/25 IF THIS DOES NOT WORK, TRY REMOVING SYSID VALUES FROM TUNER CONSTANTS?
                     // PID constants for rotation
-                    new PIDConstants(25, 0, 0)   // P was 7   // was .001
+                    new PIDConstants(7, 0, 0)      // 25, 0, 0 -3/6/25  IF THIS DOES NOT WORK, TRY REMOVING SYSID VALUES FROM TUNER CONSTANTS?
                 ),
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case
