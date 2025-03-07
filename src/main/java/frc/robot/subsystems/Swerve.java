@@ -177,7 +177,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         // Return true if within tolerance
         return Math.abs(targetAngle - currentAngle) <= rotationTolerance;
     }
-    
 
     public void setDestination(Pose2d destination)
     {
@@ -230,7 +229,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         }
         else if(climbEnabled) // If climb is enabled, drive at 1/2 speed
         {
-            speedFactor = .5;
+            speedFactor = .2;
         }
         else    // If climber is not enabled and height is at or below handoff height, drive at full speed
         {
@@ -346,9 +345,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(10, 0, 0),    // .64, 0, 0 -3/6/25 IF THIS DOES NOT WORK, TRY REMOVING SYSID VALUES FROM TUNER CONSTANTS?
+                    new PIDConstants(5, 0, 0),    // .64, 0, 0 -3/6/25  // CT: 5, 0, 0
                     // PID constants for rotation
-                    new PIDConstants(7, 0, 0)      // 25, 0, 0 -3/6/25  IF THIS DOES NOT WORK, TRY REMOVING SYSID VALUES FROM TUNER CONSTANTS?
+                    new PIDConstants(5, 0, 0)      // 25, 0, 0 -3/6/25  // CT: 5, 0, 0
                 ),
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case

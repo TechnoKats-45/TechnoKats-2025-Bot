@@ -43,8 +43,9 @@ public class AutoScoreWithDeadline extends Command
 
     public boolean isFinished()
     {
-        //return false;
+        return false;
 
+        /*
         if(!isBarge)// If Scoring Coral
         {
             return !s_carriage.isCoralDetected();
@@ -53,7 +54,7 @@ public class AutoScoreWithDeadline extends Command
         {
             return !s_carriage.isAlgaeDetected();
         }
-
+        */
     }
 
     public void end(boolean interrupted)

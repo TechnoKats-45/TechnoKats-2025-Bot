@@ -23,22 +23,24 @@ public class TunerConstants {
 
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-    private static final Slot0Configs steerGains = new Slot0Configs()   // TODO - TUNE - IF THIS DOES NOT WORK, TRY REMOVING SYSID VALUES?
-        .withKP(100)     // 10 -3/6/25
+    private static final Slot0Configs steerGains = new Slot0Configs()   // Values from SYSID
+        .withKP(1)
         .withKI(0)
         .withKD(0.5)
-        .withKS(0.1)    // 0.1 -3/6/25
-        .withKV(1.91)   // 2.66 -3/6/25
-        .withKA(0)
+        .withKS(0.42342)
+        .withKV(1.7908)
+        .withKA(0.063403)
         .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-    private static final Slot0Configs driveGains = new Slot0Configs()   // TODO - TUNE - IF THIS DOES NOT WORK, TRY REMOVING SYSID VALUES?
-        .withKP(.1)     // 15 -3/6/25
+    private static final Slot0Configs driveGains = new Slot0Configs()   // Values from
+        .withKP(0.1)
         .withKI(0)
         .withKD(0)
-        .withKS(0)
-        .withKV(0.124); // 0.124 -3/6/25
+        .withKS(0.14113)
+        .withKV(0.12143)
+        .withKA(0.011019);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -81,15 +83,15 @@ public class TunerConstants {
 
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(7.84);  // TODO
+    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(7.84);
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
-    private static final double kCoupleRatio = 3.5714285714285716;  // TODO
+    private static final double kCoupleRatio = 3.5714285714285716;
 
-    private static final double kDriveGearRatio = 8.142857142857142;    // TODO - CHECK THIS
-    private static final double kSteerGearRatio = 21.428571428571427;   // TODO - CHECK THIS
-    private static final Distance kWheelRadius = Meters.of((3.82 / 2) * 0.0254);;  // TODO - CHECK THIS
+    private static final double kDriveGearRatio = 8.142857142857142;
+    private static final double kSteerGearRatio = 21.428571428571427;
+    private static final Distance kWheelRadius = Meters.of((3.943 / 2) * 0.0254);
 
     private static final boolean kInvertLeftSide = false;
     private static final boolean kInvertRightSide = true;
