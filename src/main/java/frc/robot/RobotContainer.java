@@ -311,12 +311,19 @@ public class RobotContainer
 
         NamedCommands.registerCommand
         (
-            "CleanAlgae",
+            "CleanAlgaeA1",
             new SequentialCommandGroup
             (
-                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4), s_elevator),
-                new GoToHeightPreset(s_elevator, s_carriage),
-                new AutoClean(s_carriage, s_elevator)
+                new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.HeightPresets.A1)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "CleanAlgaeA2",
+            new SequentialCommandGroup
+            (
+                new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.HeightPresets.A2)
             )
         );
 
