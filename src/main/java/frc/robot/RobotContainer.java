@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.generated.TunerConstants;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
-
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -134,9 +133,11 @@ public class RobotContainer
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
+
+        driver.a().whileTrue(new LastMileAlignment(s_swerve));  // TODO - Test if this works - this is the last mile alignment w/o pose, just April Tag Alignment, and dead reckoning.
         
-        //driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
-        //driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));                  // Back Button - Set Pose to LL
+        driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
+        driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));                  // Back Button - Set Pose to LL
         //driver.leftBumper().whileTrue(new AutoClean(s_carriage, s_elevator));               // Left Bumper - Clean Coral
         
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -190,10 +191,10 @@ public class RobotContainer
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-            driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
-            driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
-            driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
-            driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
+            //driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
+            //driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
+            //driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
+            //driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
 
             s_swerve.registerTelemetry(logger::telemeterize);           
     }

@@ -329,21 +329,25 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         SmartDashboard.putData("Field", field);
     }
 
-        private void configureAutoBuilder() 
+    private void configureAutoBuilder() 
+    {
+        try 
         {
-        try {
             var config = RobotConfig.fromGUISettings();
-            AutoBuilder.configure(
+            AutoBuilder.configure
+            (
                 () -> getState().Pose,   // Supplier of current robot pose
                 this::resetPose,         // Consumer for seeding pose against auto
                 () -> getState().Speeds, // Supplier of current robot speeds
                 // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                (speeds, feedforwards) -> setControl(
+                (speeds, feedforwards) -> setControl
+                (
                     m_pathApplyRobotSpeeds.withSpeeds(speeds)
                         .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                         .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
                 ),
-                new PPHolonomicDriveController(
+                new PPHolonomicDriveController
+                (
                     // PID constants for translation
                     new PIDConstants(5, 0, 0),    // .64, 0, 0 -3/6/25  // CT: 5, 0, 0
                     // PID constants for rotation
@@ -354,7 +358,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this // Subsystem for requirements
             );
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) 
+        {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
     }
@@ -446,7 +452,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      * @param timestampSeconds The timestamp of the vision measurement in seconds.
      */
     @Override
-    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds)
+    {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
