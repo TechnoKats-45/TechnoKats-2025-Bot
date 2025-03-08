@@ -21,12 +21,12 @@ public class CoralIntake extends Command
         
         addRequirements(s_carriage, s_elevator);    // Elevator NEEDED - trust me bro
 
-        s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight); // TODO
+        s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle); // TODO
     }
 
     public void execute()
     {
-        s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight); // TODO
+        s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle); // TODO
 
         if (!s_carriage.isCoralDetected() && !coralHasBeenSeen) // no coral, never been seen = passive intake
         {

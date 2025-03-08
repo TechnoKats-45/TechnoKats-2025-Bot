@@ -3,14 +3,21 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Volts;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Second;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,7 +42,6 @@ public class Carriage extends SubsystemBase
 
     // PID Declarations
     private final VelocityVoltage coral_velocity = new VelocityVoltage(0);
-    private final VelocityVoltage algae_velocity = new VelocityVoltage(0);
     private final PositionTorqueCurrentFOC algae_angle = new PositionTorqueCurrentFOC(0);
     
     public Carriage()
@@ -46,11 +52,12 @@ public class Carriage extends SubsystemBase
 
         algaeMotor = new TalonFX(algaeMotorID);
         algaeAngleMotor = new TalonFX(algaeAngleMotorID);
+        algaeAngleMotor.setNeutralMode(NeutralModeValue.Brake);
+
         algaeCANdi = new CANdi(algaeCANdiID);
 
         configCoralMotor();
-        //configAlgaeMotor();
-        //configAlgaeAngleMotor();
+        configAlgaeAngleMotor();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -59,14 +66,15 @@ public class Carriage extends SubsystemBase
 
     public double getAlgaeAngle()
     {
-        algaeAngle = algaeCANdi.getPWM1Position().getValueAsDouble();   // Get the angle of the algae (-16384.0 to 16383.999755859375)
-        algaeAngle = ((algaeAngle % 360) + 360) % 360;  // Normalize the angle to the range [0, 360)
+        algaeAngle = algaeAngleMotor.getPosition().getValueAsDouble();
+        algaeAngle = algaeAngle * 200;
+
         return algaeAngle;
     }
 
     public void setAlgaeAngle(double angle)
     {
-        algaeAngleMotor.setControl(algae_angle.withPosition(angle/360));
+        algaeAngleMotor.setControl(algae_angle.withPosition(angle));
     }
 
     public boolean isAlgaeAngleAligned()
@@ -81,7 +89,7 @@ public class Carriage extends SubsystemBase
 
     public void setAlgaeSpeed(double speed)
     {
-        algaeMotor.setControl(algae_velocity.withVelocity(speed));
+        //algaeMotor.setControl(algae_velocity.withVelocity(speed));
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -102,7 +110,7 @@ public class Carriage extends SubsystemBase
 
     public void setCoralSpeed(double speed, Elevator s_elevator)
     {
-        if (s_elevator.getHeightPreset() == Constants.Elevator.HeightPresets.L4)
+        if (s_elevator.getAnglePreset() == Constants.Elevator.AnglePresets.L4)
         {
             speed = Constants.Carriage.autoCoralScoreSpeed;
         }
@@ -149,46 +157,31 @@ public class Carriage extends SubsystemBase
 
     public void configAlgaeMotor()
     {
-        TalonFXConfiguration algaeConfigs = new TalonFXConfiguration();
-
-        /* Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor */
-        algaeConfigs.Slot0.kS = 0.1;// TODO - Tune
-        algaeConfigs.Slot0.kV = 0.1;// TODO - Tune
-        algaeConfigs.Slot0.kP = 0.1;// TODO - Tune
-        algaeConfigs.Slot0.kI = 0;// TODO - Tune
-        algaeConfigs.Slot0.kD = 0;// TODO - Tune
         
-        // Peak output of 8 volts
-        algaeConfigs.Voltage.withPeakForwardVoltage(Volts.of(8))
-            .withPeakReverseVoltage(Volts.of(-8));
-
-        /* Retry config apply up to 5 times, report if failure */
-        StatusCode status = StatusCode.StatusCodeNotInitialized;
-        for (int i = 0; i < 5; ++i) 
-        {
-            status = algaeMotor.getConfigurator().apply(algaeConfigs);
-            if (status.isOK()) break;
-        }
-        if (!status.isOK()) 
-        {
-            System.out.println("Could not apply configs, error code: " + status.toString());
-        }
     }
 
     public void configAlgaeAngleMotor()
     {
         TalonFXConfiguration algaeAngleMotorConfigs = new TalonFXConfiguration();
-        algaeAngleMotorConfigs.Slot0.kP = 0;// TODO - Tune
+
+        FeedbackConfigs fdb = algaeAngleMotorConfigs.Feedback;
+        fdb.SensorToMechanismRatio = 14/39;
+        fdb.RotorToSensorRatio = 1;
+
+        MotionMagicConfigs mm = algaeAngleMotorConfigs.MotionMagic;
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))    // 100
+            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(1))    // 10
+            .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10));  // 100
+
+        algaeAngleMotorConfigs.Slot0.kP = 10;// TODO - Tune
         algaeAngleMotorConfigs.Slot0.kI = 0;// TODO - Tune
         algaeAngleMotorConfigs.Slot0.kD = 0;// TODO - Tune
         
+        algaeAngleMotorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
         // Peak output of 120 A
         algaeAngleMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(120))
             .withPeakReverseTorqueCurrent(Amps.of(-120));
-
-            algaeAngleMotorConfigs.Feedback = new FeedbackConfigs()
-                .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANdiPWM1)
-                .withFeedbackRemoteSensorID(algaeCANdiID);
 
         /* Retry config apply up to 5 times, report if failure */
         StatusCode status = StatusCode.StatusCodeNotInitialized;

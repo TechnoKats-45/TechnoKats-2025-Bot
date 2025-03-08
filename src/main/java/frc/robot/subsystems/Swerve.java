@@ -223,7 +223,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     
     public double getSpeedFactor(double elevatorHeight, boolean climbEnabled) 
     {
-        if (elevatorHeight > Constants.Elevator.HeightPresets.handoffHeight + .5) // 0.5 inch saftety   // If height is above handoff height, drive at 1/2 speed
+        if (elevatorHeight > Constants.Elevator.AnglePresets.handoffAngle + .5) // 0.5 inch saftety   // If height is above handoff height, drive at 1/2 speed
         {
             speedFactor = .5;
         }
@@ -349,7 +349,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
                 new PPHolonomicDriveController
                 (
                     // PID constants for translation
-                    new PIDConstants(5, 0, 0),    // .64, 0, 0 -3/6/25  // CT: 5, 0, 0
+                    new PIDConstants(10, 0, 0),    // .64, 0, 0 -3/6/25  // CT: 5, 0, 0
                     // PID constants for rotation
                     new PIDConstants(5, 0, 0)      // 25, 0, 0 -3/6/25  // CT: 5, 0, 0
                 ),

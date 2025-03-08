@@ -9,7 +9,9 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.core.CoreCANdi;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -19,25 +21,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.Constants.Elevator.AnglePresets;
 
 public class Elevator extends SubsystemBase 
 {
     private TalonFX elevatorMotor1;
     
     // This preset is now in degrees.
-    double currentHeightPreset;
+    double currentAnglePreset;
 
     // Using CANdi for diagnostics (optional)
+    private CoreCANdi elevatorCANdi;
 
     // PID control on angle (in degrees)
     private final MotionMagicVoltage motionMagicControl = new MotionMagicVoltage(0);
-
 
     public Elevator() 
     {
         // Initialize motors and sensors
         elevatorMotor1 = new TalonFX(Constants.Elevator.elevatorMotor1ID);
         elevatorMotor1.setNeutralMode(NeutralModeValue.Brake);
+        elevatorCANdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
         configElevator();
     }
@@ -47,53 +51,12 @@ public class Elevator extends SubsystemBase
     */
     public boolean isAligned() 
     {
-        return Math.abs(getHeight() - currentHeightPreset) <= Constants.Elevator.elevatorHeightTolerance;
-    }
-
-    private double getHeightFromAngle(double angle) 
-    {
-        double minAngle = 8.01;
-        double maxAngle = 19.0;
-        double minHeight = 8.0;
-        double maxHeight = 79.0;
-        double height = minHeight + (angle - minAngle) * (maxHeight - minHeight) / (maxAngle - minAngle);
-        return height;
-    }
-
-    private double getAngleFromHeight(double height) 
-    {
-        double minAngle = 8.01;
-        double maxAngle = 19.0;
-        double minHeight = 8.0;
-        double maxHeight = 79.0;
-        double angle = minAngle + (height - minHeight) * (maxAngle - minAngle) / (maxHeight - minHeight);
-        return angle;
-    }
-
-    public double getHeight()
-    {
-        return(getHeightFromAngle(getAngle()));
-    }
-    
-    public void setHeight(double height)
-    {
-        setAngle(getAngleFromHeight(height));
-        SmartDashboard.putNumber("Desired Height", height);
+        return Math.abs(getAngle() - currentAnglePreset) <= Constants.Elevator.elevatorAngleTolerance;
     }
 
     public void GoToPreset()
     {
-        setHeight(currentHeightPreset);
-    }
-
-    public void setHeightPreset(double heightPreset) 
-    {
-        currentHeightPreset = heightPreset;
-    }
-
-    public double getHeightPreset() 
-    {
-        return currentHeightPreset;
+        setAngle(currentAnglePreset);
     }
 
     /**
@@ -101,14 +64,18 @@ public class Elevator extends SubsystemBase
      */
     public void setAngle(double angle) 
     {
-        // Convert desired physical angle to sensor space by adding the sensor offset.
         elevatorMotor1.setControl(motionMagicControl.withPosition(angle));
-        SmartDashboard.putNumber("Desired Angle", angle);   // TODO - comment out
+        SmartDashboard.putNumber("Desired Angle", angle);
     }
 
-    public void setAngle()  // TODO - remove
+    public void setAngle()
     {
-        setAngle(currentHeightPreset);
+        setAngle(currentAnglePreset);
+    }
+
+    public void setAnglePreset(double passedPreset)
+    {
+        currentAnglePreset = passedPreset;
     }
 
     /**
@@ -117,6 +84,11 @@ public class Elevator extends SubsystemBase
     public double getAngle() 
     {
         return elevatorMotor1.getPosition().getValueAsDouble();
+    }
+
+    public double getAnglePreset()
+    {
+        return currentAnglePreset;
     }
 
     public void ManualElevator(CommandXboxController controller) 
@@ -150,7 +122,7 @@ public class Elevator extends SubsystemBase
         */
         FeedbackConfigs fdb = elevatorConfig.Feedback;
         fdb.FeedbackRemoteSensorID = Constants.Elevator.elevatorCANdiID;
-        fdb.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANdiPWM1;
+        fdb.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANdiPWM2;
         fdb.SensorToMechanismRatio = 1/Constants.Elevator.MECHANISM_TO_ENCODER;
         fdb.RotorToSensorRatio = 11.9*12;
 
@@ -158,7 +130,7 @@ public class Elevator extends SubsystemBase
         
         MotionMagicConfigs mm = elevatorConfig.MotionMagic;
         mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(100))    // 100
-            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(45))    // 10
+            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10))    // 10
             .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));  // 100
 
         // PID and feedforward tuning constants
@@ -184,12 +156,11 @@ public class Elevator extends SubsystemBase
     
     public void printDiagnostics() 
     {
-        SmartDashboard.putNumber("Current Preset Angle", currentHeightPreset);
-        SmartDashboard.putNumber("Stashed Value", getHeightPreset());
         SmartDashboard.putBoolean("Elevator Aligned", isAligned());
         SmartDashboard.putNumber("CANDdi from TALON Angle", elevatorMotor1.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Height", getHeight());
-        SmartDashboard.putNumber("Elevator Current", elevatorMotor1.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator Angle", getAngle());
+        SmartDashboard.putNumber("Raw Encoder Angle", elevatorCANdi.getPWM2Position().getValueAsDouble());
+        SmartDashboard.putNumber("Current Angle Preset", currentAnglePreset);
     }
 
     // SYS ID Stuff (Manual)

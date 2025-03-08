@@ -37,6 +37,7 @@ public class LastMileAlignment extends Command
     @Override
     public void execute() 
     {
+        System.out.println("Last Mile Alignment");
         // Get AprilTag position from Limelight
         LimelightHelpers.PoseEstimate llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         

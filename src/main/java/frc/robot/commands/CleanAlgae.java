@@ -10,18 +10,18 @@ public class CleanAlgae extends Command
 {
     private Carriage s_carriage;
     private Elevator s_elevator; 
-    private double height;   
+    private double angle;   
     private boolean intookSuccessfully;
 
-    public CleanAlgae(Carriage s_carriage, Elevator s_elevator, double height)
+    public CleanAlgae(Carriage s_carriage, Elevator s_elevator, double angle)
     {
         this.s_carriage = s_carriage;
         this.s_elevator = s_elevator;
-        this.height = height;
+        this.angle = angle;
 
         addRequirements(s_carriage, s_elevator);
 
-        s_elevator.setHeight(height);
+        s_elevator.setAngle(angle);
 
         intookSuccessfully = false;
     }
@@ -30,7 +30,7 @@ public class CleanAlgae extends Command
     {
         if(!s_elevator.isAligned()) // If elevator is not aligned, wait until it is
         {
-            s_elevator.setHeight(height);   // Set to either A1 or A2
+            s_elevator.setAngle(angle);   // Set to either A1 or A2
         }
         else if (s_elevator.isAligned() && !s_carriage.isAlgaeAngleAligned())   // If elevator is aligned, but algae mech is not deploted
         {
@@ -46,7 +46,7 @@ public class CleanAlgae extends Command
             s_carriage.setAlgaeSpeed(0);                                  // Stop spinning intake wheels
             s_carriage.setAlgaeAngle(Constants.Carriage.algaeStowAngle);        // Stow algae mech
             new WaitCommand(.5);                                        // Wait for algae mech to stow before going down
-            s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight);    // Lower elevator to handoff height
+            s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle);    // Lower elevator to handoff height
             intookSuccessfully = true;
         }
     }

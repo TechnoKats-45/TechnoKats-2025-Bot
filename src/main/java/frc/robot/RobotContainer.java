@@ -81,12 +81,12 @@ public class RobotContainer
             (
                 () -> driver.x().getAsBoolean()  // This checks the button state continuously
                     ? forwardStraight
-                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getHeight(), s_climber.isClimbEnabled()))   // Robot-centric forward/backward
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getHeight(), s_climber.isClimbEnabled()))   // Robot-centric strafe left/right
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled()))   // Robot-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled()))   // Robot-centric strafe left/right
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Robot-centric rotation
                     : drive
-                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getHeight(), s_climber.isClimbEnabled()))   // Field-centric forward/backward
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getHeight(), s_climber.isClimbEnabled()))   // Field-centric strafe left/right
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled()))   // Field-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled()))   // Field-centric strafe left/right
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Field-centric rotation
             )
         );
@@ -100,6 +100,14 @@ public class RobotContainer
         (
             new ManualClimber(s_climber, testController, driver)
         );
+
+        /*
+        s_elevator.setDefaultCommand
+        (
+            // Elevator will execute this command periodically  // TODO - Comment out when tuned / tested
+            new ManualElevator(s_elevator, testController)
+        );
+        */
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// TEST CONTROLS
@@ -129,29 +137,32 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
-        driver.leftTrigger().whileTrue(new GoToHeightPreset(s_elevator, s_carriage));       // Go to selected preset
+        driver.leftTrigger().whileTrue(new GoToAnglePreset(s_elevator, s_carriage));       // Go to selected preset
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
 
-        driver.a().whileTrue(new LastMileAlignment(s_swerve));  // TODO - Test if this works - this is the last mile alignment w/o pose, just April Tag Alignment, and dead reckoning.
+        //driver.a().whileTrue(new LastMileAlignment(s_swerve));  // TODO - Test if this works - this is the last mile alignment w/o pose, just April Tag Alignment, and dead reckoning.
         
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
         driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));                  // Back Button - Set Pose to LL
+        //driver.povLeft().onTrue(s_carriage.runOnce(() -> s_carriage.setAlgaeAngle(0)));
+        //driver.povRight().onTrue(s_carriage.runOnce(() -> s_carriage.setAlgaeAngle(100)));
+
         //driver.leftBumper().whileTrue(new AutoClean(s_carriage, s_elevator));               // Left Bumper - Clean Coral
         
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR BUTTON BOARD CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         
-        operator.button(Constants.Button.height.L1).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1)));
-        operator.button(Constants.Button.height.L2).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L2)));
-        operator.button(Constants.Button.height.L3).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L3)));
-        operator.button(Constants.Button.height.L4).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4)));
-        operator.button(Constants.Button.height.Barge).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Barge)));
+        operator.button(Constants.Button.height.L1).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L1)));
+        operator.button(Constants.Button.height.L2).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L2)));
+        operator.button(Constants.Button.height.L3).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L3)));
+        operator.button(Constants.Button.height.L4).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L4)));
+        operator.button(Constants.Button.height.Barge).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Barge)));
 
-        operator.button(Constants.Button.height.A1).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.A1)));
-        operator.button(Constants.Button.height.A2).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.A2)));
+        operator.button(Constants.Button.height.A1).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.A1)));
+        operator.button(Constants.Button.height.A2).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.A2)));
 
         operator.button(Constants.Button.location.A).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.A)));
         operator.button(Constants.Button.location.B).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.B)));
@@ -173,10 +184,10 @@ public class RobotContainer
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
         operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
-        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.Stow)));
+        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Stow)));
         operator.button(Constants.Button.H).whileTrue(new RunCommand(() -> s_elevator.GoToPreset()));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
-        operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.handoffHeight)));
+        operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.handoffAngle)));
 
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -223,7 +234,7 @@ public class RobotContainer
             "CoralStationIntake",
             new SequentialCommandGroup
             (
-                new InstantCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.handoffHeight), s_elevator),
+                new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle), s_elevator),
                 new CoralIntake(s_carriage, s_elevator)
             )
         );
@@ -233,8 +244,8 @@ public class RobotContainer
             "ScoreL1",
             new SequentialCommandGroup
             (
-                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L1), s_elevator),
-                new GoToHeightPreset(s_elevator, s_carriage),
+                new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L1), s_elevator),
+                new GoToAnglePreset(s_elevator, s_carriage),
                 new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
@@ -249,8 +260,8 @@ public class RobotContainer
             "ScoreL2",
             new SequentialCommandGroup
             (
-                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L2), s_elevator),
-                new GoToHeightPreset(s_elevator, s_carriage),
+                new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L2), s_elevator),
+                new GoToAnglePreset(s_elevator, s_carriage),
                 new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
@@ -265,8 +276,8 @@ public class RobotContainer
             "ScoreL3",
             new SequentialCommandGroup
             (
-                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L3), s_elevator),
-                new GoToHeightPreset(s_elevator, s_carriage),
+                new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L3), s_elevator),
+                new GoToAnglePreset(s_elevator, s_carriage),
                 new WaitCommand(.1),
 
                 new ParallelDeadlineGroup
@@ -282,8 +293,8 @@ public class RobotContainer
             "ScoreL4",
             new SequentialCommandGroup
             (
-                new InstantCommand(() -> s_elevator.setHeightPreset(Constants.Elevator.HeightPresets.L4), s_elevator),
-                new GoToHeightPreset(s_elevator, s_carriage),
+                new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L4), s_elevator),
+                new GoToAnglePreset(s_elevator, s_carriage),
                 new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
@@ -298,8 +309,8 @@ public class RobotContainer
             "ScoreBarge",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setHeight(Constants.Elevator.HeightPresets.Barge), s_elevator),
-                new GoToHeightPreset(s_elevator, s_carriage),
+                new RunCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator),
+                new GoToAnglePreset(s_elevator, s_carriage),
                 new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
@@ -314,7 +325,7 @@ public class RobotContainer
             "CleanAlgaeA1",
             new SequentialCommandGroup
             (
-                new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.HeightPresets.A1)
+                new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A1)
             )
         );
 
@@ -323,7 +334,7 @@ public class RobotContainer
             "CleanAlgaeA2",
             new SequentialCommandGroup
             (
-                new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.HeightPresets.A2)
+                new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A2)
             )
         );
 

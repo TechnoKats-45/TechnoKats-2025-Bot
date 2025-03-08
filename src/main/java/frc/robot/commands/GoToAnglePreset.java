@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Elevator;
 
-public class GoToHeightPreset extends Command
+public class GoToAnglePreset extends Command
 {
     private Elevator s_elevator;    
 
-    public GoToHeightPreset(Elevator s_elevator, Carriage s_carriage)
+    public GoToAnglePreset(Elevator s_elevator, Carriage s_carriage)
     {
         this.s_elevator = s_elevator;
 
@@ -18,9 +18,9 @@ public class GoToHeightPreset extends Command
 
     public void execute()
     {
-        double currentPreset = s_elevator.getHeightPreset();
+        double currentPreset = s_elevator.getAnglePreset();
         
-        s_elevator.setHeight(currentPreset);
+        s_elevator.setAngle(currentPreset);
     }
 
     public boolean isFinished()

@@ -110,39 +110,26 @@ public class Constants
     public static final int elevatorMotor1ID = 7;
     public static final int elevatorMotor2ID = 8;
     public static final int elevatorCANdiID = 9;
-    
-    public static final double elevatorHeightTolerance = 0.5; // adjust as needed
 
-    // If your sensor's “zero” (i.e. its output when the elevator is at your desired physical zero)
-    // is not actually 0°, then set this offset (in degrees) accordingly.
-    public static final double SENSOR_ZERO_OFFSET = 0; // For example, set to 5.0 if needed.
+    public static final int elevatorAngleTolerance = 1;
     
-        public static final double maxAngle = 287.35546875; // at max height
-        public static final double maxHeight = 77.0;
-        public static final double minHeight = 8.0;
-    
-        public static final double DRUM_DIAMETER = 1;
-        
-        // Calculate the circumference (in inches)
-        public static final double CIRCUMFERENCE = Math.PI * Constants.Elevator.DRUM_DIAMETER;
-    
-        public static final class HeightPresets // TODO
+        public static final class AnglePresets // TODO
         {
-            public static final double L1 = 28;     // was 30
-            public static final double L2 = 35;  // was 37.75
-            public static final double L3 = 49;
-            public static final double L4 = 68;
-            public static final double Barge = 70;
-            public static final double A1 = 31;
+            public static final double L1 = 4;
+            public static final double L2 = 6;  // 6 works
+            public static final double L3 = 8;  
+            public static final double L4 = 10.3;
+            public static final double Barge = 10.4;
+            public static final double A1 = 0;
 
-            public static final double A2 = 49;
+            public static final double A2 = 0;
     
-            public static final double handoffHeight = 23;
+            public static final double handoffAngle = 3.5;  // GOOD!
 
-            public static final double Stow = 12;
+            public static final double Stow = 1.5;
 
-            public static final double algaeCleanStartHeight = 68;  // TODO - Tune
-            public static final double algaeCleanEndHeight = 23;  // TODO - Tune
+            public static final double algaeCleanStartHeight = 0;
+            public static final double algaeCleanEndHeight = 0;
         }
     }
     
