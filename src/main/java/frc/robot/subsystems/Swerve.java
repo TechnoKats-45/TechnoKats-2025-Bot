@@ -49,6 +49,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private Pose2d onTheFlyDestination = new Pose2d();
     private final Field2d field = new Field2d();
 
+    Matrix<N3, N1> lowStdev = new Matrix<>(N3.instance, N1.instance);
+
     private double speedFactor;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
@@ -238,6 +240,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         return speedFactor;
     }
     
+    /*
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>
@@ -247,7 +250,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      *
      * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
      * @param modules               Constants for each specific module
-     */
+     *
     public Swerve
     (
         SwerveDrivetrainConstants drivetrainConstants,
@@ -261,7 +264,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         }
         configureAutoBuilder();
     }
+    */
 
+    /*
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>
@@ -274,7 +279,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
      *                                unspecified or set to 0 Hz, this is 250 Hz on
      *                                CAN FD, and 100 Hz on CAN 2.0.
      * @param modules                 Constants for each specific module
-     */
+     *
     public Swerve
     (
         SwerveDrivetrainConstants drivetrainConstants,
@@ -289,6 +294,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         }
         configureAutoBuilder();
     }
+    */
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -540,16 +546,18 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     {
         double omegaRPS = Units.radiansToRotations(getState().Speeds.omegaRadiansPerSecond);
         double headingDeg = getState().Pose.getRotation().getDegrees();
-        SmartDashboard.putNumber("HEADING", headingDeg);
         
+        lowStdev.set(0, 0, 0.5); // X standard deviation (meters)
+        lowStdev.set(1, 0, 0.5); // Y standard deviation (meters)
+        lowStdev.set(2, 0, 1); // Theta standard deviation (radians)
+
         LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
         llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
-        if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRPS < 2.0) 
+        if (llMeasurement != null && llMeasurement.tagCount > 0)  // omegaRPS < 2.0
         { 
-            System.out.println(llMeasurement.pose);
-            
-            addVisionMeasurement(llMeasurement.pose, Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
+            //System.out.println(llMeasurement.pose);
+            addVisionMeasurement(llMeasurement.pose, Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds), lowStdev);
         }
     }
 }

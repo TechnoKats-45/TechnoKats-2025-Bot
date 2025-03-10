@@ -6,19 +6,21 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.LimelightHelpers;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 
 public class LastMileAlignment extends Command 
 {
     private final Swerve swerve;
-    private static final double TARGET_DISTANCE_METERS = Units.feetToMeters(2.0);
-    private static final double FINAL_FORWARD_DISTANCE_METERS = Units.feetToMeters(2.0);
-    private static final double ALIGNMENT_TOLERANCE_METERS = 0.05;
-    private static final double ALIGNMENT_SPEED = 0.3;
-    private static final double ROTATION_TOLERANCE_DEGREES = 5.0;
-    private static final double LATERAL_SHIFT_METERS = Units.feetToMeters(11.337687) / 2.0;
+    private static final double TARGET_DISTANCE_METERS = Units.feetToMeters(2.0);  // Align at 2 feet from tag
+    private static final double FINAL_FORWARD_DISTANCE_METERS = Units.feetToMeters(2.0); // Move forward 2 feet
+    private static final double ALIGNMENT_TOLERANCE_METERS = 0.05; // Tolerance for distance
+    private static final double ALIGNMENT_SPEED = 0.3; // Speed when aligning
+    private static final double ROTATION_TOLERANCE_DEGREES = 5.0; // Rotation tolerance
+    private static final double LATERAL_SHIFT_METERS = Units.feetToMeters(12.937677) / 2.0; // Hardcoded lateral offset
 
-    private boolean moveLeft = false; // Placeholder, can be set externally
+    private boolean moveRight = true; // Hardcoded to always go right
     private boolean moveForward = false;
+    private boolean lateralShiftComplete = false;
     private Pose2d lastKnownTagPose = null;
 
     public LastMileAlignment(Swerve swerve) 
@@ -32,15 +34,18 @@ public class LastMileAlignment extends Command
     {
         System.out.println("Starting Last Mile Alignment");
         lastKnownTagPose = null;
+        moveForward = false;
+        lateralShiftComplete = false;
     }
 
     @Override
     public void execute() 
     {
-        System.out.println("Last Mile Alignment");
+        System.out.println("Executing Last Mile Alignment...");
+
         // Get AprilTag position from Limelight
         LimelightHelpers.PoseEstimate llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        
+
         if (llMeasurement != null && llMeasurement.tagCount > 0) 
         {
             // Store the last known position of the AprilTag
@@ -52,66 +57,77 @@ public class LastMileAlignment extends Command
             double tagX = lastKnownTagPose.getX();
             double tagY = lastKnownTagPose.getY();
             double tagRotation = lastKnownTagPose.getRotation().getRadians();
-            
-            // Compute distance and angle to the last known tag position
+
+            // Compute distance to the tag
             double distanceToTag = Math.hypot(tagX, tagY);
             double angleToTag = Math.atan2(tagY, tagX);
 
-            // Determine movement speed based on distance
-            double speed = (distanceToTag > TARGET_DISTANCE_METERS + ALIGNMENT_TOLERANCE_METERS) ? ALIGNMENT_SPEED : 0.0;
+            // Compute rotation speed to face the tag
             double rotationSpeed = (Math.abs(tagRotation) > Units.degreesToRadians(ROTATION_TOLERANCE_DEGREES)) ? 0.3 * Math.signum(tagRotation) : 0.0;
-            
-            // If within target distance, prepare to move forward
-            if (distanceToTag <= TARGET_DISTANCE_METERS + ALIGNMENT_TOLERANCE_METERS) 
-            {
-                moveForward = true;
-            }
 
-            // Calculate new position based on alignment relative to the tag
-            double finalX = speed * Math.cos(angleToTag);
-            double finalY = speed * Math.sin(angleToTag);
-            
-            // Move forward the last 2 feet if alignment is complete
-            if (moveForward) 
+            if (!moveForward) 
             {
-                finalX += FINAL_FORWARD_DISTANCE_METERS * Math.cos(tagRotation);
-                finalY += FINAL_FORWARD_DISTANCE_METERS * Math.sin(tagRotation);
-            }
+                // Align perpendicular to the tag
+                double forwardSpeed = (distanceToTag > TARGET_DISTANCE_METERS + ALIGNMENT_TOLERANCE_METERS) ? ALIGNMENT_SPEED : 0.0;
 
-            // Move left or right based on boolean flag
-            if (moveLeft) 
+                if (distanceToTag <= TARGET_DISTANCE_METERS + ALIGNMENT_TOLERANCE_METERS) 
+                {
+                    moveForward = true; // Start moving forward after alignment
+                }
+
+                // Drive toward the target distance
+                SwerveRequest.RobotCentric request = new SwerveRequest.RobotCentric()
+                    .withVelocityX(forwardSpeed * Math.cos(angleToTag))
+                    .withVelocityY(forwardSpeed * Math.sin(angleToTag))
+                    .withRotationalRate(rotationSpeed);
+
+                swerve.setControl(request);
+                System.out.println("Aligning - SpeedX: " + forwardSpeed * Math.cos(angleToTag) + " SpeedY: " + forwardSpeed * Math.sin(angleToTag) + " Rotation: " + rotationSpeed);
+            } 
+            else if (!lateralShiftComplete) 
             {
-                finalX += LATERAL_SHIFT_METERS * Math.cos(tagRotation + Math.PI / 2);
-                finalY += LATERAL_SHIFT_METERS * Math.sin(tagRotation + Math.PI / 2);
+                // Move forward the last 2 feet
+                SwerveRequest.RobotCentric forwardRequest = new SwerveRequest.RobotCentric()
+                    .withVelocityX(FINAL_FORWARD_DISTANCE_METERS) 
+                    .withVelocityY(0)
+                    .withRotationalRate(0);
+
+                swerve.setControl(forwardRequest);
+                System.out.println("Moving Forward");
+
+                lateralShiftComplete = true;
             } 
             else 
             {
-                finalX -= LATERAL_SHIFT_METERS * Math.cos(tagRotation + Math.PI / 2);
-                finalY -= LATERAL_SHIFT_METERS * Math.sin(tagRotation + Math.PI / 2);
-            }
+                // Shift laterally to the right
+                double lateralX = moveRight ? LATERAL_SHIFT_METERS * Math.cos(tagRotation + Math.PI / 2) : -LATERAL_SHIFT_METERS * Math.cos(tagRotation + Math.PI / 2);
+                double lateralY = moveRight ? LATERAL_SHIFT_METERS * Math.sin(tagRotation + Math.PI / 2) : -LATERAL_SHIFT_METERS * Math.sin(tagRotation + Math.PI / 2);
 
-            // Send the calculated position to the swerve drive
-            swerve.driveToPose(new Pose2d
-            (
-                finalX,
-                finalY,
-                new Rotation2d(rotationSpeed)
-            ));
+                SwerveRequest.RobotCentric lateralRequest = new SwerveRequest.RobotCentric()
+                    .withVelocityX(lateralX)
+                    .withVelocityY(lateralY)
+                    .withRotationalRate(0);
+
+                swerve.setControl(lateralRequest);
+                System.out.println("Shifting Right");
+            }
+        }
+        else 
+        {
+            System.out.println("No AprilTag Detected!");
         }
     }
 
     @Override
     public boolean isFinished() 
     {
-        // Stop when the final forward movement is complete
-        return moveForward;
+        return lateralShiftComplete;
     }
 
     @Override
     public void end(boolean interrupted) 
     {
-        // Stop the robot and print completion message
-        //swerve.stop();
-        System.out.println("Last Mile Alignment Completed");
+        swerve.setControl(new SwerveRequest.RobotCentric().withVelocityX(0).withVelocityY(0).withRotationalRate(0)); // Stop
+        System.out.println("Last Mile Alignment Completed. Interrupted? " + interrupted);
     }
 }

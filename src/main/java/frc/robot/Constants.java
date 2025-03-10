@@ -120,16 +120,16 @@ public class Constants
             public static final double L3 = 8;  
             public static final double L4 = 10.3;
             public static final double Barge = 10.4;
-            public static final double A1 = 0;
+            public static final double A1 = 5;
 
-            public static final double A2 = 0;
+            public static final double A2 = 7;
     
             public static final double handoffAngle = 3.5;  // GOOD!
 
             public static final double Stow = 1.5;
 
-            public static final double algaeCleanStartHeight = 0;
-            public static final double algaeCleanEndHeight = 0;
+            public static final double algaeCleanStartHeight = 5;
+            public static final double algaeCleanEndHeight = 5;
         }
     }
     

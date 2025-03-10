@@ -53,6 +53,7 @@ public class PositionAlign extends Command
     @Override
     public boolean isFinished()
     {
+    /*
         if(DriverStation.isTeleop())
         {
             return false;
@@ -66,11 +67,14 @@ public class PositionAlign extends Command
             System.out.println("Error: Not in Teleop or Autonomous = PositionAlign Failed");
             return false;
         }
+    */
+
+        return (s_swerve.isWithinTolerance(1));
     }
     
     @Override
     public void end(boolean interrupted)
     {
-        pathCommand.cancel();
+        s_swerve.driveToPose(targetPose).cancel();
     }
 }

@@ -18,7 +18,7 @@ public class CarriageDefault extends Command
     public void execute()
     {
         s_Carriage.setCoralSpeed(0);
-        //s_Carriage.setAlgaeAngle(0);
+        s_Carriage.setAlgaeAngle(0);
     }
 
     public boolean isFinished()

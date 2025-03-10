@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 
 import frc.robot.subsystems.Swerve;
@@ -212,11 +213,29 @@ public class TunerConstants
      */
     public static Swerve createDrivetrain() 
     {
-        return new Swerve
-        (
-            DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
+        // Define standard deviation matrices for odometry and vision
+        Matrix<N3, N1> odometryStdDev = new Matrix<>(N3.instance, N1.instance);
+        Matrix<N3, N1> visionStdDev = new Matrix<>(N3.instance, N1.instance);
+    
+        // Set odometry standard deviations (default trust in wheels)
+        odometryStdDev.set(0, 0, 0.1);  // X std dev (meters)
+        odometryStdDev.set(1, 0, 0.1);  // Y std dev (meters)
+        odometryStdDev.set(2, 0, Units.degreesToRadians(2.0));  // Theta std dev (radians)
+    
+        // Set vision standard deviations (adjust for more or less vision trust)
+        visionStdDev.set(0, 0, 0.0001);  // X std dev (meters) - Lower = More trust in vision
+        visionStdDev.set(1, 0, 0.0001);  // Y std dev (meters)
+        visionStdDev.set(2, 0, Units.degreesToRadians(1.0));  // Theta std dev (radians)
+    
+        return new Swerve(
+            DrivetrainConstants,
+            0.0,  // Odometry update frequency (0 = default)
+            odometryStdDev,
+            visionStdDev,
+            FrontLeft, FrontRight, BackLeft, BackRight
         );
     }
+    
 
 
     /**

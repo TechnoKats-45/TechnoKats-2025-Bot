@@ -11,6 +11,9 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -93,7 +96,8 @@ public class RobotContainer
     
         s_carriage.setDefaultCommand
         (
-            new CarriageDefault(s_carriage)
+            //new CarriageDefault(s_carriage)
+            new SetAlgaeAngle(s_carriage, driver)
         );
         
         s_climber.setDefaultCommand // TODO - Still need to get set points
@@ -143,13 +147,17 @@ public class RobotContainer
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
 
         //driver.a().whileTrue(new LastMileAlignment(s_swerve));  // TODO - Test if this works - this is the last mile alignment w/o pose, just April Tag Alignment, and dead reckoning.
-        
+        //driver.a().whileTrue(s_swerve.driveToPose(new Pose2d(5.781,4.176,new Rotation2d()))); // THIS WORKS
+        driver.a().whileTrue(new PositionAlign(s_swerve));
+        //driver.a().onFalse(new PositionAlign(s_swerve).cancel());
+
+
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
         driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));                  // Back Button - Set Pose to LL
         //driver.povLeft().onTrue(s_carriage.runOnce(() -> s_carriage.setAlgaeAngle(0)));
         //driver.povRight().onTrue(s_carriage.runOnce(() -> s_carriage.setAlgaeAngle(100)));
 
-        //driver.leftBumper().whileTrue(new AutoClean(s_carriage, s_elevator));               // Left Bumper - Clean Coral
+        driver.leftBumper().whileTrue(new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A2));               // Left Bumper - Clean Coral
         
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR BUTTON BOARD CONTROLS

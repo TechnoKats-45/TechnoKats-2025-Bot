@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Volts;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -18,9 +19,12 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
 public class Carriage extends SubsystemBase
@@ -36,13 +40,12 @@ public class Carriage extends SubsystemBase
 
     private TalonFX coralMotor;
     private TalonFX algaeMotor;
-    private TalonFX algaeAngleMotor;
+    private TalonSRX algaeAngleMotor;
     private CANdi coralCANdi;   // Coral Digital Sensor(s)
     private CANdi algaeCANdi;   // Algae Digital Sensor and Algae Angle Encoder
 
     // PID Declarations
     private final VelocityVoltage coral_velocity = new VelocityVoltage(0);
-    private final PositionTorqueCurrentFOC algae_angle = new PositionTorqueCurrentFOC(0);
     
     public Carriage()
     {
@@ -51,13 +54,9 @@ public class Carriage extends SubsystemBase
         coralCANdi = new CANdi(coralCANdiID);
 
         algaeMotor = new TalonFX(algaeMotorID);
-        algaeAngleMotor = new TalonFX(algaeAngleMotorID);
-        algaeAngleMotor.setNeutralMode(NeutralModeValue.Brake);
+        algaeAngleMotor = new TalonSRX(algaeAngleMotorID);
 
         algaeCANdi = new CANdi(algaeCANdiID);
-
-        configCoralMotor();
-        configAlgaeAngleMotor();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -66,15 +65,29 @@ public class Carriage extends SubsystemBase
 
     public double getAlgaeAngle()
     {
-        algaeAngle = algaeAngleMotor.getPosition().getValueAsDouble();
-        algaeAngle = algaeAngle * 200;
+        algaeAngle = coralCANdi.getPWM1Position().getValueAsDouble();
 
         return algaeAngle;
+    }
+    
+    public void ManualAlgaeAngle(CommandXboxController controller) 
+    {
+        if (controller.povLeft().getAsBoolean()) {  // Down
+            algaeAngleMotor.set(ControlMode.PercentOutput, .25);
+        } 
+        else if (controller.povRight().getAsBoolean())   // Up
+        { // Up
+            algaeAngleMotor.set(ControlMode.PercentOutput, -.5);
+        } 
+        else 
+        {
+            algaeAngleMotor.set(ControlMode.PercentOutput, 0);
+        }
     }
 
     public void setAlgaeAngle(double angle)
     {
-        algaeAngleMotor.setControl(algae_angle.withPosition(angle));
+            // TODO - Remove this
     }
 
     public boolean isAlgaeAngleAligned()
@@ -155,97 +168,10 @@ public class Carriage extends SubsystemBase
         }
     }
 
-    public void configAlgaeMotor()
-    {
-        
-    }
-
-    public void configAlgaeAngleMotor()
-    {
-        TalonFXConfiguration algaeAngleMotorConfigs = new TalonFXConfiguration();
-
-        FeedbackConfigs fdb = algaeAngleMotorConfigs.Feedback;
-        fdb.SensorToMechanismRatio = 14/39;
-        fdb.RotorToSensorRatio = 1;
-
-        MotionMagicConfigs mm = algaeAngleMotorConfigs.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))    // 100
-            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(1))    // 10
-            .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10));  // 100
-
-        algaeAngleMotorConfigs.Slot0.kP = 10;// TODO - Tune
-        algaeAngleMotorConfigs.Slot0.kI = 0;// TODO - Tune
-        algaeAngleMotorConfigs.Slot0.kD = 0;// TODO - Tune
-        
-        algaeAngleMotorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-
-        // Peak output of 120 A
-        algaeAngleMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(120))
-            .withPeakReverseTorqueCurrent(Amps.of(-120));
-
-        /* Retry config apply up to 5 times, report if failure */
-        StatusCode status = StatusCode.StatusCodeNotInitialized;
-        for (int i = 0; i < 5; ++i) 
-        {
-            status = algaeAngleMotor.getConfigurator().apply(algaeAngleMotorConfigs);
-            if (status.isOK()) break;
-        }
-        if (!status.isOK()) 
-        {
-            System.out.println("Could not apply configs, error code: " + status.toString());
-        }
-    
-        /* Make sure we start at 0 */
-        algaeAngleMotor.setPosition(0);
-    }
-
     public void printDiagnostics()
     {
         SmartDashboard.putBoolean("Algae Detecected", isAlgaeDetected());
         SmartDashboard.putBoolean("Coral Detected", isCoralDetected());
         SmartDashboard.putNumber("Algae Intake Angle", getAlgaeAngle());
-    }
-
-    // Custom SYS ID:
-    public void determineKs()   // TODO - Assign to button
-    {
-        determineKsForMotor(coralMotor, "Coral Motor");
-        determineKsForMotor(algaeMotor, "Algae Motor");
-        determineKsForMotor(algaeAngleMotor, "Algae Angle Motor");
-    }
-    
-    private void determineKsForMotor(TalonFX motor, String motorName)   // TODO - Assign to button
-    {
-        double voltage = 0.0;
-        double velocity = 0.0;
-    
-        while (voltage <= 12.0) // Prevent over-volting
-        { 
-            motor.setVoltage(voltage);
-            velocity = motor.getVelocity().getValueAsDouble(); // Assuming this method gets velocity
-    
-            SmartDashboard.putNumber(motorName + " Testing Voltage", voltage);
-            SmartDashboard.putNumber(motorName + " Velocity", velocity);
-    
-            if (Math.abs(velocity) > 0.01)  // Detect motion (adjust threshold if needed)
-            { 
-                System.out.println(motorName + " motion detected at " + voltage + "V");
-                break;
-            }
-    
-            voltage += 0.1;
-            try 
-            {
-                Thread.sleep(500); // Small delay to allow motor to react
-            } 
-            catch (InterruptedException e) 
-            {
-                Thread.currentThread().interrupt();
-            }
-        }
-    
-        motor.setVoltage(0); // Stop the motor
-        System.out.println("Final kS estimate for " + motorName + ": " + voltage);
-    }
-    
+    }    
 }
