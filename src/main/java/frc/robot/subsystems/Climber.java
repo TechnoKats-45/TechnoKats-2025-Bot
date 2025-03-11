@@ -75,7 +75,7 @@ public class Climber extends SubsystemBase
     public void ManualClimber(CommandXboxController controller, CommandXboxController controller2)
     {
         double angle = getAngle();  // Get current climber position
-    
+
         if (controller2.povDown().getAsBoolean() && climbEnabled)   // Moving IN (Stowing)  // 300
         {  
             winchMotor.set(-1);

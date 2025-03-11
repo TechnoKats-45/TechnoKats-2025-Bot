@@ -24,7 +24,7 @@ public class AutoScoreWithDeadline extends Command
 
         if(isBarge)
         {
-            s_carriage.setAlgaeAngle(Constants.Carriage.algaeScoreAngle);
+            s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeScoreAngle);
         }
     }
 
@@ -61,7 +61,7 @@ public class AutoScoreWithDeadline extends Command
     {
         s_carriage.setCoralSpeed(0);
         s_carriage.setAlgaeSpeed(0);
-        s_carriage.setAlgaeAngle(Constants.Carriage.algaeStowAngle);
+        s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeStowAngle);
         s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle);
     }
 }

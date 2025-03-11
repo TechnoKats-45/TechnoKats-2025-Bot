@@ -22,7 +22,7 @@ public class AlgaeIntake extends Command
 
     public void execute()
     {
-        if(!s_carriage.isAlgaeDetected() && s_elevator.isAligned())
+        if(s_elevator.isAligned())  // && !s_carriage.isAlgaeDetected()
         {
             s_carriage.setAlgaeSpeed(Constants.Carriage.algaeCleanSpeed);
         }
@@ -34,7 +34,8 @@ public class AlgaeIntake extends Command
 
     public boolean isFinished()
     {
-        return s_carriage.isAlgaeDetected();
+        //return s_carriage.isAlgaeDetected();
+        return false;
     }
     
 

@@ -96,8 +96,7 @@ public class RobotContainer
     
         s_carriage.setDefaultCommand
         (
-            //new CarriageDefault(s_carriage)
-            new SetAlgaeAngle(s_carriage, driver)
+            new CarriageDefault(s_carriage)
         );
         
         s_climber.setDefaultCommand // TODO - Still need to get set points
@@ -145,19 +144,16 @@ public class RobotContainer
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
+        driver.leftBumper().whileTrue(new CleanAlgae(s_carriage, s_elevator));
+        driver.povLeft().whileTrue(s_carriage.run(() -> s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeStowAngle)));
+        driver.povRight().whileFalse(s_carriage.run(() -> s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeCleanAngle)));
 
         //driver.a().whileTrue(new LastMileAlignment(s_swerve));  // TODO - Test if this works - this is the last mile alignment w/o pose, just April Tag Alignment, and dead reckoning.
         //driver.a().whileTrue(s_swerve.driveToPose(new Pose2d(5.781,4.176,new Rotation2d()))); // THIS WORKS
         driver.a().whileTrue(new PositionAlign(s_swerve));
         //driver.a().onFalse(new PositionAlign(s_swerve).cancel());
 
-
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
-        driver.back().onTrue(s_swerve.runOnce(() -> s_swerve.poseToLL()));                  // Back Button - Set Pose to LL
-        //driver.povLeft().onTrue(s_carriage.runOnce(() -> s_carriage.setAlgaeAngle(0)));
-        //driver.povRight().onTrue(s_carriage.runOnce(() -> s_carriage.setAlgaeAngle(100)));
-
-        driver.leftBumper().whileTrue(new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A2));               // Left Bumper - Clean Coral
         
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR BUTTON BOARD CONTROLS
@@ -170,7 +166,9 @@ public class RobotContainer
         operator.button(Constants.Button.height.Barge).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Barge)));
 
         operator.button(Constants.Button.height.A1).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.A1)));
+        operator.button(Constants.Button.height.A1).onTrue(new InstantCommand(() -> s_carriage.setAnglePreset(Constants.Carriage.AnglePresets.A1)));
         operator.button(Constants.Button.height.A2).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.A2)));
+        operator.button(Constants.Button.height.A2).onTrue(new InstantCommand(() -> s_carriage.setAnglePreset(Constants.Carriage.AnglePresets.A2)));
 
         operator.button(Constants.Button.location.A).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.A)));
         operator.button(Constants.Button.location.B).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.B)));
@@ -333,7 +331,7 @@ public class RobotContainer
             "CleanAlgaeA1",
             new SequentialCommandGroup
             (
-                new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A1)
+                //new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A1)
             )
         );
 
@@ -342,7 +340,7 @@ public class RobotContainer
             "CleanAlgaeA2",
             new SequentialCommandGroup
             (
-                new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A2)
+                //new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A2)
             )
         );
 

@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants;
 import frc.robot.subsystems.Carriage;
 
 public class CarriageDefault extends Command
@@ -18,7 +18,7 @@ public class CarriageDefault extends Command
     public void execute()
     {
         s_Carriage.setCoralSpeed(0);
-        s_Carriage.setAlgaeAngle(0);
+        s_Carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeStowAngle);
     }
 
     public boolean isFinished()
