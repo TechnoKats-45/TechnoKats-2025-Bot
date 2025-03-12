@@ -22,6 +22,7 @@ public class CoralIntake extends Command
         addRequirements(s_carriage, s_elevator);    // Elevator NEEDED - trust me bro
 
         s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle); // TODO
+        s_carriage.setCoralSpeed(Constants.Carriage.coralPassiveIntakeSpeed); // TODO
     }
 
     public void execute()

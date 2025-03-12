@@ -145,8 +145,9 @@ public class RobotContainer
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
         driver.leftBumper().whileTrue(new CleanAlgae(s_carriage, s_elevator));
-        driver.povLeft().whileTrue(s_carriage.run(() -> s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeStowAngle)));
-        driver.povRight().whileFalse(s_carriage.run(() -> s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeCleanAngle)));
+        //driver.povLeft().whileTrue(s_carriage.run(() -> s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeStowAngle)));
+        //driver.povRight().whileFalse(s_carriage.run(() -> s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeCleanAngle)));
+        driver.y().whileTrue(new RunCommand(() -> s_carriage.setAlgaeSpeed(Constants.Carriage.algaeScoreSpeed)));
 
         //driver.a().whileTrue(new LastMileAlignment(s_swerve));  // TODO - Test if this works - this is the last mile alignment w/o pose, just April Tag Alignment, and dead reckoning.
         //driver.a().whileTrue(s_swerve.driveToPose(new Pose2d(5.781,4.176,new Rotation2d()))); // THIS WORKS

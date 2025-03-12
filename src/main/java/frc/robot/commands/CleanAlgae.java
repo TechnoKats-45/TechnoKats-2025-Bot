@@ -28,7 +28,7 @@ public class CleanAlgae extends Command
     public void execute()
     {
         // Check to see if elevator is aligned first?
-        s_carriage.setAlgaeSpeed(Constants.Carriage.algaeCleanSpeed);               // Spin intake wheels// Deploy algae mech
+        s_carriage.setAlgaeSpeed(Constants.Carriage.algaeIntakeSpeed);               // Spin intake wheels// Deploy algae mech
         s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeCleanAngle);  // Deploy algae mech
     }
 

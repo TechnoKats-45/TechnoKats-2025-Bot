@@ -24,7 +24,7 @@ public class AlgaeIntake extends Command
     {
         if(s_elevator.isAligned())  // && !s_carriage.isAlgaeDetected()
         {
-            s_carriage.setAlgaeSpeed(Constants.Carriage.algaeCleanSpeed);
+            s_carriage.setAlgaeSpeed(Constants.Carriage.algaeIntakeSpeed);
         }
         else
         {

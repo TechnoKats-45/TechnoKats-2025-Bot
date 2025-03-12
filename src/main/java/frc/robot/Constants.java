@@ -136,7 +136,7 @@ public class Constants
 
     public static final class Carriage
     {
-        public static final double algaeCleanSpeed = -1;   // TODO - Tune
+        public static final double algaeIntakeSpeed = -1;   // TODO - Tune
         public static final double algaeCleanAngle = 45;    // TODO - Tune
         public static final double algaeCleanTime = 2;      // TODO - Tune
         
@@ -146,7 +146,7 @@ public class Constants
         ////////////////////////////////////////////////////////////////
 
         public static final double coralIntakeSpeed = 45;
-        public static final double coralPassiveIntakeSpeed = -45;
+        public static final double coralPassiveIntakeSpeed = -45;   // -45
         public static final double coralReverseSpeed = 45;
         public static final double coralSlowIntakeSpeed = -30;
         public static final double coralScoreSpeed = -35;
@@ -156,9 +156,10 @@ public class Constants
         {
             public static final double A1 = 1;
             public static final double A2 = 2;
-            public static final double algaeStowAngle = 0.45;    // TODO - Tune
-            public static final double algaeScoreAngle = 1.5;    // TODO - Tune
-            public static final double algaeCleanAngle = 0.25;
+            public static final double algaeStowAngle = -.3;    // TODO - Tune
+            public static final double algaeScoreAngle = -.3;    // TODO - Tune
+            public static final double algaeCleanAngle = -.45;
+            public static final double algaeFloorIntake = -.4;
         }
     }
 }

@@ -65,7 +65,7 @@ public class Carriage extends SubsystemBase
 
         //algaeCANdi = new CANdi(algaeCANdiID);
 
-        //configCoralMotor();
+        configCoralMotor();
         configAlgaeAngle();
     }
 
@@ -150,7 +150,6 @@ public class Carriage extends SubsystemBase
     public void configAlgaeAngle()
     {
         TalonFXConfiguration algaeAngleConfigs = new TalonFXConfiguration();
-
         var limitConfigs = new CurrentLimitsConfigs();
     
         // Enable stator current limit.
@@ -162,12 +161,12 @@ public class Carriage extends SubsystemBase
         fdb.FeedbackRemoteSensorID = coralCANdiID;
         fdb.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANdiPWM1;
         fdb.SensorToMechanismRatio = 1;
-        fdb.RotorToSensorRatio = 14/39;
+        fdb.RotorToSensorRatio = 14.0/39.0;
 
         /* Configure Motion Magic parameters as needed */
         MotionMagicConfigs mm = algaeAngleConfigs.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(1))
-            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(.25))
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3))
+            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(1))
             .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10));
 
         algaeAngleConfigs.Slot0.kS = 0;// TODO - Tune
@@ -175,7 +174,6 @@ public class Carriage extends SubsystemBase
         algaeAngleConfigs.Slot0.kP = 15;// TODO - Tune
         algaeAngleConfigs.Slot0.kI = 0;// TODO - Tune
         algaeAngleConfigs.Slot0.kD = 0;// TODO - Tune
-
 
         algaeAngleConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
