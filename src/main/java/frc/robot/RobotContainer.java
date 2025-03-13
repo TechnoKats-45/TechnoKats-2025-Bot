@@ -60,6 +60,8 @@ public class RobotContainer
 
     private final SendableChooser<Command> autoChooser;
 
+    private boolean atCompetioon = true;    // CHANGE THIS TO EFFECT POSE ON START!!!!
+
     public RobotContainer() 
     {
         registerNamedCommands();
@@ -305,7 +307,7 @@ public class RobotContainer
                 new WaitCommand(.25),
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(1),
+                    new WaitCommand(.75),
                     new AutoScoreWithDeadline(s_carriage, s_elevator, false)
                 )
             )
@@ -345,12 +347,12 @@ public class RobotContainer
             (
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(1),
+                    new WaitCommand(.75),
                     new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator)
                 ),
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(2),
+                    new WaitCommand(1),
                     new AutoScoreWithDeadline(s_carriage, s_elevator, true)
                 )
             )
@@ -372,12 +374,12 @@ public class RobotContainer
             (
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(1),
+                    new WaitCommand(.75),
                     new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.A1), s_elevator)
                 ),
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(2),
+                    new WaitCommand(.75),
                     new CleanAlgae(s_carriage, s_elevator)
                 )
             )
