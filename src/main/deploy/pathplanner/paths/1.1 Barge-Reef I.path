@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.206661184210526,
-        "y": 7.5561677631578945
+        "x": 7.254769736842105,
+        "y": 6.064802631578947
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.120065789473683,
-        "y": 7.084703947368421
+        "x": 7.489244925367344,
+        "y": 6.151528555996353
       },
       "isLocked": false,
       "linkedName": "Barge Start"
     },
     {
       "anchor": {
-        "x": 5.285047231961906,
-        "y": 5.04827583153049
+        "x": 5.330427631578947,
+        "y": 4.842845394736842
       },
       "prevControl": {
-        "x": 5.554455126698748,
-        "y": 5.46200938416207
+        "x": 5.830756578947367,
+        "y": 6.035937499999999
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,12 +31,24 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "GoToL4Height",
+      "waypointRelativePos": 0.6256684491978617,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "GoToL4Height"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 0.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 200.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

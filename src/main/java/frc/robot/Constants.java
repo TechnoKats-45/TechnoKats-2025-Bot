@@ -118,7 +118,7 @@ public class Constants
             public static final double L1 = 3.8;
             public static final double L2 = 5.9;  // 6 works
             public static final double L3 = 7.8;  
-            public static final double L4 = 10.4;   // was 10.3
+            public static final double L4 = 10.3;   // was 10.3
             
             public static final double Barge = 10.4;
             public static final double A1 = 4.2;

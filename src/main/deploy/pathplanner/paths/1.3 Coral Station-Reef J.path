@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.225081168831169,
-        "y": 7.080580357142857
+        "x": 1.2123355263157893,
+        "y": 7.411842105263157
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8216272214627478,
-        "y": 6.878524436090225
+        "x": 1.8088815789473682,
+        "y": 7.209786184210525
       },
       "isLocked": false,
       "linkedName": "Coral Station - Barge Side"
     },
     {
       "anchor": {
-        "x": 4.955180921052631,
-        "y": 5.150740131578948
+        "x": 4.9263157894736835,
+        "y": 5.1411184210526315
       },
       "prevControl": {
-        "x": 4.570312499999999,
-        "y": 6.0359375
+        "x": 5.349671052631578,
+        "y": 6.295723684210526
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,12 +31,24 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "GoToL4Height",
+      "waypointRelativePos": 0.6831550802139047,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "GoToL4Height"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 0.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 200.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

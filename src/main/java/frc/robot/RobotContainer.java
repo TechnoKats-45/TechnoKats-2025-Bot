@@ -347,7 +347,7 @@ public class RobotContainer
             (
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(.75),
+                    new WaitCommand(1),
                     new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator)
                 ),
                 new ParallelDeadlineGroup

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.976261576718451,
-        "y": 5.206016922771389
+        "x": 3.858305921052631,
+        "y": 5.131496710526315
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.571157785691056,
-        "y": 6.625653562212021
+        "x": 2.4532021300252365,
+        "y": 6.551133349966947
       },
       "isLocked": false,
       "linkedName": "Reef - K"
     },
     {
       "anchor": {
-        "x": 1.225081168831169,
-        "y": 7.080580357142857
+        "x": 1.2123355263157893,
+        "y": 7.411842105263157
       },
       "prevControl": {
-        "x": 2.575325180996078,
-        "y": 5.730606104584525
+        "x": 2.5625795384806986,
+        "y": 6.061867852704825
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "GoToHandoffHeight",
+      "waypointRelativePos": 0.0655080213903743,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "GoToHandoffHeight"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 1.0,

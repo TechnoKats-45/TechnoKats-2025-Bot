@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.955180921052631,
-        "y": 5.150740131578948
+        "x": 4.9263157894736835,
+        "y": 5.1411184210526315
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.231798338767206,
-        "y": 5.647537960967511
+        "x": 4.202933207188258,
+        "y": 5.637916250441195
       },
       "isLocked": false,
       "linkedName": "Reef - J"
     },
     {
       "anchor": {
-        "x": 1.225081168831169,
-        "y": 7.080580357142857
+        "x": 1.2123355263157893,
+        "y": 7.411842105263157
       },
       "prevControl": {
-        "x": 2.631178373837218,
-        "y": 6.162007555795439
+        "x": 2.618432731321838,
+        "y": 6.493269303915739
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,12 +31,24 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "GoToHandoffHeight",
+      "waypointRelativePos": 0.21524064171123,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "GoToHandoffHeight"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 200.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -50,5 +62,5 @@
     "velocity": 0,
     "rotation": -119.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

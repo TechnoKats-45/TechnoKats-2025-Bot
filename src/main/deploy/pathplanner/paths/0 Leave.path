@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.350986842105263,
-        "y": 4.09235197368421
+        "x": 7.312499999999999,
+        "y": 4.034621710526316
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.382542050125979,
-        "y": 4.0975092805996685
+        "x": 6.344055208020715,
+        "y": 4.039779017441774
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.609457236842105,
-        "y": 4.09235197368421
+        "x": 5.628700657894736,
+        "y": 4.034621710526316
       },
       "prevControl": {
-        "x": 6.183118651649949,
-        "y": 4.1034944531057045
+        "x": 6.20236207270258,
+        "y": 4.04576418994781
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "GoToL4Height",
-      "waypointRelativePos": 0.24598930481283343,
+      "waypointRelativePos": 0.06016042780748619,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
