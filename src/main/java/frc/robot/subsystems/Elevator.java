@@ -44,6 +44,7 @@ public class Elevator extends SubsystemBase
         elevatorCANdi = new CANdi(Constants.Elevator.elevatorCANdiID);
 
         configElevator();
+        setAngle(Constants.Elevator.AnglePresets.handoffAngle);
     }
     
     /**
@@ -128,8 +129,8 @@ public class Elevator extends SubsystemBase
 
         /* Configure Motion Magic parameters as needed */
         MotionMagicConfigs mm = elevatorConfig.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(100))    // 100
-            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10))    // 10
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(150))    // 100
+            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(25))    // 10
             .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100));  // 100
 
         // PID and feedforward tuning constants
@@ -138,7 +139,7 @@ public class Elevator extends SubsystemBase
         elevatorConfig.Slot0.kV = 0;     // Tune as needed.  // 3.11
         elevatorConfig.Slot0.kA = 0;     // Tune as needed.
         elevatorConfig.Slot0.kP = 25;   // Was 20 3-10-25       // Tune as needed   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
-        elevatorConfig.Slot0.kI = 0;// Was 5 // Tune as needed  // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
+        elevatorConfig.Slot0.kI = 5;    // Was 5 // Tune as needed  // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
         elevatorConfig.Slot0.kD = 0;        // Tune as needed   // In an Elevator: If the elevator is moving too fast toward the target, the D term applies a braking effect, slowing it down before overshooting.
         elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 

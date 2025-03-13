@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.350986842105263,
-        "y": 4.09235197368421
+        "x": 7.692370129870129,
+        "y": 5.371164772727273
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.382542050125979,
-        "y": 4.0975092805996685
+        "x": 7.312499999999999,
+        "y": 5.939720394736842
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Barge Score"
     },
     {
       "anchor": {
-        "x": 5.609457236842105,
-        "y": 4.09235197368421
+        "x": 4.647286184210526,
+        "y": 7.459950657894736
       },
       "prevControl": {
-        "x": 6.183118651649949,
-        "y": 4.1034944531057045
+        "x": 5.2534539473684205,
+        "y": 7.267516447368421
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Reef - H"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,34 +33,34 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "GoToL4Height",
-      "waypointRelativePos": 0.24598930481283343,
+      "name": "GoToHandoffHeight",
+      "waypointRelativePos": 0.35026737967914473,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "GoToL4Height"
+          "name": "GoToHandoffHeight"
         }
       }
     }
   ],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 0.5,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 100.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "0 Leave",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

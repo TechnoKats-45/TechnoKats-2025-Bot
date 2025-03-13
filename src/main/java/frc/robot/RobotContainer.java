@@ -302,12 +302,39 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L4), s_elevator),
                 new GoToAnglePreset(s_elevator, s_carriage),
-                new WaitCommand(.1),
+                new WaitCommand(.25),
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(3),
+                    new WaitCommand(1),
                     new AutoScoreWithDeadline(s_carriage, s_elevator, false)
                 )
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "PassiveIntakeAlgae",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_carriage.setAlgaeSpeed(-0.5), s_carriage)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToL4Height",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.L4), s_elevator)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToHandoffHeight",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle))
             )
         );
         
@@ -316,9 +343,11 @@ public class RobotContainer
             "ScoreBarge",
             new SequentialCommandGroup
             (
-                new RunCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator),
-                new GoToAnglePreset(s_elevator, s_carriage),
-                new WaitCommand(.1),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(1),
+                    new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator)
+                ),
                 new ParallelDeadlineGroup
                 (
                     new WaitCommand(2),
@@ -329,10 +358,28 @@ public class RobotContainer
 
         NamedCommands.registerCommand
         (
+            "poseToLL",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_swerve.poseToLL())           
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
             "CleanAlgaeA1",
             new SequentialCommandGroup
             (
-                //new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A1)
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(1),
+                    new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.A1), s_elevator)
+                ),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(2),
+                    new CleanAlgae(s_carriage, s_elevator)
+                )
             )
         );
 

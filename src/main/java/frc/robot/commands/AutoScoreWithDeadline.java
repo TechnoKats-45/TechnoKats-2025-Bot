@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Carriage;
 
 import frc.robot.subsystems.Elevator;
@@ -13,6 +13,7 @@ public class AutoScoreWithDeadline extends Command
     private Carriage s_carriage;
     private Elevator s_elevator;   
     private Boolean isBarge; 
+    private Boolean outtook;
 
     public AutoScoreWithDeadline(Carriage s_carriage, Elevator s_elevator, Boolean isBarge)
     {
@@ -26,6 +27,7 @@ public class AutoScoreWithDeadline extends Command
         {
             s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeScoreAngle);
         }
+        outtook = false;
     }
 
     public void execute()
@@ -36,25 +38,13 @@ public class AutoScoreWithDeadline extends Command
         }
         else            // Is barge - scoring algae
         {
-            s_carriage.setCoralSpeed(Constants.Carriage.algaeScoreSpeed);
+            s_carriage.setAlgaeSpeed(Constants.Carriage.algaeScoreSpeed);
         }
-    
     }
 
     public boolean isFinished()
     {
         return false;
-
-        /*
-        if(!isBarge)// If Scoring Coral
-        {
-            return !s_carriage.isCoralDetected();
-        }
-        else        // If Scoring Algae
-        {
-            return !s_carriage.isAlgaeDetected();
-        }
-        */
     }
 
     public void end(boolean interrupted)
@@ -62,6 +52,6 @@ public class AutoScoreWithDeadline extends Command
         s_carriage.setCoralSpeed(0);
         s_carriage.setAlgaeSpeed(0);
         s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeStowAngle);
-        s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle);
+        //s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle);
     }
 }

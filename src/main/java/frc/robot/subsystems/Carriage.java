@@ -165,13 +165,13 @@ public class Carriage extends SubsystemBase
 
         /* Configure Motion Magic parameters as needed */
         MotionMagicConfigs mm = algaeAngleConfigs.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(3))
-            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(1))
-            .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10));
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(5))
+            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(5));
+            //.withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(10));
 
         algaeAngleConfigs.Slot0.kS = 0;// TODO - Tune
         algaeAngleConfigs.Slot0.kV = 0;// TODO - Tune
-        algaeAngleConfigs.Slot0.kP = 15;// TODO - Tune
+        algaeAngleConfigs.Slot0.kP = 20;// TODO - Tune  // 25 w/ elastic
         algaeAngleConfigs.Slot0.kI = 0;// TODO - Tune
         algaeAngleConfigs.Slot0.kD = 0;// TODO - Tune
 

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.780850234320349,
-        "y": 4.0347319753376905
+        "x": 5.638322368421052,
+        "y": 4.053865131578948
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.017274853166805,
-        "y": 4.11599327980241
+        "x": 5.874746987267509,
+        "y": 4.1351264360436675
       },
       "isLocked": false,
       "linkedName": "Reef - GH"
@@ -31,10 +31,33 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "PassiveIntakeAlgae",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "PassiveIntakeAlgae"
+        }
+      }
+    },
+    {
+      "name": "GoToL4Height",
+      "waypointRelativePos": 0.46256684491978606,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "GoToL4Height"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 100.0,
     "nominalVoltage": 12.0,

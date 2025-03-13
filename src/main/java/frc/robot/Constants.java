@@ -115,16 +115,16 @@ public class Constants
     
         public static final class AnglePresets // TODO
         {
-            public static final double L1 = 4;
-            public static final double L2 = 6;  // 6 works
-            public static final double L3 = 8;  
-            public static final double L4 = 10.3;
+            public static final double L1 = 3.8;
+            public static final double L2 = 5.9;  // 6 works
+            public static final double L3 = 7.8;  
+            public static final double L4 = 10.4;   // was 10.3
+            
             public static final double Barge = 10.4;
-            public static final double A1 = 5;
-
-            public static final double A2 = 7;
+            public static final double A1 = 4.2;
+            public static final double A2 = 6;
     
-            public static final double handoffAngle = 3.5;  // GOOD!
+            public static final double handoffAngle = 3.6;  // GOOD!
 
             public static final double Stow = 1.5;
 
@@ -149,7 +149,7 @@ public class Constants
         public static final double coralPassiveIntakeSpeed = -45;   // -45
         public static final double coralReverseSpeed = 45;
         public static final double coralSlowIntakeSpeed = -30;
-        public static final double coralScoreSpeed = -35;
+        public static final double coralScoreSpeed = -25;   // was -35
         public static final double autoCoralScoreSpeed = -25;   // -15 for L4
 
         public static final class AnglePresets

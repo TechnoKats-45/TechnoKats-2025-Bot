@@ -39,6 +39,12 @@
           "data": {
             "name": "ScoreBarge"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0.3 Lower Elevator"
+          }
         }
       ]
     }

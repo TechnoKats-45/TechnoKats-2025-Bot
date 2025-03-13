@@ -547,9 +547,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         double omegaRPS = Units.radiansToRotations(getState().Speeds.omegaRadiansPerSecond);
         double headingDeg = getState().Pose.getRotation().getDegrees();
         
+        /*
         lowStdev.set(0, 0, 0.5); // X standard deviation (meters)
         lowStdev.set(1, 0, 0.5); // Y standard deviation (meters)
         lowStdev.set(2, 0, 1); // Theta standard deviation (radians)
+        */
 
         LimelightHelpers.SetRobotOrientation("limelight", headingDeg, 0, 0, 0, 0, 0);
         llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
@@ -557,7 +559,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         if (llMeasurement != null && llMeasurement.tagCount > 0)  // omegaRPS < 2.0
         { 
             //System.out.println(llMeasurement.pose);
-            addVisionMeasurement(llMeasurement.pose, Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds), lowStdev);
+            addVisionMeasurement(llMeasurement.pose, Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));    // , lowStdev
         }
     }
 }

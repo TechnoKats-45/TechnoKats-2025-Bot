@@ -220,14 +220,15 @@ public class TunerConstants
         // Set odometry standard deviations (default trust in wheels)
         odometryStdDev.set(0, 0, 0.1);  // X std dev (meters)
         odometryStdDev.set(1, 0, 0.1);  // Y std dev (meters)
-        odometryStdDev.set(2, 0, Units.degreesToRadians(2.0));  // Theta std dev (radians)
+        odometryStdDev.set(2, 0, Units.degreesToRadians(1));  // Theta std dev (radians)
     
         // Set vision standard deviations (adjust for more or less vision trust)
-        visionStdDev.set(0, 0, 0.0001);  // X std dev (meters) - Lower = More trust in vision
-        visionStdDev.set(1, 0, 0.0001);  // Y std dev (meters)
-        visionStdDev.set(2, 0, Units.degreesToRadians(1.0));  // Theta std dev (radians)
+        visionStdDev.set(0, 0, .1);  // X std dev (meters) - Lower = More trust in vision      // .2 was too high   // 0.05 was too low
+        visionStdDev.set(1, 0, .1);  // Y std dev (meters)                                     // .2 was too high   // 0.05 was too low
+        visionStdDev.set(2, 0, Units.degreesToRadians(2));  // Theta std dev (radians)
     
-        return new Swerve(
+        return new Swerve
+        (
             DrivetrainConstants,
             0.0,  // Odometry update frequency (0 = default)
             odometryStdDev,
