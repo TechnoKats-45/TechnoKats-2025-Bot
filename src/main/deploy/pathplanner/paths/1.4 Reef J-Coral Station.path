@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "GoToHandoffHeight",
-      "waypointRelativePos": 0.21524064171123,
+      "waypointRelativePos": 0.09491978609625647,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

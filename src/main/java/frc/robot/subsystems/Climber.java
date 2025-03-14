@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
+import java.lang.invoke.ConstantBootstraps;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,8 +21,6 @@ public class Climber extends SubsystemBase
     double maximumOutAngle = 310;
     private double lastAngle = 0.0;
     private int rotationCount = 0;
-
-
     private TalonFX winchMotor;
     private boolean climbEnabled = false;
     DutyCycleEncoder encoder = new DutyCycleEncoder(0);
@@ -45,9 +46,12 @@ public class Climber extends SubsystemBase
         double newAngle = encoder.get() * 360;  // Convert from [0,1] to degrees
     
         // Detect wrap-around
-        if (lastAngle > 300 && newAngle < 60) {  // Wrap from 360 to 0
+        if (lastAngle > 300 && newAngle < 60) 
+        {  // Wrap from 360 to 0
             rotationCount++;
-        } else if (lastAngle < 60 && newAngle > 300) {  // Wrap from 0 to 360
+        } 
+        else if (lastAngle < 60 && newAngle > 300) 
+        {  // Wrap from 0 to 360
             rotationCount--;
         }
     
@@ -55,7 +59,6 @@ public class Climber extends SubsystemBase
     
         return (rotationCount * 360) + newAngle;  // Return continuous position
     }
-    
 
     public void enableClimb()
     {
@@ -70,6 +73,12 @@ public class Climber extends SubsystemBase
     public boolean isClimbEnabled()
     {
         return climbEnabled;
+    }
+
+    public boolean isClimberAligned()
+    {
+        double angle = getAngle();
+        return ((angle < Constants.Climber.climbAngle + 15) && (angle > Constants.Climber.climbAngle - 15));  // Check if within 1 degree of target angle
     }
 
     public void ManualClimber(CommandXboxController controller, CommandXboxController controller2)

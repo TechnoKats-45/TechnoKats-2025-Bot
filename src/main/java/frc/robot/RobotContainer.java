@@ -14,6 +14,7 @@ import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,6 +50,7 @@ public class RobotContainer
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController driver = new CommandXboxController(0);              // Driver Controller
+    private final Joystick rumbleDriver = new Joystick(0);                                  // Rumble Controller for Driver Controller
     private final CommandJoystick operator = new CommandJoystick(1);                        // Operator Button Board
     private final CommandXboxController testController = new CommandXboxController(2);      // Test Controller
 
@@ -103,7 +105,7 @@ public class RobotContainer
         
         s_climber.setDefaultCommand // TODO - Still need to get set points
         (
-            new ManualClimber(s_climber, testController, driver)
+            new ManualClimber(s_climber, testController, driver, rumbleDriver)
         );
 
         /*
@@ -168,10 +170,8 @@ public class RobotContainer
         operator.button(Constants.Button.height.L4).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L4)));
         operator.button(Constants.Button.height.Barge).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Barge)));
 
-        operator.button(Constants.Button.height.A1).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.A1)));
-        operator.button(Constants.Button.height.A1).onTrue(new InstantCommand(() -> s_carriage.setAnglePreset(Constants.Carriage.AnglePresets.A1)));
+        operator.button(Constants.Button.height.A1).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Stow)));  // Currently being used as ground pickup
         operator.button(Constants.Button.height.A2).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.A2)));
-        operator.button(Constants.Button.height.A2).onTrue(new InstantCommand(() -> s_carriage.setAnglePreset(Constants.Carriage.AnglePresets.A2)));
 
         operator.button(Constants.Button.location.A).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.A)));
         operator.button(Constants.Button.location.B).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.B)));
@@ -304,10 +304,10 @@ public class RobotContainer
             (
                 new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L4), s_elevator),
                 new GoToAnglePreset(s_elevator, s_carriage),
-                new WaitCommand(.25),
+                new WaitCommand(.0),    //0 .25
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(.75),
+                    new WaitCommand(.5),    // .75
                     new AutoScoreWithDeadline(s_carriage, s_elevator, false)
                 )
             )
@@ -347,7 +347,7 @@ public class RobotContainer
             (
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(1),
+                    new WaitCommand(0),
                     new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator)
                 ),
                 new ParallelDeadlineGroup

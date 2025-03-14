@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.456825657894736,
-        "y": 4.996792763157894
+        "x": 7.591529605263157,
+        "y": 5.00641447368421
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.325630299521907,
-        "y": 5.30797018236783
+        "x": 7.341765565674392,
+        "y": 4.995555167615134
       },
       "isLocked": false,
       "linkedName": "Barge Score"
     },
     {
       "anchor": {
-        "x": 6.898766447368421,
-        "y": 6.10328947368421
+        "x": 6.956496710526316,
+        "y": 4.996792763157894
       },
       "prevControl": {
-        "x": 7.1068713283539955,
-        "y": 5.628065577863505
+        "x": 7.206213744957425,
+        "y": 4.9849014758040315
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "GoToHandoffHeight",
-      "waypointRelativePos": 0.1951871657754004,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "GoToL4Height",
-      "waypointRelativePos": 0.6256684491978617,
+      "waypointRelativePos": 0.43716577540106916,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

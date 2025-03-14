@@ -171,9 +171,9 @@ public class Carriage extends SubsystemBase
 
         algaeAngleConfigs.Slot0.kS = 0;// TODO - Tune
         algaeAngleConfigs.Slot0.kV = 0;// TODO - Tune
-        algaeAngleConfigs.Slot0.kP = 20;// TODO - Tune  // 25 w/ elastic
+        algaeAngleConfigs.Slot0.kP = 10;// TODO - Tune  // 25 w/ elastic    // was 20
         algaeAngleConfigs.Slot0.kI = 0;// TODO - Tune
-        algaeAngleConfigs.Slot0.kD = 0;// TODO - Tune
+        algaeAngleConfigs.Slot0.kD = 1;// TODO - Tune
 
         algaeAngleConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
