@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 0.2
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.2
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CoralIntakeDoNothing"
+                }
+              }
+            ]
           }
         },
         {
