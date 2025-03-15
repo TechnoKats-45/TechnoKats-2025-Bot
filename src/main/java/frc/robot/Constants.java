@@ -57,7 +57,7 @@ public class Constants
     
     public static final class Climber
     {
-        public static final int climbAngle = 610;    // TODO - find actual angle
+        public static final int climbAngle = 400;    // TODO - find actual angle
     }
     
     // Operator Button Board Mapping
