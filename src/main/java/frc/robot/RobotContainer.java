@@ -324,6 +324,15 @@ public class RobotContainer
 
         NamedCommands.registerCommand
         (
+            "CoralIntakeDoNothing",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_carriage.setCoralSpeed(0))
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
             "GoToL4Height",
             new SequentialCommandGroup
             (
