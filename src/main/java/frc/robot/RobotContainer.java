@@ -342,6 +342,15 @@ public class RobotContainer
 
         NamedCommands.registerCommand
         (
+            "GoToA1Height",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.A1), s_elevator)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
             "GoToHandoffHeight",
             new SequentialCommandGroup
             (
@@ -375,6 +384,7 @@ public class RobotContainer
                 new InstantCommand(() -> s_swerve.poseToLL())           
             )
         );
+        
 
         NamedCommands.registerCommand
         (

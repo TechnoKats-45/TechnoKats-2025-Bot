@@ -116,7 +116,7 @@ public class Constants
         public static final class AnglePresets // TODO
         {
             public static final double L1 = 3.8;
-            public static final double L2 = 5.9;  // 6 works
+            public static final double L2 = 5.9;  // 6 works    // was 5.9
             public static final double L3 = 7.8;  
             public static final double L4 = 10.3;   // was 10.3
             
@@ -124,7 +124,7 @@ public class Constants
             public static final double A1 = 4.2;
             public static final double A2 = 6;
     
-            public static final double handoffAngle = 3.5;  // GOOD!
+            public static final double handoffAngle = 3.35;  // GOOD!    // was 3.5
 
             public static final double Stow = 1.5;
 
