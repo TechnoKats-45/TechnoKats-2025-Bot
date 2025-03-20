@@ -225,7 +225,7 @@ public class TunerConstants
         // Set vision standard deviations (adjust for more or less vision trust)
         visionStdDev.set(0, 0, .1);  // X std dev (meters) - Lower = More trust in vision      // .2 was too high   // 0.05 was too low
         visionStdDev.set(1, 0, .1);  // Y std dev (meters)                                     // .2 was too high   // 0.05 was too low
-        visionStdDev.set(2, 0, Units.degreesToRadians(2));  // Theta std dev (radians)
+        visionStdDev.set(2, 0, Units.degreesToRadians(99999999));  // Theta std dev (radians)
     
         return new Swerve
         (
