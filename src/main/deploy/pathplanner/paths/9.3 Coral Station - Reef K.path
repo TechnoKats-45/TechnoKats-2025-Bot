@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9946618928283935,
-        "y": 6.8107097935613385
+        "x": 1.9503326205240472,
+        "y": 6.782499251010952
       },
       "isLocked": false,
       "linkedName": "Coral Station - Barge Side"
@@ -20,8 +20,8 @@
         "y": 5.1411184210526315
       },
       "prevControl": {
-        "x": 3.25751690199797,
-        "y": 5.725082846004141
+        "x": 3.274116114250124,
+        "y": 5.745728461686092
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "5 Barge Side - 2 Coral (Far) - L4 + Algae Remove",
+  "folder": "9 Barge Side - 3 Coral, Remove 2 Algae",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -54.0

@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9946618928283935,
-        "y": 6.8107097935613385
+        "x": 1.897042385757703,
+        "y": 6.715644964078156
       },
       "isLocked": false,
       "linkedName": "Coral Station - Barge Side"
     },
     {
       "anchor": {
-        "x": 4.0122532894736835,
-        "y": 5.1411184210526315
+        "x": 3.7043585526315788,
+        "y": 5.016036184210526
       },
       "prevControl": {
-        "x": 3.25751690199797,
-        "y": 5.725082846004141
+        "x": 3.0062694505387726,
+        "y": 5.680076829582115
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Reef - K"
+      "linkedName": "Reef - L"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "5 Barge Side - 2 Coral (Far) - L4 + Algae Remove",
+  "folder": "9 Barge Side - 3 Coral, Remove 2 Algae",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -54.0

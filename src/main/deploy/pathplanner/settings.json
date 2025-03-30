@@ -11,11 +11,12 @@
     "5 Barge Side - 2 Coral (Far) - L4 + Algae Remove",
     "6 Processor Side - 2 Coral (Far) - L4 + Algae Remove",
     "7 Push Partner - Barge Side + 1 Coral",
-    "8 Push Partner - Processor Side + 1 Coral"
+    "8 Push Partner - Processor Side + 1 Coral",
+    "9 Barge Side - 3 Coral, Remove 2 Algae"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 2.0,
-  "defaultMaxAccel": 1.0,
+  "defaultMaxVel": 4.2,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,

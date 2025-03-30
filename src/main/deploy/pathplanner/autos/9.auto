@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "9.1 Barge Start - Reef J"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "9.2 Reef J - Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "9.3 Coral Station - Reef K"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "9.4 Reef K - Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "9.5 Coral Station - Reef L"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
