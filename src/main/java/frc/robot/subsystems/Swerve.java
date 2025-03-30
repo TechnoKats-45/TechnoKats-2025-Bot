@@ -223,11 +223,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         return onTheFlyDestination;
     }
     
-    public double getSpeedFactor(double elevatorHeight, boolean climbEnabled) 
+    public double getSpeedFactor(double elevatorHeight, boolean climbEnabled, boolean isAligned) 
     {
-        if (elevatorHeight > Constants.Elevator.AnglePresets.handoffAngle + .5) // 0.5 inch saftety   // If height is above handoff height, drive at 1/2 speed
+        if(isAligned)
         {
-            speedFactor = .5;
+            speedFactor = .5;   // If aligned to a target, drive at 1/2 speed to allow for more precise movement and alignment to the target
         }
         else if(climbEnabled) // If climb is enabled, drive at 1/2 speed
         {

@@ -62,8 +62,6 @@ public class RobotContainer
 
     private final SendableChooser<Command> autoChooser;
 
-    private boolean atCompetioon = true;    // CHANGE THIS TO EFFECT POSE ON START!!!!
-
     public RobotContainer() 
     {
         registerNamedCommands();
@@ -88,12 +86,12 @@ public class RobotContainer
             (
                 () -> driver.x().getAsBoolean()  // This checks the button state continuously
                     ? forwardStraight
-                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled()))   // Robot-centric forward/backward
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled()))   // Robot-centric strafe left/right
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))   // Robot-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))   // Robot-centric strafe left/right
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Robot-centric rotation
                     : drive
-                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled()))   // Field-centric forward/backward
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled()))   // Field-centric strafe left/right
+                        .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))   // Field-centric forward/backward
+                        .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))   // Field-centric strafe left/right
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Field-centric rotation
             )
         );
@@ -145,6 +143,7 @@ public class RobotContainer
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         driver.leftTrigger().whileTrue(new GoToAnglePreset(s_elevator, s_carriage));       // Go to selected preset
+        driver.leftTrigger().onFalse(new CoralIntake(s_carriage, s_elevator));             // When the left trigger is released, run Coral Intake (this will intake coral when the trigger is released after going to a preset)
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
@@ -197,7 +196,6 @@ public class RobotContainer
         operator.button(Constants.Button.H).whileTrue(new RunCommand(() -> s_elevator.GoToPreset()));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.handoffAngle)));
-
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// TEST CONTROLLER
