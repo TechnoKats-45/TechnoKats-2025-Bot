@@ -115,24 +115,17 @@ public class Constants
     
         public static final class AnglePresets // TODO
         {
-            public static final double L1 = 3.8;
-            public static final double L2 = 5.9;  // 6 works    // was 5.9
-            public static final double L3 = 7.8;  
-            public static final double L4 = 10.3;   // was 10.3
-            
-            public static final double Barge = 10.4;
-            public static final double A1 = 4.2;
-            public static final double A2 = 6;
-    
-            public static final double handoffAngle = 3.35;  // GOOD!    // was 3.5
-
-            public static final double Stow = 1.5;
-
-            public static final double algaeCleanStartHeight = 5;
-            public static final double algaeCleanEndHeight = 5;
+            public static final double Stow = 4.5;
+            public static final double handoffAngle = 8.3;
+            public static final double L1 = 8;
+            public static final double A1 = 10;
+            public static final double L2 = 15;
+            public static final double A2 = 17;
+            public static final double L3 = 20;  
+            public static final double L4 = 28;
+            public static final double Barge = 32;
         }
     }
-    
 
     public static final class Carriage
     {
@@ -155,9 +148,9 @@ public class Constants
         {
             public static final double A1 = 1;
             public static final double A2 = 2;
-            public static final double algaeStowAngle = -.26;
+            public static final double algaeStowAngle = -.15;
             public static final double algaeScoreAngle = -.3;
-            public static final double algaeCleanAngle = -.55;       // Was -0.45
+            public static final double algaeCleanAngle = -.4;
             public static final double algaeFloorIntake = -.4;
         }
     }
