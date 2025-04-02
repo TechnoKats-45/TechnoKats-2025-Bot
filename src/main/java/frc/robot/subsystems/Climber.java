@@ -81,6 +81,11 @@ public class Climber extends SubsystemBase
         return ((angle < Constants.Climber.climbAngle + 15) && (angle > Constants.Climber.climbAngle - 15));  // Check if within 1 degree of target angle
     }
 
+    public void setClimberSpeed()
+    {
+        
+    }
+
     public void ManualClimber(CommandXboxController controller, CommandXboxController controller2)
     {
         double angle = getAngle();  // Get current climber position

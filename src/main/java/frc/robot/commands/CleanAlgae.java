@@ -18,7 +18,7 @@ public class CleanAlgae extends Command
         this.s_carriage = s_carriage;
         this.s_elevator = s_elevator;
 
-        addRequirements(s_carriage, s_elevator);
+        addRequirements(s_carriage);
 
         s_elevator.setAngle(angle);
 

@@ -14,6 +14,7 @@ import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -35,6 +37,10 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer 
 {
+    // Create a DigitalInput on DIO port 2
+    private final DigitalInput buttonInput = new DigitalInput(2);
+    Trigger buttonTrigger = new Trigger(buttonInput::get);    
+
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
@@ -80,6 +86,7 @@ public class RobotContainer
         
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
+        /*
         s_swerve.setDefaultCommand
         (
             s_swerve.applyRequest
@@ -95,7 +102,57 @@ public class RobotContainer
                         .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Field-centric rotation
             )
         );
-    
+        */
+
+        s_swerve.setDefaultCommand
+        (
+            s_swerve.applyRequest(() -> 
+            {
+                /*
+                // If left trigger is held, run auto-align logic:
+                if (driver.leftTrigger().getAsBoolean()) 
+                {
+                    // Get the current robot pose
+                    Pose2d robotPose = s_swerve.getState().Pose;
+                    // Compute the closest reef face based on the robot's current pose.
+                    Pose2d targetPose = new GetClosestFace(s_swerve).getClosestFace(); // This will return the closest reef face based on the current robot pose.
+                    // Compute the error between the target pose and the current pose.
+                    double errorX = targetPose.getTranslation().getX() - robotPose.getTranslation().getX();
+                    double errorY = targetPose.getTranslation().getY() - robotPose.getTranslation().getY();
+                    double errorTheta = targetPose.getRotation().getRadians() - robotPose.getRotation().getRadians();
+                    
+                    // Use a simple proportional controller (tune kP as needed)
+                    double kP_linear = 1.0;  
+                    double kP_angular = 1.0;
+                    double velocityX = kP_linear * errorX;
+                    double velocityY = kP_linear * errorY;
+                    double rotationalRate = kP_angular * errorTheta;
+                    
+                    // Return a SwerveRequest that drives toward the target.
+                    return drive
+                            .withVelocityX(velocityX)
+                            .withVelocityY(velocityY)
+                            .withRotationalRate(rotationalRate);
+                } 
+                            */
+                    // Otherwise, use the normal manual drive logic.
+                    return driver.x().getAsBoolean() 
+                        ? forwardStraight
+                            .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(
+                                    s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))
+                            .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(
+                                    s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))
+                            .withRotationalRate(-driver.getRightX() * MaxAngularRate)
+                        : drive
+                            .withVelocityX(-driver.getLeftY() * MaxSpeed * s_swerve.getSpeedFactor(
+                                    s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))
+                            .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(
+                                    s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))
+                            .withRotationalRate(-driver.getRightX() * MaxAngularRate);
+                
+            })
+        );
+
         s_carriage.setDefaultCommand
         (
             new CarriageDefault(s_carriage)
@@ -105,7 +162,7 @@ public class RobotContainer
         (
             new ManualClimber(s_climber, testController, driver, rumbleDriver)
         );
-
+        
         /*
         s_elevator.setDefaultCommand
         (
@@ -136,25 +193,29 @@ public class RobotContainer
                     () -> operator.button(Constants.Button.height.A1).getAsBoolean() || operator.button(Constants.Button.height.A2).getAsBoolean()  // Check if set to either A1 or A2 heights
                 )
             )
-        );    
+        );
         */
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+        /// ROBOT BUTTON BINDINGS
+        //////////////////////////////////////////////////////////////////////////////////////////
+        buttonTrigger.onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));  // TODO - Need to change function - this should save heading and then heading should be used at start of auto.
+
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
-        driver.leftTrigger().whileTrue(new GoToAnglePreset(s_elevator, s_carriage));       // Go to selected preset
+        driver.leftTrigger().whileTrue(new GoToAnglePreset(s_elevator, s_carriage, driver));       // Go to selected preset
         driver.leftTrigger().onFalse(new CoralIntake(s_carriage, s_elevator));             // When the left trigger is released, run Coral Intake (this will intake coral when the trigger is released after going to a preset)
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
         driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
         driver.leftBumper().whileTrue(new CleanAlgae(s_carriage, s_elevator));
-        //driver.povLeft().whileTrue(s_carriage.run(() -> s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeStowAngle)));
-        //driver.povRight().whileFalse(s_carriage.run(() -> s_carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeCleanAngle)));
         driver.y().whileTrue(new RunCommand(() -> s_carriage.setAlgaeSpeed(Constants.Carriage.algaeScoreSpeed)));
 
         //driver.a().whileTrue(new LastMileAlignment(s_swerve));  // TODO - Test if this works - this is the last mile alignment w/o pose, just April Tag Alignment, and dead reckoning.
         //driver.a().whileTrue(s_swerve.driveToPose(new Pose2d(5.781,4.176,new Rotation2d()))); // THIS WORKS
-        driver.a().whileTrue(new PositionAlign(s_swerve));
+        //driver.a().whileTrue(new PositionAlign(s_swerve));
         //driver.a().onFalse(new PositionAlign(s_swerve).cancel());
 
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
@@ -203,18 +264,8 @@ public class RobotContainer
             //testController.leftTrigger().whileTrue(s_swerve.driveToPose(new Pose2d(4,1.5,new Rotation2d()))); // THIS WORKS
             //testController.leftTrigger().whileTrue(new PositionAlign(s_swerve));
 
-        //////////////////////////////////////////////////////////////////////////////////////////
-        // SYSID ROUTINES
-        //////////////////////////////////////////////////////////////////////////////////////////
 
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-            //driver.back().and(driver.y()).whileTrue(s_swerve.sysIdDynamic(Direction.kForward));
-            //driver.back().and(driver.x()).whileTrue(s_swerve.sysIdDynamic(Direction.kReverse));
-            //driver.start().and(driver.y()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kForward));
-            //driver.start().and(driver.x()).whileTrue(s_swerve.sysIdQuasistatic(Direction.kReverse));
-
-            s_swerve.registerTelemetry(logger::telemeterize);           
+        s_swerve.registerTelemetry(logger::telemeterize);           
     }
 
     public Command getAutonomousCommand() 
@@ -252,7 +303,7 @@ public class RobotContainer
             new SequentialCommandGroup
             (
                 new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L1), s_elevator),
-                new GoToAnglePreset(s_elevator, s_carriage),
+                new GoToAnglePreset(s_elevator, s_carriage, driver),
                 new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
@@ -268,7 +319,7 @@ public class RobotContainer
             new SequentialCommandGroup
             (
                 new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L2), s_elevator),
-                new GoToAnglePreset(s_elevator, s_carriage),
+                new GoToAnglePreset(s_elevator, s_carriage, driver),
                 new WaitCommand(.1),
                 new ParallelDeadlineGroup
                 (
@@ -284,7 +335,7 @@ public class RobotContainer
             new SequentialCommandGroup
             (
                 new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L3), s_elevator),
-                new GoToAnglePreset(s_elevator, s_carriage),
+                new GoToAnglePreset(s_elevator, s_carriage, driver),
                 new WaitCommand(.1),
 
                 new ParallelDeadlineGroup
@@ -301,7 +352,7 @@ public class RobotContainer
             new SequentialCommandGroup
             (
                 new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L4), s_elevator),
-                new GoToAnglePreset(s_elevator, s_carriage),
+                new GoToAnglePreset(s_elevator, s_carriage, driver),
                 new WaitCommand(.0),    //0 .25
                 new ParallelDeadlineGroup
                 (

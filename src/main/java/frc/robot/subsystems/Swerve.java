@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -48,6 +49,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
 
     private Pose2d onTheFlyDestination = new Pose2d();
     private final Field2d field = new Field2d();
+
+    private double zeroedHeading;
 
     Matrix<N3, N1> lowStdev = new Matrix<>(N3.instance, N1.instance);
 
@@ -540,6 +543,33 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         {
             resetPose(llMeasurement.pose);
         }
+    }
+
+    public double getHeadingFromPigeon()
+    {
+        return getPigeon2().getYaw().getValueAsDouble();
+    }
+
+    public void setZeroedOffset(double heading)
+    {
+        zeroedHeading = heading;
+    }
+
+    public double getZeroedOffset()
+    {
+        return zeroedHeading;
+    }
+
+    public void setHeadingFromZero()
+    {
+        // Get the current pose's translation
+        Pose2d currentPose = getState().Pose;
+        // Create a new rotation from the stored heading (assumes heading is in degrees)
+        Rotation2d newRotation = Rotation2d.fromDegrees(getZeroedOffset());
+        // Combine the current translation with the new rotation
+        Pose2d updatedPose = new Pose2d(currentPose.getTranslation(), newRotation);
+        // Reset the robot pose with the updated heading
+        resetPose(updatedPose);
     }
 
     private void updateVisionOdometry()

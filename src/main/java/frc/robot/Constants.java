@@ -111,29 +111,29 @@ public class Constants
     public static final int elevatorMotor2ID = 8;
     public static final int elevatorCANdiID = 9;
 
-    public static final int elevatorAngleTolerance = 1;
+    public static final double elevatorAngleTolerance = .5;
     
-        public static final class AnglePresets // TODO
+        public static final class AnglePresets
         {
-            public static final double Stow = 4.5;
-            public static final double handoffAngle = 8.3;
+            public static final double Stow = 6.2;
+            public static final double handoffAngle = 7.3;
             public static final double L1 = 8;
-            public static final double A1 = 10;
-            public static final double L2 = 15;
-            public static final double A2 = 17;
-            public static final double L3 = 20;  
-            public static final double L4 = 28;
-            public static final double Barge = 32;
+            public static final double A1 = 8;
+            public static final double L2 = 9.9;
+            public static final double A2 = 10;
+            public static final double L3 = 11.5;   
+            public static final double L4 = 14.1;   
+            public static final double Barge = 15;
         }
     }
 
     public static final class Carriage
     {
-        public static final double algaeIntakeSpeed = -1;   // TODO - Tune
-        public static final double algaeCleanTime = 2;      // TODO - Tune
+        public static final double algaeIntakeSpeed = -1;
+        public static final double algaeCleanTime = 2;
         
-        public static final double algaeScoreSpeed = 1;     // TODO - Tune
-        public static final double algaeAngleTolerance = 1; // TODO - Tune
+        public static final double algaeScoreSpeed = 1;
+        public static final double algaeAngleTolerance = 1;
 
         ////////////////////////////////////////////////////////////////
 

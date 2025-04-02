@@ -95,9 +95,9 @@ public class Elevator extends SubsystemBase
     public void ManualElevator(CommandXboxController controller) 
     {
         if (controller.getLeftY() < -Constants.STICK_DEADBAND) {  // Down
-            elevatorMotor1.set(.5);
+            elevatorMotor1.set(1);
         } else if (controller.getLeftY() > Constants.STICK_DEADBAND) { // Up
-            elevatorMotor1.set(-.5);
+            elevatorMotor1.set(-1);
         } else {
             elevatorMotor1.set(0);
         }
@@ -110,7 +110,7 @@ public class Elevator extends SubsystemBase
     
         // Enable stator current limit.
         limitConfigs.StatorCurrentLimit = 120;
-        limitConfigs.SupplyCurrentLimit = 60;
+        limitConfigs.SupplyCurrentLimit = 80;   // Was 60
         limitConfigs.StatorCurrentLimitEnable = true; // or true as needed
     
         /* Configure the Talon FX to use the CANdi sensor as its feedback source.
@@ -129,9 +129,9 @@ public class Elevator extends SubsystemBase
 
         /* Configure Motion Magic parameters as needed */
         MotionMagicConfigs mm = elevatorConfig.MotionMagic;
-        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(5000))    // 150
-            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(5000))    // 25
-            .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(5000));  // 100
+        mm.withMotionMagicCruiseVelocity(RotationsPerSecond.of(250))    
+            .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(320)) 
+            .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(3200));
 
         // PID and feedforward tuning constants
         elevatorConfig.Slot0.kS = 0;      // Tune as needed.  0.9
@@ -145,6 +145,7 @@ public class Elevator extends SubsystemBase
 
         /* Retry config apply up to 5 times, report if failure */
         StatusCode status = StatusCode.StatusCodeNotInitialized;
+
         for (int i = 0; i < 5; ++i) {
             status = elevatorMotor1.getConfigurator().apply(elevatorConfig);
             if (status.isOK()) break;
