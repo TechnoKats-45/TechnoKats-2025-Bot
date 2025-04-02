@@ -1,0 +1,92 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CoralIntakeDoNothing"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.01
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0 Leave"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0.1 Algae Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CleanAlgaeA1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0.2 Barge Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreBarge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0.3a"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CleanAlgaeA2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0.4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreBarge"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

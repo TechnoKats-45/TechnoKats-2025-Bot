@@ -458,7 +458,16 @@ public class RobotContainer
             "CleanAlgaeA2",
             new SequentialCommandGroup
             (
-                //new CleanAlgae(s_carriage, s_elevator, Constants.Elevator.AnglePresets.A2)
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(.5),
+                    new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.A2), s_elevator)
+                ),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(.75),
+                    new CleanAlgae(s_carriage, s_elevator)
+                )
             )
         );
 

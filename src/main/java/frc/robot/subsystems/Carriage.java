@@ -22,6 +22,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -60,6 +61,8 @@ public class Carriage extends SubsystemBase
         coralCANdi = new CANdi(coralCANdiID);
 
         algaeMotor = new TalonSRX(algaeMotorID);
+        algaeMotor.setNeutralMode(NeutralMode.Brake);
+        
         algaeAngleMotor = new TalonFX(algaeAngleMotorID);
         algaeAngleMotor.setNeutralMode(NeutralModeValue.Brake);
 

@@ -8,42 +8,30 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.341765565674392,
-        "y": 4.995555167615134
+        "x": 6.852735401527715,
+        "y": 4.268303886431864
       },
       "isLocked": false,
       "linkedName": "Barge Score"
     },
     {
       "anchor": {
-        "x": 6.273355263157895,
-        "y": 5.00641447368421
+        "x": 5.130452764688786,
+        "y": 5.153085639851249
       },
       "prevControl": {
-        "x": 6.523072297589004,
-        "y": 4.994523186330348
+        "x": 5.484375,
+        "y": 5.534983766233766
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Reef - JI"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "GoToHandoffHeight",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "GoToHandoffHeight"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.2,
     "maxAcceleration": 2.0,
@@ -54,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "0 Leave",

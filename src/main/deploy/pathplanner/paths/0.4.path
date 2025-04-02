@@ -3,47 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.591529605263157,
-        "y": 5.00641447368421
+        "x": 5.130452764688786,
+        "y": 5.153085639851249
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.341765565674392,
-        "y": 4.995555167615134
+        "x": 6.189508928571429,
+        "y": 5.235836038961038
       },
       "isLocked": false,
-      "linkedName": "Barge Score"
+      "linkedName": "Reef - JI"
     },
     {
       "anchor": {
-        "x": 6.273355263157895,
+        "x": 7.591529605263157,
         "y": 5.00641447368421
       },
       "prevControl": {
-        "x": 6.523072297589004,
-        "y": 4.994523186330348
+        "x": 6.522832813921343,
+        "y": 5.06662945502892
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Barge Score"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "GoToHandoffHeight",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "GoToHandoffHeight"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.2,
     "maxAcceleration": 2.0,
@@ -60,7 +48,7 @@
   "folder": "0 Leave",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": false
 }
