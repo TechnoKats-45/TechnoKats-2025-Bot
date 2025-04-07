@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.2123355263157893,
-        "y": 7.411842105263157
+        "x": 1.7703947368421051,
+        "y": 6.728700657894737
       },
       "prevControl": {
-        "x": 2.618432731321838,
-        "y": 6.493269303915739
+        "x": 3.1764919418481545,
+        "y": 5.810127856547319
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral Station - Barge Side"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -46,7 +46,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 1.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 200.0,
     "nominalVoltage": 12.0,

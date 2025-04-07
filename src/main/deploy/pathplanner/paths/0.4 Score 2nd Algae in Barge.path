@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8216671094453303,
-        "y": 5.1352703021548765
+        "x": 5.18610197368421,
+        "y": 5.410526315789473
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4022788322414614,
-        "y": 5.560751348520384
+        "x": 5.040792425254436,
+        "y": 5.207092947987789
       },
       "isLocked": false,
-      "linkedName": "Reef - KL"
+      "linkedName": "Reef - JI"
     },
     {
       "anchor": {
-        "x": 1.2123355263157893,
-        "y": 7.411842105263157
+        "x": 5.022532894736842,
+        "y": 5.1411184210526315
       },
       "prevControl": {
-        "x": 1.7775992171781303,
-        "y": 6.872068690331046
+        "x": 5.140179953560371,
+        "y": 5.361706656346749
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral Station - Barge Side"
+      "linkedName": "0.4 End"
     }
   ],
   "rotationTargets": [],
@@ -33,20 +33,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "GoToHandoffHeight",
-      "waypointRelativePos": 0.08556149732620326,
-      "endWaypointRelativePos": null,
+      "name": "PassiveIntakeAlgae",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 1.0,
       "command": {
         "type": "named",
         "data": {
-          "name": "GoToHandoffHeight"
+          "name": "PassiveIntakeAlgae"
         }
       }
     }
   ],
   "globalConstraints": {
     "maxVelocity": 4.2,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -54,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "2 Barge Side - 4 Coral (Close) - L4",
+  "folder": "0 Leave",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -119.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

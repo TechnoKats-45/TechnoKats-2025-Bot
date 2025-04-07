@@ -74,6 +74,11 @@ public class Elevator extends SubsystemBase
         setAngle(currentAnglePreset);
     }
 
+    public void setMotor(double speed)
+    {
+        elevatorMotor1.set(speed);
+    }
+
     public void setAnglePreset(double passedPreset)
     {
         currentAnglePreset = passedPreset;
@@ -138,7 +143,7 @@ public class Elevator extends SubsystemBase
         elevatorConfig.Slot0.kG = 0;       // Tune as needed.  // 14
         elevatorConfig.Slot0.kV = 0;     // Tune as needed.  // 3.11
         elevatorConfig.Slot0.kA = 0;     // Tune as needed.
-        elevatorConfig.Slot0.kP = 15;   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
+        elevatorConfig.Slot0.kP = 18;   // In an Elevator: If the elevator is far from the target position, the motor applies more power to get there quickly. However, it may not eliminate steady-state error, meaning the elevator might stop just short of the target.
         elevatorConfig.Slot0.kI = 0;    // Was 5 // Tune as needed  // In an Elevator: If friction or gravity causes the elevator to stop just short of the target, the integral term will gradually increase power to eliminate this offset.
         elevatorConfig.Slot0.kD = 0;        // Tune as needed   // In an Elevator: If the elevator is moving too fast toward the target, the D term applies a braking effect, slowing it down before overshooting.
         elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

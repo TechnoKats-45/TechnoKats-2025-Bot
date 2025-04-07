@@ -18,8 +18,7 @@ public class ClimberPrep extends Command
 
     public void execute()
     {
-        s_climber.setClimberSpeed();
-
+       // s_climber.setClimberSpeed();
     }
 
     public boolean isFinished()

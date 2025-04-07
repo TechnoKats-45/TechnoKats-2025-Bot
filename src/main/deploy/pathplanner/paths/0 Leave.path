@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 5.628700657894736,
+        "x": 5.574529109589041,
         "y": 4.034621710526316
       },
       "prevControl": {
-        "x": 6.20236207270258,
+        "x": 6.148190524396885,
         "y": 4.04576418994781
       },
       "nextControl": null,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "GoToL4Height",
-      "waypointRelativePos": 0.06016042780748619,
+      "waypointRelativePos": 0.08957219251336904,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

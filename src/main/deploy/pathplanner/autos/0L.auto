@@ -24,27 +24,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "GoToHandoffHeight"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "1.1 Barge-Reef I"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
+            "pathName": "0 Leave"
           }
         },
         {
@@ -56,43 +38,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1.2 Reef I-Coral Station"
+            "pathName": "0.1 Algae Align"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralStationIntake"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
+            "name": "CleanAlgaeA1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1.5 Coral Station-Reef K"
+            "pathName": "0.2 Barge Score"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreL4"
+            "name": "ScoreBarge"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1.6 Reef K-Coral Station"
+            "pathName": "0.3a 2nd Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0.4 Score 2nd Algae in Barge"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralStationIntake"
+            "name": "CleanAlgaeA2"
           }
         }
       ]

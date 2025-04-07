@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Elevator;
 
@@ -29,7 +31,14 @@ public class GoToAnglePreset extends Command
         if(!ranFlag)
         {
             currentPreset = s_elevator.getAnglePreset();
-            s_elevator.setAngle(currentPreset);
+            if(currentPreset == Constants.Elevator.AnglePresets.Stow)
+            {
+                s_elevator.setMotor(0);
+            }
+            else
+            {
+                s_elevator.setAngle(currentPreset);
+            }
             ranFlag = true;
         }
         else
@@ -39,13 +48,23 @@ public class GoToAnglePreset extends Command
                 currentPreset = s_elevator.getAnglePreset();
                 s_elevator.setAngle(currentPreset);
             }
+            if(currentPreset == Constants.Elevator.AnglePresets.Stow)
+            {
+                s_elevator.setMotor(0);
+            }
         }
     }
 
     public boolean isFinished()
     {
-        //return s_elevator.isAligned();    // This 
-        return false;
+        if(DriverStation.isAutonomous())
+        {
+            return s_elevator.isAligned(); 
+        }
+        else
+        {
+            return false;
+        }
     }
     
 

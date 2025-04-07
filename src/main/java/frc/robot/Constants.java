@@ -57,7 +57,7 @@ public class Constants
     
     public static final class Climber
     {
-        public static final int climbAngle = 400;    // TODO - find actual angle
+        public static final int climbAngle = 400;
     }
     
     // Operator Button Board Mapping
@@ -95,7 +95,6 @@ public class Constants
             public static final int Barge = 18;
             public static final int Processor = 6;
         }
-
         public static final int H = 14;
     }
 
@@ -115,8 +114,8 @@ public class Constants
     
         public static final class AnglePresets
         {
-            public static final double Stow = 6.2;
-            public static final double handoffAngle = 7.3;
+            public static final double Stow = 6.25;
+            public static final double handoffAngle = 7.05;    // was 7.15
             public static final double L1 = 8;
             public static final double A1 = 8;
             public static final double L2 = 9.9;
@@ -148,10 +147,10 @@ public class Constants
         {
             public static final double A1 = 1;
             public static final double A2 = 2;
-            public static final double algaeStowAngle = -.15;
-            public static final double algaeScoreAngle = -.3;
-            public static final double algaeCleanAngle = -.4;
-            public static final double algaeFloorIntake = -.4;
+            public static final double algaeStowAngle = 0;
+            public static final double algaeScoreAngle = 0;
+            public static final double algaeCleanAngle = -.28;  // Was -.24
+            public static final double algaeFloorIntake = -.28; // Was -.24
         }
     }
 }

@@ -62,25 +62,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "0.3a"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CleanAlgaeA2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "0.4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreBarge"
+            "pathName": "0.3a 2nd Algae"
           }
         }
       ]

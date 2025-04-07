@@ -81,20 +81,20 @@ public class Climber extends SubsystemBase
         return ((angle < Constants.Climber.climbAngle + 15) && (angle > Constants.Climber.climbAngle - 15));  // Check if within 1 degree of target angle
     }
 
-    public void setClimberSpeed()
+    public void setClimberSpeed(double speed)
     {
-        
+        winchMotor.set(speed);
     }
 
     public void ManualClimber(CommandXboxController controller, CommandXboxController controller2)
     {
         double angle = getAngle();  // Get current climber position
 
-        if (controller2.povDown().getAsBoolean() && climbEnabled)   // Moving IN (Stowing)  // 300
+        if ((controller2.povDown().getAsBoolean() || controller2.povDownLeft().getAsBoolean() || controller2.povDownRight().getAsBoolean()) && climbEnabled)   // Moving IN (Stowing)  // 300
         {  
             winchMotor.set(-1);
         } 
-        else if (controller2.povUp().getAsBoolean() && climbEnabled)  // Moving OUT (Extending)        // =-140
+        else if ((controller2.povUp().getAsBoolean() || controller2.povUpRight().getAsBoolean() || controller2.povUpLeft().getAsBoolean()) && climbEnabled)  // Moving OUT (Extending)        // =-140
         {  
             winchMotor.set(1);
         } 
@@ -102,6 +102,7 @@ public class Climber extends SubsystemBase
         {
             winchMotor.set(0);  // Stop if out of bounds or no input
         }
+
     }
     
     public void printDiagnostics()

@@ -16,8 +16,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -65,6 +67,15 @@ public class RobotContainer
     public final Carriage s_carriage = new Carriage();
     public final Elevator s_elevator = new Elevator();
     public final Climber s_climber = new Climber();    
+
+    // LEDs:
+    private final LEDSubsystem ledSubsystem = new LEDSubsystem();
+
+    public LEDSubsystem getLEDSubsystem()
+    {
+        return ledSubsystem;
+    }
+    
 
     private final SendableChooser<Command> autoChooser;
 
@@ -199,8 +210,7 @@ public class RobotContainer
         //////////////////////////////////////////////////////////////////////////////////////////
         /// ROBOT BUTTON BINDINGS
         //////////////////////////////////////////////////////////////////////////////////////////
-        buttonTrigger.onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));  // TODO - Need to change function - this should save heading and then heading should be used at start of auto.
-
+        //buttonTrigger.onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));  // TODO - Need to change function - this should save heading and then heading should be used at start of auto.
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// DRIVER CONTROLS
@@ -252,11 +262,33 @@ public class RobotContainer
         operator.button(Constants.Button.location.Barge).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Barge)));
         operator.button(Constants.Button.location.Processor).onTrue(new InstantCommand(() -> s_swerve.setDestination(Constants.Destinations.Processor)));
 
-        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
-        operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Stow)));
+        //operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_climber.enableClimb()));
+        //operator.button(Constants.Button.H).onTrue(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Stow)));
         operator.button(Constants.Button.H).whileTrue(new RunCommand(() -> s_elevator.GoToPreset()));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_climber.disableClimb()));
         operator.button(Constants.Button.H).onFalse(new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.handoffAngle)));
+
+        operator.button(Constants.Button.H).onTrue(new SequentialCommandGroup
+        (
+            //new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Stow)),
+            new InstantCommand(() -> s_climber.enableClimb()),
+            new ParallelDeadlineGroup
+            (
+                new WaitCommand(1.25),
+                new RunCommand(() -> s_climber.setClimberSpeed(1), s_climber)
+            ),
+            new ParallelDeadlineGroup
+            (
+                new WaitCommand(1.25),
+                new RunCommand(() -> s_climber.setClimberSpeed(-1), s_climber)         
+            )
+        ));
+        
+        operator.button(Constants.Button.H).whileTrue(new SequentialCommandGroup
+        (
+            new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.Stow)),
+            new GoToAnglePreset(s_elevator, s_carriage, driver)
+        ));
 
         //////////////////////////////////////////////////////////////////////////////////////////
         /// TEST CONTROLLER
@@ -283,6 +315,11 @@ public class RobotContainer
         s_elevator.printDiagnostics();
         s_carriage.printDiagnostics();
         s_climber.printDiagnostics();
+    }
+
+    public void updateLEDs()
+    {
+        ledSubsystem.runPattern(LEDPattern.solid(Color.kGreen));
     }
 
     public void registerNamedCommands()
@@ -351,13 +388,33 @@ public class RobotContainer
             "ScoreL4",
             new SequentialCommandGroup
             (
-                new InstantCommand(() -> s_elevator.setAnglePreset(Constants.Elevator.AnglePresets.L4), s_elevator),
-                new GoToAnglePreset(s_elevator, s_carriage, driver),
-                new WaitCommand(.0),    //0 .25
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(.125),
+                    new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.L4), s_elevator)
+                ),
                 new ParallelDeadlineGroup
                 (
                     new WaitCommand(.5),    // .75
                     new AutoScoreWithDeadline(s_carriage, s_elevator, false)
+                )
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "ScoreBarge",
+            new SequentialCommandGroup
+            (
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(.125),
+                    new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator)
+                ),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(.5),
+                    new AutoScoreWithDeadline(s_carriage, s_elevator, true)
                 )
             )
         );
@@ -391,6 +448,15 @@ public class RobotContainer
 
         NamedCommands.registerCommand
         (
+            "GoToBargeHeight",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
             "GoToA1Height",
             new SequentialCommandGroup
             (
@@ -404,24 +470,6 @@ public class RobotContainer
             new SequentialCommandGroup
             (
                 new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle))
-            )
-        );
-        
-        NamedCommands.registerCommand
-        (
-            "ScoreBarge",
-            new SequentialCommandGroup
-            (
-                new ParallelDeadlineGroup
-                (
-                    new WaitCommand(0),
-                    new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator)
-                ),
-                new ParallelDeadlineGroup
-                (
-                    new WaitCommand(1),
-                    new AutoScoreWithDeadline(s_carriage, s_elevator, true)
-                )
             )
         );
 
@@ -442,12 +490,12 @@ public class RobotContainer
             (
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(.75),
+                    new WaitCommand(.5),
                     new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.A1), s_elevator)
                 ),
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(.75),
+                    new WaitCommand(.5),
                     new CleanAlgae(s_carriage, s_elevator)
                 )
             )

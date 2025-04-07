@@ -164,7 +164,7 @@ public class Carriage extends SubsystemBase
         fdb.FeedbackRemoteSensorID = coralCANdiID;
         fdb.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANdiPWM1;
         fdb.SensorToMechanismRatio = 1;
-        fdb.RotorToSensorRatio = 14.0/39.0;
+        //fdb.RotorToSensorRatio = 14.0/39.0;
 
         /* Configure Motion Magic parameters as needed */
         MotionMagicConfigs mm = algaeAngleConfigs.MotionMagic;
