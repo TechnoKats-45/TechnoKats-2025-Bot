@@ -12,7 +12,8 @@
     "6 Processor Side - 2 Coral (Far) - L4 + Algae Remove",
     "7 Push Partner - Barge Side + 1 Coral",
     "8 Push Partner - Processor Side + 1 Coral",
-    "9 Barge Side - 3 Coral, Remove 2 Algae"
+    "9 Barge Side - 3 Coral, Remove 2 Algae",
+    "10 Processor Side, 2 Algae, 1 L4"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.2,

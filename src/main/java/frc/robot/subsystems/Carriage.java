@@ -76,6 +76,18 @@ public class Carriage extends SubsystemBase
     /// ALGAE Helpers
     /////////////////////////////////////////////////////////////////////////// 
 
+    public void setBrakeMode(boolean brake)
+    {
+        if(brake)
+        {
+            algaeMotor.setNeutralMode(NeutralMode.Brake);
+        }
+        else
+        {
+            algaeMotor.setNeutralMode(NeutralMode.Coast);
+        }
+    }
+
     public double getAlgaeAngle()
     {
         return algaeAngleMotor.getPosition().getValueAsDouble();
@@ -136,6 +148,10 @@ public class Carriage extends SubsystemBase
         if (s_elevator.getAnglePreset() == Constants.Elevator.AnglePresets.L4)
         {
             speed = Constants.Carriage.autoCoralScoreSpeed;
+        }
+        else if(s_elevator.getAnglePreset() == Constants.Elevator.AnglePresets.L1)
+        {
+            speed = -25;
         }
         coralMotor.setControl(coral_velocity.withVelocity(speed));
         //SmartDashboard.putNumber("Coral Speed", speed);

@@ -19,7 +19,7 @@ public class CarriageDefault extends Command
     {
         s_Carriage.setCoralSpeed(0);
         s_Carriage.setAlgaeAngle(Constants.Carriage.AnglePresets.algaeStowAngle);
-        s_Carriage.setAlgaeSpeed(-0.5);    // to keep algae in 
+        s_Carriage.setAlgaeSpeed(-.75);    // to keep algae in 
     }
 
     public boolean isFinished()

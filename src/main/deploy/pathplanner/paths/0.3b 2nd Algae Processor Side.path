@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2123355263157893,
-        "y": 7.411842105263157
+        "x": 7.687746710526316,
+        "y": 5.121875
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.897042385757703,
-        "y": 6.715644964078156
+        "x": 7.110444078947368,
+        "y": 3.29375
       },
       "isLocked": false,
-      "linkedName": "Coral Station - Barge Side"
+      "linkedName": "Barge Score"
     },
     {
       "anchor": {
-        "x": 3.7043585526315788,
-        "y": 5.016036184210526
+        "x": 5.263075657894737,
+        "y": 2.947368421052632
       },
       "prevControl": {
-        "x": 3.0062694505387726,
-        "y": 5.680076829582115
+        "x": 5.811513157894737,
+        "y": 2.1391447368421055
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Reef - L"
+      "linkedName": "Reef - EF"
     }
   ],
   "rotationTargets": [],
@@ -33,20 +33,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "GoToL4Height",
-      "waypointRelativePos": 0.32085561497326215,
+      "name": "GoToA1Height",
+      "waypointRelativePos": 0.18850267379679067,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "GoToL4Height"
+          "name": "GoToA1Height"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.2,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -54,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "9 Barge Side - 3 Coral, Remove 2 Algae",
+  "folder": "0 Leave",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

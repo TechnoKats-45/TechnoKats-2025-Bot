@@ -50,7 +50,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
     private Pose2d onTheFlyDestination = new Pose2d();
     private final Field2d field = new Field2d();
 
-    private double zeroedHeading;
+    private double imuOffsetFromStartup;
 
     Matrix<N3, N1> lowStdev = new Matrix<>(N3.instance, N1.instance);
 
@@ -550,14 +550,14 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         return getPigeon2().getYaw().getValueAsDouble();
     }
 
-    public void setZeroedOffset(double heading)
+    public void saveCurrentHeading()
     {
-        zeroedHeading = heading;
+        imuOffsetFromStartup = getHeadingFromPigeon();
     }
 
     public double getZeroedOffset()
     {
-        return zeroedHeading;
+        return imuOffsetFromStartup;
     }
 
     public void setHeadingFromZero()

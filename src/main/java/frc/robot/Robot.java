@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.Carriage;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Swerve;
 
@@ -47,23 +48,25 @@ public class Robot extends TimedRobot
   {
     PathfindingCommand.warmupCommand().schedule();
     m_robotContainer.s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle);
-
-    //s_led.runPattern(LEDPattern.solid(Color.kGreen)).schedule();
     
-    //s_swerve.seedFieldCentric();  // Need to replace with a value that is set on start of auto
+    m_robotContainer.s_swerve.seedFieldCentric();  // Zeros the gyro on startup
   }
 
   @Override
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() 
+  {
+    m_robotContainer.s_swerve.saveCurrentHeading();
+  }
 
   @Override
   public void disabledExit() {}
 
   @Override
-  public void autonomousInit() {
+  public void autonomousInit() 
+  {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) 
@@ -79,8 +82,10 @@ public class Robot extends TimedRobot
   public void autonomousExit() {}
 
   @Override
-  public void teleopInit() {
-    if (m_autonomousCommand != null) {
+  public void teleopInit() 
+  {
+    if (m_autonomousCommand != null) 
+    {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.s_elevator.setAngle(Constants.Elevator.AnglePresets.A2);

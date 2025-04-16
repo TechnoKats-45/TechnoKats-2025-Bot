@@ -8,43 +8,65 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.976769243579091,
-        "y": 1.9271751027945423
+        "x": 5.526585965490531,
+        "y": 2.6868305459423736
       },
       "isLocked": false,
       "linkedName": "Reef - EF"
     },
     {
       "anchor": {
-        "x": 1.6025771103896103,
-        "y": 0.7130073051948045
+        "x": 5.744161184210526,
+        "y": 0.6477796052631584
       },
       "prevControl": {
-        "x": 1.769699207716191,
-        "y": 1.2487789797902795
+        "x": 5.859621710526316,
+        "y": 2.4470394736842107
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral Station - Processor Side"
+      "linkedName": "Processor"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 121.80702712359152
+      "waypointRelativePos": 0.7339782345828277,
+      "rotationDegrees": -90.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "SpitAlgae",
-      "waypointRelativePos": 0.5271535580524335,
+      "name": "PassiveIntakeAlgae",
+      "waypointRelativePos": 0.008021390374331543,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "PassiveIntakeAlgae"
+        }
+      }
+    },
+    {
+      "name": "GoToStowHeight",
+      "waypointRelativePos": 0.3061497326203213,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "SpitAlgae"
+          "name": "GoToStowHeight"
+        }
+      }
+    },
+    {
+      "name": "ScoreProcessor",
+      "waypointRelativePos": 0.8556149732620318,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ScoreProcessor"
         }
       }
     }
@@ -59,10 +81,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "6 Processor Side - 2 Coral (Far) - L4 + Algae Remove",
+  "folder": "0 Leave",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

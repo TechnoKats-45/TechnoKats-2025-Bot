@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.091200657894737,
-        "y": 6.045559210526315
+        "x": 7.110444078947368,
+        "y": 6.670970394736842
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.943515432953945,
-        "y": 5.6278359503407565
+        "x": 6.28588259128745,
+        "y": 6.067191448441051
       },
       "isLocked": false,
-      "linkedName": "Barge Start"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 5.1411184210526315
       },
       "prevControl": {
-        "x": 5.78894159484955,
-        "y": 5.493085343107344
+        "x": 5.818395196577252,
+        "y": 5.736836197768981
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "GoToL4Height",
+      "waypointRelativePos": 0.5320855614973271,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "GoToL4Height"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.2,
     "maxAcceleration": 3.0,
@@ -48,7 +60,7 @@
   "folder": "9 Barge Side - 3 Coral, Remove 2 Algae",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

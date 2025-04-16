@@ -69,7 +69,7 @@ public class RobotContainer
     public final Climber s_climber = new Climber();    
 
     // LEDs:
-    private final LEDSubsystem ledSubsystem = new LEDSubsystem();
+    public final LEDSubsystem ledSubsystem = new LEDSubsystem();
 
     public LEDSubsystem getLEDSubsystem()
     {
@@ -160,7 +160,6 @@ public class RobotContainer
                             .withVelocityY(-driver.getLeftX() * MaxSpeed * s_swerve.getSpeedFactor(
                                     s_elevator.getAngle(), s_climber.isClimbEnabled(), s_elevator.isAligned()))
                             .withRotationalRate(-driver.getRightX() * MaxAngularRate);
-                
             })
         );
 
@@ -173,6 +172,19 @@ public class RobotContainer
         (
             new ManualClimber(s_climber, testController, driver, rumbleDriver)
         );
+
+        // Update LED default command:
+        // This sets the LED subsystem to run the "rainbow" pattern continuously,
+        // and with ignoringDisable(true) it will run even if the robot is disabled.
+        ledSubsystem.setDefaultCommand
+        (
+            ledSubsystem.runPattern
+            (
+                LEDPattern.rainbow(255, 255)
+                        .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meters.of(0.1))
+            ).ignoringDisable(true)
+        );
+
         
         /*
         s_elevator.setDefaultCommand
@@ -216,9 +228,9 @@ public class RobotContainer
         /// DRIVER CONTROLS
         //////////////////////////////////////////////////////////////////////////////////////////
         driver.leftTrigger().whileTrue(new GoToAnglePreset(s_elevator, s_carriage, driver));       // Go to selected preset
-        driver.leftTrigger().onFalse(new CoralIntake(s_carriage, s_elevator));             // When the left trigger is released, run Coral Intake (this will intake coral when the trigger is released after going to a preset)
+        driver.leftTrigger().onFalse(new CoralIntake(s_carriage, s_elevator, ledSubsystem));             // When the left trigger is released, run Coral Intake (this will intake coral when the trigger is released after going to a preset)
         driver.b().onTrue(s_swerve.runOnce(() -> s_swerve.seedFieldCentric()));             // B button - Reset the field-centric heading on B button press
-        driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator));               // Start Coral Intake
+        driver.rightBumper().onTrue(new CoralIntake(s_carriage, s_elevator, ledSubsystem));               // Start Coral Intake
         driver.rightTrigger().whileTrue(s_carriage.run(() -> s_carriage.setCoralSpeed(Constants.Carriage.coralScoreSpeed, s_elevator)));    // Shoot coral
         driver.leftBumper().whileTrue(new CleanAlgae(s_carriage, s_elevator));
         driver.y().whileTrue(new RunCommand(() -> s_carriage.setAlgaeSpeed(Constants.Carriage.algaeScoreSpeed)));
@@ -319,18 +331,28 @@ public class RobotContainer
 
     public void updateLEDs()
     {
-        ledSubsystem.runPattern(LEDPattern.solid(Color.kGreen));
+        new InstantCommand(() -> ledSubsystem.runPattern(LEDPattern.solid(Color.kRed))).ignoringDisable(true);
+        new InstantCommand(() -> ledSubsystem.periodic());
     }
 
     public void registerNamedCommands()
     {
         NamedCommands.registerCommand
         (
+            "SetHeadingFromSavedHeading",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_swerve.setHeadingFromZero())
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
             "CoralStationIntake",
             new SequentialCommandGroup
             (
                 new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.handoffAngle), s_elevator),
-                new CoralIntake(s_carriage, s_elevator)
+                new CoralIntake(s_carriage, s_elevator, ledSubsystem)
             )
         );
 
@@ -395,7 +417,7 @@ public class RobotContainer
                 ),
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(.5),    // .75
+                    new WaitCommand(.35),    // .75
                     new AutoScoreWithDeadline(s_carriage, s_elevator, false)
                 )
             )
@@ -413,7 +435,25 @@ public class RobotContainer
                 ),
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(.5),
+                    new WaitCommand(.25),
+                    new AutoScoreWithDeadline(s_carriage, s_elevator, true)
+                )
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "ScoreProcessor",
+            new SequentialCommandGroup
+            (
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(0),
+                    new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Stow), s_elevator)
+                ),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(1),
                     new AutoScoreWithDeadline(s_carriage, s_elevator, true)
                 )
             )
@@ -443,6 +483,15 @@ public class RobotContainer
             new SequentialCommandGroup
             (
                 new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.L4), s_elevator)
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "GoToStowHeight",
+            new SequentialCommandGroup
+            (
+                new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Stow), s_elevator)
             )
         );
 
@@ -481,7 +530,6 @@ public class RobotContainer
                 new InstantCommand(() -> s_swerve.poseToLL())           
             )
         );
-        
 
         NamedCommands.registerCommand
         (
@@ -490,12 +538,12 @@ public class RobotContainer
             (
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(.5),
+                    new WaitCommand(.25),
                     new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.A1), s_elevator)
                 ),
                 new ParallelDeadlineGroup
                 (
-                    new WaitCommand(.5),
+                    new WaitCommand(.75),
                     new CleanAlgae(s_carriage, s_elevator)
                 )
             )

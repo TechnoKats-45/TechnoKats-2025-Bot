@@ -115,13 +115,13 @@ public class Constants
         public static final class AnglePresets
         {
             public static final double Stow = 6.25;
-            public static final double handoffAngle = 7.05;    // was 7.15
-            public static final double L1 = 8;
+            public static final double handoffAngle = 6.67;    // was 7.05
+            public static final double L1 = 8.5;
             public static final double A1 = 8;
-            public static final double L2 = 9.9;
+            public static final double L2 = 9.7;
             public static final double A2 = 10;
             public static final double L3 = 11.5;   
-            public static final double L4 = 14.1;   
+            public static final double L4 = 13.6;   
             public static final double Barge = 15;
         }
     }
@@ -149,8 +149,8 @@ public class Constants
             public static final double A2 = 2;
             public static final double algaeStowAngle = 0;
             public static final double algaeScoreAngle = 0;
-            public static final double algaeCleanAngle = -.28;  // Was -.24
-            public static final double algaeFloorIntake = -.28; // Was -.24
+            public static final double algaeCleanAngle = -.26;  // Was -.28
+            public static final double algaeFloorIntake = -.26; // Was -.28
         }
     }
 }
