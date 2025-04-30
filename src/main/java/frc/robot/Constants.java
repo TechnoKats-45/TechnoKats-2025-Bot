@@ -118,10 +118,10 @@ public class Constants
             public static final double handoffAngle = 6.67;    // was 7.05
             public static final double L1 = 8.5;
             public static final double A1 = 8;
-            public static final double L2 = 9.7;
+            public static final double L2 = 10; // was 9.7
             public static final double A2 = 10;
             public static final double L3 = 11.5;   
-            public static final double L4 = 13.6;   
+            public static final double L4 = 13.7;       // Was 13.6
             public static final double Barge = 15;
         }
     }

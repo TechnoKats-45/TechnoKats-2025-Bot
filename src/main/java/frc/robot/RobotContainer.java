@@ -119,7 +119,8 @@ public class RobotContainer
         (
             s_swerve.applyRequest(() -> 
             {
-                /*
+////////////////////
+/* 
                 // If left trigger is held, run auto-align logic:
                 if (driver.leftTrigger().getAsBoolean()) 
                 {
@@ -144,8 +145,10 @@ public class RobotContainer
                             .withVelocityX(velocityX)
                             .withVelocityY(velocityY)
                             .withRotationalRate(rotationalRate);
-                } 
-                            */
+                }   
+                */
+///////////////////
+/// 
                     // Otherwise, use the normal manual drive logic.
                     return driver.x().getAsBoolean() 
                         ? forwardStraight
@@ -236,11 +239,14 @@ public class RobotContainer
         driver.y().whileTrue(new RunCommand(() -> s_carriage.setAlgaeSpeed(Constants.Carriage.algaeScoreSpeed)));
 
         //driver.a().whileTrue(new LastMileAlignment(s_swerve));  // TODO - Test if this works - this is the last mile alignment w/o pose, just April Tag Alignment, and dead reckoning.
-        //driver.a().whileTrue(s_swerve.driveToPose(new Pose2d(5.781,4.176,new Rotation2d()))); // THIS WORKS
+        //driver.a().whileTrue(s_swerve.driveToPose(new Pose2d(5.781,4.176,new Rotation2d()))); // THIS WORKS // THIS STILL WORKS!!!! 4-29-25 
+        //driver.a().whileTrue(s_swerve.driveToPose(s_swerve.getDestination()));    // For some reason this goes to 0,0
+        driver.a().whileTrue(new AlignTest(s_swerve));  // This does nothing, like it doesn't drive at all, but does block stick control
         //driver.a().whileTrue(new PositionAlign(s_swerve));
         //driver.a().onFalse(new PositionAlign(s_swerve).cancel());
 
         driver.start().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));    // Start Button - Cancel All Commands
+        driver.back().onTrue(new InstantCommand(() -> s_swerve.poseToLL()));
         
         //////////////////////////////////////////////////////////////////////////////////////////
         /// OPERATOR BUTTON BOARD CONTROLS
