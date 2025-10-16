@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.312499999999999,
+        "y": 7.517680921052631
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.452394944694879,
+        "y": 6.959342557069984
+      },
+      "isLocked": false,
+      "linkedName": "PRELOAD BARGE START"
+    },
+    {
+      "anchor": {
+        "x": 7.581907894736841,
+        "y": 6.276480263157895
+      },
+      "prevControl": {
+        "x": 7.5864561024296755,
+        "y": 6.549222195813454
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "PRELOAD BARGE SCORE"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 100.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "10 PRELOAD ALGAE BARGE",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": false
+}

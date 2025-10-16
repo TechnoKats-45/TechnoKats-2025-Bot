@@ -330,9 +330,9 @@ public class RobotContainer
 
     public void printDiagnostics()
     {
-        s_elevator.printDiagnostics();
-        s_carriage.printDiagnostics();
-        s_climber.printDiagnostics();
+        //s_elevator.printDiagnostics();
+        //s_carriage.printDiagnostics();
+        //s_climber.printDiagnostics();
     }
 
     public void updateLEDs()
@@ -432,6 +432,24 @@ public class RobotContainer
         NamedCommands.registerCommand
         (
             "ScoreBarge",
+            new SequentialCommandGroup
+            (
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(.125),
+                    new InstantCommand(() -> s_elevator.setAngle(Constants.Elevator.AnglePresets.Barge), s_elevator)
+                ),
+                new ParallelDeadlineGroup
+                (
+                    new WaitCommand(.25),
+                    new AutoScoreWithDeadline(s_carriage, s_elevator, true)
+                )
+            )
+        );
+
+        NamedCommands.registerCommand
+        (
+            "ScoreBargePreload",
             new SequentialCommandGroup
             (
                 new ParallelDeadlineGroup

@@ -33,7 +33,7 @@ public class LEDSubsystem extends SubsystemBase
     public void periodic()
     {
       // Periodically send the latest LED color data to the LED strip for it to display
-      m_led.setData(m_buffer);
+      //m_led.setData(m_buffer);
     }
   
     /**

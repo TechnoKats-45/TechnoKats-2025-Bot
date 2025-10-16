@@ -21,6 +21,11 @@ public class Constants
         public static Matrix<N3, N1> ODOM_STD_DEV;
         public static Function<Double, Matrix<N3, N1>> VISION_STD_DEV_MULTITAG_FUNCTION;
     }
+    
+    public static final class Limelight
+    {
+        public static final double X_Alignment_Tolerance = 3;
+    }
 
     public static final class Destinations
     {
@@ -115,15 +120,15 @@ public class Constants
         public static final class AnglePresets
         {
             public static final double Stow = 6.25;
-            public static final double handoffAngle = 6.67;    // was 7.05
+            public static final double handoffAngle = 6.35;  // was 6.5
             public static final double L1 = 8.5;
             public static final double A1 = 8;
-            public static final double L2 = 10; // was 9.7
-            public static final double A2 = 10;
+            public static final double L2 = 9.4; // was 9.7
+            public static final double A2 = 9.4;
             public static final double L3 = 11.5;   
-            public static final double L4 = 13.7;       // Was 13.6
+            public static final double L4 = 13.5;       // Was 13.6
             public static final double Barge = 15;
-        }
+        }   
     }
 
     public static final class Carriage

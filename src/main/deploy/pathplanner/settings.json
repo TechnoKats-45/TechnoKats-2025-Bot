@@ -5,6 +5,7 @@
   "pathFolders": [
     "0 Leave",
     "1 Barge Side - 3 Coral (Far) - L4",
+    "10 Processor Side, 2 Algae, 1 L4",
     "2 Barge Side - 4 Coral (Close) - L4",
     "3 Processor Side - 3 Coral (Far) - L4",
     "4 Processor Side - 4 Coral (Close) - L4",
@@ -13,7 +14,7 @@
     "7 Push Partner - Barge Side + 1 Coral",
     "8 Push Partner - Processor Side + 1 Coral",
     "9 Barge Side - 3 Coral, Remove 2 Algae",
-    "10 Processor Side, 2 Algae, 1 L4"
+    "10 PRELOAD ALGAE BARGE"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.2,

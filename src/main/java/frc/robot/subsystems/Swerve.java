@@ -238,7 +238,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem
         }
         else    // If climber is not enabled and height is at or below handoff height, drive at full speed
         {
-            speedFactor = 1;
+            speedFactor = .75;    // I think we can change this to change overall speed (AKA: FRESHMAN MODE)    // 1 is normal (not nerfed) JTL - 10/16/25
         }
         return speedFactor;
     }

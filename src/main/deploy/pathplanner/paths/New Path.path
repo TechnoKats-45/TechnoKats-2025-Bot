@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.157236842105262,
-        "y": 2.9185032894736844
+        "x": 7.225904605263157,
+        "y": 7.459950657894736
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.487715738209158,
-        "y": 2.355820659603554
+        "x": 0.7120065789473697,
+        "y": 7.633141447368422
       },
       "isLocked": false,
-      "linkedName": "Reef - EF"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.6025771103896103,
-        "y": 0.7130073051948045
+        "x": 3.1174342105263158,
+        "y": 4.140460526315789
       },
       "prevControl": {
-        "x": 2.545008078603242,
-        "y": 1.3253312874715895
+        "x": 0.7408717105263158,
+        "y": 4.27516447368421
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral Station - Processor Side"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "3 Processor Side - 3 Coral (Far) - L4",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 178.93250031625982
   },
   "useDefaultConstraints": true
 }
